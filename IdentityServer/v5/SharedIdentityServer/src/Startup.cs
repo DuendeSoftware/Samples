@@ -34,15 +34,14 @@ namespace IdentityServerHost
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
 
-                // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
+                // see https://docs.duendesoftware.com/identityserver/v5/basics/resources
                 options.EmitStaticAudienceClaim = true;
             })
                 .AddTestUsers(TestUsers.Users);
-
-            // in-memory, code config
-            builder.AddInMemoryIdentityResources(Config.IdentityResources);
-            builder.AddInMemoryApiScopes(Config.ApiScopes);
-            builder.AddInMemoryClients(Config.Clients);
+            
+            builder.AddInMemoryIdentityResources(Resources.Identity);
+            builder.AddInMemoryApiScopes(Resources.ApiScopes);
+            builder.AddInMemoryClients(Clients.List);
 
             services.AddAuthentication()
                 .AddOpenIdConnect("Google", "Sign-in with Google", options =>

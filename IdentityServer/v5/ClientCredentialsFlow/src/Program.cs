@@ -30,8 +30,10 @@ namespace Client
             {
                 Address = disco.TokenEndpoint,
 
-                ClientId = "client",
+                ClientId = "client.credentials.sample",
                 ClientSecret = "secret",
+                
+                Scope = "scope1"
             });
 
             if (response.IsError) throw new Exception(response.Error);
