@@ -15,6 +15,7 @@ namespace SampleApi.Controllers
             _logger = logger;
         }
 
+        // this action simply echoes the claims back to the client
         [HttpGet]
         public ActionResult Get()
         {
