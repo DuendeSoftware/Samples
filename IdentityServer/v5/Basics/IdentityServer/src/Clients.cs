@@ -39,6 +39,24 @@ namespace IdentityServerHost
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "scope1" }
                 },
+                
+                // MVC basic sample with token management
+                // this client has a short access token lifetime to experiment with automatic refresh
+                new Client
+                {
+                    ClientId = "interactive.mvc.sample.short.token.lifetime",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    
+                    AllowedGrantTypes = GrantTypes.Code,
+                    AccessTokenLifetime = 75,
+
+                    RedirectUris = { "https://localhost:44300/signin-oidc" },
+                    FrontChannelLogoutUri = "https://localhost:44300/signout-oidc",
+                    PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
+
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "scope1" }
+                },
             };
     }
 }
