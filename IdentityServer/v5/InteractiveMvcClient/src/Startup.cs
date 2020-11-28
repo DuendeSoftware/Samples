@@ -1,4 +1,3 @@
-using Clients;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -6,10 +5,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using IdentityModel.Client;
 
-namespace MvcCode
+namespace Client
 {
     public class Startup
     {
@@ -18,14 +15,7 @@ namespace MvcCode
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             services.AddControllersWithViews();
-            
             services.AddHttpClient();
-
-            services.AddSingleton<IDiscoveryCache>(r =>
-            {
-                var factory = r.GetRequiredService<IHttpClientFactory>();
-                return new DiscoveryCache(Constants.Authority, () => factory.CreateClient());
-            });
 
             services.AddAuthentication(options =>
             {
@@ -38,10 +28,10 @@ namespace MvcCode
                 })
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = Constants.Authority;
+                    options.Authority = Urls.IdentityServer;
                     options.RequireHttpsMetadata = false;
 
-                    options.ClientId = "mvc.code";
+                    options.ClientId = "interactive.mvc.sample";
                     options.ClientSecret = "secret";
 
                     // code flow + PKCE (PKCE is turned on by default)
@@ -51,10 +41,7 @@ namespace MvcCode
                     options.Scope.Clear();
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
-                    options.Scope.Add("email");
-                    options.Scope.Add("resource1.scope1");
-                    //options.Scope.Add("transaction:123");
-                    //options.Scope.Add("transaction");
+                    options.Scope.Add("scope1");
                     options.Scope.Add("offline_access");
 
                     // not mapped by default
@@ -75,7 +62,6 @@ namespace MvcCode
         public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();

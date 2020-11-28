@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Client;
 
@@ -6,6 +7,11 @@ namespace SampleApi
 {
     public class Startup
     {
+        public Startup()
+        {
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();

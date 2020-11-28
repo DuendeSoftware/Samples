@@ -27,7 +27,7 @@ namespace IdentityServerHost
                 // interactive client using code flow + pkce
                 new Client
                 {
-                    ClientId = "interactive",
+                    ClientId = "interactive.mvc.sample",
                     ClientSecrets = { new Secret("secret".Sha256()) },
                     
                     AllowedGrantTypes = GrantTypes.Code,
