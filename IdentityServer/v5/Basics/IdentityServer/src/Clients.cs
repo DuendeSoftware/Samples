@@ -12,7 +12,7 @@ namespace IdentityServerHost
         public static IEnumerable<Client> List =>
             new []
             {
-                // m2m client credentials flow client
+                // client credentials flow sample
                 new Client
                 {
                     ClientId = "client.credentials.sample",
@@ -24,7 +24,7 @@ namespace IdentityServerHost
                     AllowedScopes = { "scope1" }
                 },
 
-                // interactive client using code flow + pkce
+                // MVC basic sample
                 new Client
                 {
                     ClientId = "interactive.mvc.sample",
