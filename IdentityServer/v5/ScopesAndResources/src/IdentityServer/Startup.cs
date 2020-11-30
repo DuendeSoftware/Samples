@@ -16,7 +16,7 @@ namespace IdentitServerHost
             var builder = services.AddIdentityServer(options =>
             {
                 // emits static audience if required
-                options.EmitStaticAudienceClaim = true;
+                options.EmitStaticAudienceClaim = false;
                 
                 // control format of scope claim
                 options.EmitScopesAsSpaceDelimitedStringInJwt = true;

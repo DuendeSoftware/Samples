@@ -16,9 +16,6 @@ namespace SampleApi
         {
             services.AddControllers();
 
-            services.AddCors();
-            services.AddDistributedMemoryCache();
-
             // this API will accept any access token from the authority
             services.AddAuthentication("token")
                 .AddJwtBearer("token", options =>
