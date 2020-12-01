@@ -5,7 +5,7 @@
 using Duende.IdentityServer.Models;
 using System.Collections.Generic;
 
-namespace IdentitServerHost
+namespace IdentityServerHost
 {
     public static class Config
     {
