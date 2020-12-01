@@ -43,7 +43,7 @@ namespace IdentityServerHost
             builder.AddInMemoryApiScopes(Resources.ApiScopes);
             builder.AddInMemoryClients(Clients.List);
             
-            // this is only needed for the MVC JAR and JWT sample and adds supports for JWT-based client authentication
+            // this is only needed for the JAR and JWT samples and adds supports for JWT-based client authentication
             builder.AddJwtBearerClientAuthentication();
 
             services.AddAuthentication()
