@@ -64,6 +64,9 @@ namespace IdentityServerHost
                 {
                     ClientId = "interactive.mvc.sample.jarjwt",
                     
+                    // force client to use signed authorize request
+                    RequireRequestObject = true,
+                    
                     // this client uses an RSA key as client secret
                     // this key is used for both validating the signature on the authorize request
                     // and for client authentication
