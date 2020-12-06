@@ -41,6 +41,7 @@ namespace IdentityServerHost
             
             builder.AddInMemoryIdentityResources(Resources.Identity);
             builder.AddInMemoryApiScopes(Resources.ApiScopes);
+            builder.AddInMemoryApiResources(Resources.ApiResources);
             builder.AddInMemoryClients(Clients.List);
             
             // this is only needed for the JAR and JWT samples and adds supports for JWT-based client authentication

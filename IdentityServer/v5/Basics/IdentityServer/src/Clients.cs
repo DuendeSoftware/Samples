@@ -21,7 +21,7 @@ namespace IdentityServerHost
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
-                    AllowedScopes = { "scope1" }
+                    AllowedScopes = { "scope1", "scope2" }
                 },
                 
                 // JWT-based client authentication sample
@@ -42,7 +42,20 @@ namespace IdentityServerHost
                         }
                     },
 
-                    AllowedScopes = { "scope1" }
+                    AllowedScopes = { "scope1", "scope2" }
+                },
+                
+                // introspection sample
+                new Client
+                {
+                    ClientId = "introspection.sample",
+
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    
+                    AccessTokenType = AccessTokenType.Reference,
+
+                    AllowedScopes = { "scope1", "scope2" }
                 },
 
                 // MVC basic sample
@@ -58,7 +71,7 @@ namespace IdentityServerHost
                     PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "scope1" }
+                    AllowedScopes = { "openid", "profile", "scope1", "scope2" }
                 },
                 
                 // MVC basic sample with token management
@@ -76,7 +89,7 @@ namespace IdentityServerHost
                     PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "scope1" }
+                    AllowedScopes = { "openid", "profile", "scope1", "scope2" }
                 },
                 
                 // MVC sample using JAR (signed authorize requests) and JWTs for client authentication
@@ -108,7 +121,7 @@ namespace IdentityServerHost
                     PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "scope1" }
+                    AllowedScopes = { "openid", "profile", "scope1", "scope2" }
                 },
             };
     }

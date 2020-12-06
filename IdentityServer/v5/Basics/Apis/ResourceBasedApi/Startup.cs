@@ -20,7 +20,7 @@ namespace ResourceBasedApi
                 .AddJwtBearer("token", options =>
                 {
                     options.Authority = Urls.IdentityServer;
-                    options.Audience = "resource1";
+                    options.Audience = "resource2";
 
                     options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
 
