@@ -123,6 +123,22 @@ namespace IdentityServerHost
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "scope1", "scope2" }
                 },
+                
+                // MVC back-channel logout sample
+                new Client
+                {
+                    ClientId = "mvc.backchannel.sample",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    RedirectUris = { "https://localhost:44300/signin-oidc" },
+                    BackChannelLogoutUri = "https://localhost:44300/logout",
+                    PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
+
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "scope1", "scope2" }
+                },
             };
     }
 }
