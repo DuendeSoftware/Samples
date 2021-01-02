@@ -3,9 +3,9 @@
 
 
 using IdentityModel.Client;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Client
@@ -54,8 +54,8 @@ namespace Client
             }
             else
             {
-                var content = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(JArray.Parse(content));
+                var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+                Console.WriteLine(JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true }));
             }
         }
     }

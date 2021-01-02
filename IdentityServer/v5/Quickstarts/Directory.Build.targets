@@ -5,9 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Update="IdentityModel" Version="4.5.0" />
+        <PackageReference Update="IdentityModel" Version="5.0.0-preview.1.2" />
         
-        <PackageReference Update="Duende.IdentityServer" Version="5.0.0-preview.2" />
+        <PackageReference Update="Duende.IdentityServer" Version="5.0.0-preview.3" />
         <PackageReference Update="Duende.IdentityServer.EntityFramework" Version="5.0.0-preview.2" />
         <PackageReference Update="Duende.IdentityServer.AspNetIdentity" Version="5.0.0-preview.2" />
 
