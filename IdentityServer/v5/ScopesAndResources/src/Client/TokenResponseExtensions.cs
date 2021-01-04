@@ -1,9 +1,9 @@
 ﻿using IdentityModel;
 using IdentityModel.Client;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
 
 namespace ResourcesScopesConsoleClient
 {
@@ -24,8 +24,8 @@ namespace ResourcesScopesConsoleClient
                     var header = parts[0];
                     var claims = parts[1];
 
-                    Console.WriteLine(JObject.Parse(Encoding.UTF8.GetString(Base64Url.Decode(header))));
-                    Console.WriteLine(JObject.Parse(Encoding.UTF8.GetString(Base64Url.Decode(claims))));
+                    Console.WriteLine(PrettyPrintJson(Encoding.UTF8.GetString(Base64Url.Decode(header))));
+                    Console.WriteLine(PrettyPrintJson(Encoding.UTF8.GetString(Base64Url.Decode(claims))));
                 }
             }
             else
@@ -43,6 +43,12 @@ namespace ResourcesScopesConsoleClient
                     Console.WriteLine(response.Raw);
                 }
             }
+        }
+        
+        public static string PrettyPrintJson(this string raw)
+        {
+            var doc = JsonDocument.Parse(raw).RootElement;
+            return JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true });
         }
     }
 

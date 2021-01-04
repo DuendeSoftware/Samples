@@ -20,7 +20,6 @@ namespace IdentityServerHost
                     transaction.ParsedParameter));
             }
 
-
             return Task.CompletedTask;
         }
     }

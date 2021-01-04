@@ -19,7 +19,7 @@ namespace IdentityServerHost
                 options.EmitScopesAsSpaceDelimitedStringInJwt = true;
             })
                 .AddInMemoryApiScopes(Config.Scopes)
-                .AddInMemoryApiResources(Config.Apis)
+                .AddInMemoryApiResources(Config.Resources)
                 .AddInMemoryClients(Config.Clients);
 
             // registers the scope parser for the transaction scope

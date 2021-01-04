@@ -9,39 +9,49 @@ namespace IdentityServerHost
 {
     public static class Config
     {
-        public static IEnumerable<ApiScope> Scopes =>
+        public static readonly IEnumerable<ApiScope> Scopes =
             new[]
             {
-                // api1 specific scopes
-                new ApiScope("api1.scope1"),
-                new ApiScope("api1.scope2"),
+                // resource specific scopes
+                new ApiScope("resource1.scope1"),
+                new ApiScope("resource1.scope2"),
                 
-                // api2 specific scopes
-                new ApiScope("api2.scope1"),
-                new ApiScope("api2.scope2"),
+                new ApiScope("resource2.scope1"),
+                new ApiScope("resource2.scope2"),
                 
-                // shared scope between resources
+                new ApiScope("resource3.scope1"),
+                new ApiScope("resource3.scope2"),
+                
+                // a scope without resource association
+                new ApiScope("scope3"),
+                new ApiScope("scope4"),
+                
+                // a scope shared by multiple resources
                 new ApiScope("shared.scope"),
 
-                // scopes with no resource association
-                new ApiScope("scope2"),
-                new ApiScope("scope3"),
-                
-                // parameterized scope
-                new ApiScope("transaction"), 
+                // a parameterized scope
+                new ApiScope("transaction", "Transaction")
             };
-        
-        public static IEnumerable<ApiResource> Apis =>
-            new ApiResource[]
+
+        // API resources are more formal representation of a resource with processing rules and their scopes (if any)
+        public static readonly IEnumerable<ApiResource> Resources = 
+            new[]
             {
-                new ApiResource("api1", "API #1")
+                new ApiResource("urn:resource1", "Resource 1")
                 {
-                    Scopes = { "api1.scope1", "api1.scope2", "shared.scope" }
+                    Scopes = { "resource1.scope1", "resource1.scope2", "shared.scope" }
                 },
                 
-                new ApiResource("api2", "API #2")
+                new ApiResource("urn:resource2", "Resource 2")
                 {
-                    Scopes = { "api2.scope1", "api2.scope2", "shared.scope" },
+                    Scopes = { "resource2.scope1", "resource2.scope2", "shared.scope" }
+                },
+                
+                new ApiResource("urn:resource3", "Resource 3 (isolated)")
+                {
+                    Scopes = { "resource3.scope1", "resource3.scope2", "shared.scope" },
+                    
+                    RequireResourceIndicator = true
                 }
             };
 
@@ -57,16 +67,19 @@ namespace IdentityServerHost
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes =
                     {
-                        "api1.scope1",
-                        "api1.scope2",
+                        "resource1.scope1",
+                        "resource1.scope2",
                         
-                        "api2.scope1",
-                        "api2.scope2",
+                        "resource2.scope1",
+                        "resource2.scope2",
+                        
+                        "resource3.scope1",
+                        "resource3.scope2",
                         
                         "shared.scope",
                         
-                        "scope2",
                         "scope3",
+                        "scope4",
                         
                         "transaction"
                     }
