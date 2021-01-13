@@ -13,9 +13,5 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
     
 </Project>
