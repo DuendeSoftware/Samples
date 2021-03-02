@@ -16,7 +16,7 @@ namespace WebForms
         {
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
-                AuthenticationType = "Cookies",
+                AuthenticationType = "cookies",
                 ExpireTimeSpan = TimeSpan.FromMinutes(10),
                 SlidingExpiration = true
             });
@@ -26,18 +26,22 @@ namespace WebForms
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
             {
                 AuthenticationType = "oidc",
-                SignInAsAuthenticationType = "Cookies",
+                SignInAsAuthenticationType = "cookies",
 
                 Authority = "https://demo.duendesoftware.com",
                 
-                ClientId = "login",
-
+                ClientId = "interactive.confidential.hybrid",
+                ClientSecret = "secret",
+                
                 RedirectUri = "https://localhost:44306/",
                 PostLogoutRedirectUri = "https://localhost:44306/",
 
-                ResponseType = "id_token",
+                ResponseType = "code id_token",
                 Scope = "openid profile",
-                UseTokenLifetime = false
+                
+                UseTokenLifetime = false,
+                SaveTokens = true,
+                RedeemCode = true,
             });
 
             app.UseStageMarker(PipelineStage.Authenticate);
