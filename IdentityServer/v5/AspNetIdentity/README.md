@@ -11,6 +11,7 @@ Finally another project was added which acts as a OIDC client application to exe
 
 The changes to the template in the ASP.NET Identity project (i.e. "IdentityServerAspNetIdentity"):
 
+* Sqlite support was added, replacing the default of SqlServer.
 * Duende IdentityServer was configured in *Startup.cs* with the necessary information about the client application, and the OIDC scopes it would be requesting.
 * Debug level logging was enabled for the "Duende" prefix to allow viewing the logging emitted during request processing.
 * In the middleware pipeline, *UseIdentityServer* replaced *UseAuthentication*. 
