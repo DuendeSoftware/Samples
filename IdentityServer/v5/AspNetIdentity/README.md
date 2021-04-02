@@ -21,4 +21,5 @@ In the client application:
 * A simple ASP.NET Core Razor Web Application was used as the starting point.
 * In *Startup.cs* the standard cookie and OIDC authentication configuration was added.
 * A secure page (*Secure.cshtml*) that required an authenticated user will render the logged in user's claim in the page.
-* The index page (*Index.cshtml*) was modified to allow a POST to trigger OIDC logout.
+* The index page (*Index.cshtml*) was modified to allow a POST to trigger OIDC logout. 
+* A logout button was added to trigger the POST.
