@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using static Bullseye.Targets;
 using static SimpleExec.Command;
 
@@ -9,11 +10,10 @@ namespace build
     {
         internal static void Main(string[] args)
         {
-            
-
             Target("build", () =>
             {
-                string[] files = Directory.GetFiles(".", "*.sln", SearchOption.AllDirectories);
+                var files = Directory.GetFiles(".", "*.sln", SearchOption.AllDirectories)
+                    .Where(f => !f.Contains("webform", StringComparison.OrdinalIgnoreCase));
 
                 foreach (var file in files)
                 {
