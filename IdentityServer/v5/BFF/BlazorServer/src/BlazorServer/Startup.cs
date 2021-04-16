@@ -52,7 +52,7 @@ namespace BlazorServer
                 .AddCookie("cookie", options =>
                 {
                     options.Cookie.Name = "__Host-bff";
-                    //options.Cookie.SameSite = SameSiteMode.Strict;
+                    options.Cookie.SameSite = SameSiteMode.Strict;
                 })
                 .AddOpenIdConnect("oidc", options =>
                 {
