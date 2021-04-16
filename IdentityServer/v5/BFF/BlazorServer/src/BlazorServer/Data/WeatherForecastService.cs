@@ -37,11 +37,9 @@ namespace BlazorServer.Data
             }
             else
             {
-                var token = await context.GetUserAccessTokenAsync();
-                var client = _httpClientFactory.CreateClient();
-                client.SetBearerToken(token);
+                var client = _httpClientFactory.CreateClient("api_client");
+                var userName = await client.GetStringAsync("identity");
 
-                var userName = await client.GetStringAsync("https://localhost:5002/identity");
                 weather.User = userName;
             }
             
