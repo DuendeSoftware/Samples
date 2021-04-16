@@ -8,8 +8,8 @@ namespace Api
     {
         public IActionResult Get()
         {
-            var claims = User.Claims.Select(c => new { c.Type, c.Value });
-            return Ok(claims);
+            var user = User.FindFirst("name")?.Value ?? User.FindFirst("sub").Value;
+            return Ok(user);
         }
     }
 }

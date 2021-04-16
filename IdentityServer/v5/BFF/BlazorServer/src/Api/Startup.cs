@@ -21,6 +21,8 @@ namespace Api
                 {
                     options.Authority = "https://demo.duendesoftware.com";
                     options.Audience = "api";
+
+                    options.MapInboundClaims = false;
                 });
         }
 

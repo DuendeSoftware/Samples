@@ -8,12 +8,16 @@
 
 <p>This component demonstrates fetching data from a service.</p>
 
-@if (forecasts == null)
+@if (weather == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
+    <h4>
+        Weather report for @weather.User
+    </h4>
+    
     <table class="table">
         <thead>
             <tr>
@@ -24,7 +28,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var forecast in weather.Forecast)
             {
                 <tr>
                     <td>@forecast.Date.ToShortDateString()</td>
@@ -38,10 +42,10 @@ else
 }
 
 @code {
-    private WeatherForecast[] forecasts;
+    private Weather weather;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        weather = await ForecastService.GetForecastAsync(DateTime.Now);
     }
 }

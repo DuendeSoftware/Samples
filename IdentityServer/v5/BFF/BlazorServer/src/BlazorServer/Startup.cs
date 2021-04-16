@@ -31,6 +31,7 @@ namespace BlazorServer
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddHttpContextAccessor();
+            services.AddHttpClient();
             
             services.AddSingleton<WeatherForecastService>();
 
