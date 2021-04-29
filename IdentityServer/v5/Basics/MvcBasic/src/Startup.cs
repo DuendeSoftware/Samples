@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
+using IdentityModel.Client;
 
 namespace Client
 {
@@ -15,6 +17,12 @@ namespace Client
 
             services.AddControllersWithViews();
             services.AddHttpClient();
+            
+            services.AddSingleton<IDiscoveryCache>(r =>
+            {
+                var factory = r.GetRequiredService<IHttpClientFactory>();
+                return new DiscoveryCache(Urls.IdentityServer, () => factory.CreateClient());
+            });
 
             services.AddAuthentication(options =>
             {
@@ -23,7 +31,7 @@ namespace Client
             })
                 .AddCookie(options =>
                 {
-                    options.Cookie.Name = "mvccode";
+                    options.Cookie.Name = "mvcbasic";
                 })
                 .AddOpenIdConnect("oidc", options =>
                 {
