@@ -13,7 +13,25 @@ namespace IdentityServerHost.WsFed
             Type = "wsfed";
         }
 
-        public string MetadataAddress { get; set; }
-        public string RelyingPartyId { get; set; }
+        public WsFedProvider(IdentityProvider other) : base(other)
+        {
+            if (other.Type != "wsfed") throw new System.Exception($"Invalid type '{other.Type}'");
+        }
+
+        public string MetadataAddress 
+        {
+            get => this["MetadataAddress"];
+            set => this["MetadataAddress"] = value; 
+        }
+        public string RelyingPartyId 
+        {
+            get => this["RelyingPartyId"];
+            set => this["RelyingPartyId"] = value;
+        }
+        public bool AllowIdpInitiated 
+        {
+            get => this["AllowIdpInitiated"] == "true";
+            set => this["AllowIdpInitiated"] = value ? "true" : "false";
+        }
     }
 }

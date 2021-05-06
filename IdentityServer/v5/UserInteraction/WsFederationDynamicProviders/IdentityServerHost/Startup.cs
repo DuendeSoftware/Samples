@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using IdentityServerHost.Quickstart.UI;
 using Duende.IdentityServer;
 using IdentityServerHost.WsFed;
-using IdentityModel;
 
 namespace IdentityServerHost
 {
@@ -60,15 +59,18 @@ namespace IdentityServerHost
                 });
 
             builder.AddWsFedDynamicProvider()
-                .AddInMemoryWsFedProviders(new WsFedProvider[] {
-                    new WsFedProvider
-                    {
-                        Scheme = "adfs",
-                        MetadataAddress = "https://adfs4.local/federationmetadata/2007-06/federationmetadata.xml",
-                        RelyingPartyId = "urn:test",
-                        DisplayName = "Local ADFS"
-                    }
-                });
+                .AddIdentityProviderStore<EfWsFedProviderStore>();
+
+            //builder.AddWsFedDynamicProvider()
+            //  .AddInMemoryWsFedProviders(new WsFedProvider[] {
+            //        new WsFedProvider
+            //        {
+            //            Scheme = "adfs",
+            //            MetadataAddress = "https://adfs4.local/federationmetadata/2007-06/federationmetadata.xml",
+            //            RelyingPartyId = "urn:test",
+            //            DisplayName = "Local ADFS"
+            //        }
+            //    });
 
 
             services.AddAuthentication()

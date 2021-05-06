@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdentityServerHost.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
-    [Migration("20210505170708_Update_DuendeIdentityServer_v5_2")]
-    partial class Update_DuendeIdentityServer_v5_2
+    [Migration("20210506161826_v5_2")]
+    partial class v5_2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -631,6 +631,37 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                     b.ToTable("ClientSecrets");
                 });
 
+            modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.IdentityProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Properties")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Scheme")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(20);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityProviders");
+                });
+
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.IdentityResource", b =>
                 {
                     b.Property<int>("Id")
@@ -724,54 +755,6 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                     b.HasIndex("IdentityResourceId");
 
                     b.ToTable("IdentityResourceProperties");
-                });
-
-            modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.OidcIdentityProvider", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Authority")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(400);
-
-                    b.Property<string>("ClientId")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("ClientSecret")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
-
-                    b.Property<string>("DisplayName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ResponseType")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
-
-                    b.Property<string>("Scheme")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
-
-                    b.Property<string>("Scope")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(400);
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OidcIdentityProviders");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResourceClaim", b =>

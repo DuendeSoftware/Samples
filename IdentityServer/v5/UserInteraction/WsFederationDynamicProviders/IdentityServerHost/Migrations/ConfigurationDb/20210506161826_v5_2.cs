@@ -2,12 +2,12 @@
 
 namespace IdentityServerHost.Migrations.ConfigurationDb
 {
-    public partial class Update_DuendeIdentityServer_v5_2 : Migration
+    public partial class v5_2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "OidcIdentityProviders",
+                name: "IdentityProviders",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -16,22 +16,18 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
                     Enabled = table.Column<bool>(nullable: false),
                     Type = table.Column<string>(maxLength: 20, nullable: false),
-                    Authority = table.Column<string>(maxLength: 400, nullable: true),
-                    ResponseType = table.Column<string>(maxLength: 20, nullable: true),
-                    ClientId = table.Column<string>(maxLength: 100, nullable: true),
-                    ClientSecret = table.Column<string>(maxLength: 200, nullable: true),
-                    Scope = table.Column<string>(maxLength: 400, nullable: true)
+                    Properties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OidcIdentityProviders", x => x.Id);
+                    table.PrimaryKey("PK_IdentityProviders", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OidcIdentityProviders");
+                name: "IdentityProviders");
         }
     }
 }

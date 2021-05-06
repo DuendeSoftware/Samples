@@ -8,6 +8,9 @@ using Serilog;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
+using Duende.IdentityServer.Models;
+using System;
+using IdentityServerHost.WsFed;
 
 namespace IdentityServerHost
 {
@@ -79,6 +82,40 @@ namespace IdentityServerHost
             else
             {
                 Log.Debug("ApiScopes already populated");
+            }
+
+            if (!context.IdentityProviders.Any())
+            {
+                Console.WriteLine("IdentityProviders being populated");
+                context.IdentityProviders.Add(new OidcProvider
+                {
+                    Scheme = "demoidsrv",
+                    DisplayName = "IdentityServer",
+                    Authority = "https://demo.duendesoftware.com",
+                    ClientId = "login",
+                }.ToEntity());
+                context.IdentityProviders.Add(new OidcProvider
+                {
+                    Scheme = "google",
+                    DisplayName = "Google",
+                    Authority = "https://accounts.google.com",
+                    ClientId = "998042782978-gkes3j509qj26omrh6orvrnu0klpflh6.apps.googleusercontent.com",
+                    Scope = "openid profile email"
+                }.ToEntity());
+                context.SaveChanges();
+                
+                context.IdentityProviders.Add(new WsFedProvider
+                {
+                    Scheme = "adfs",
+                    DisplayName = "Local ADFS",
+                    MetadataAddress = "https://adfs4.local/federationmetadata/2007-06/federationmetadata.xml",
+                    RelyingPartyId = "urn:test",
+                }.ToEntity());
+                context.SaveChanges();
+            }
+            else
+            {
+                Console.WriteLine("OidcIdentityProviders already populated");
             }
         }
     }
