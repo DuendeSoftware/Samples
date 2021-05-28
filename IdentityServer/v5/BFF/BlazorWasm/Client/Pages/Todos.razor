@@ -1,0 +1,59 @@
+@page "/todos"
+@using Blazor.Shared
+@inject HttpClient Http
+
+<h1>ToDo</h1>
+
+@if (todos == null)
+{
+    <p><em>Loading...</em></p>
+    <p>@error</p>
+}
+else
+{
+    <div>
+        <button class="btn btn-primary" @onclick="Add">Add</button>
+    </div>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>User</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            @foreach (var todo in todos)
+            {
+                <tr>
+                    <td>@todo.Name</td>
+                    <td>@todo.User</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ToDo> todos;
+    private string error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Http.GetAsync("todos");
+        if (response.IsSuccessStatusCode)
+        {
+            todos = await response.Content.ReadFromJsonAsync<List<ToDo>>();
+        }
+        else
+        {
+            error = "Error contacting API: " + response.StatusCode.ToString();
+        }
+    }
+    
+    private void Add()
+    {
+        todos.Add(new ToDo { Name = "knockout!", User = "dom"});
+    }
+}
