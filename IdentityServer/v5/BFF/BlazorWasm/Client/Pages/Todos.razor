@@ -6,31 +6,37 @@
 
 @if (todos == null)
 {
-    <p><em>Loading...</em></p>
+    <p>
+        <em>Loading...</em>
+    </p>
     <p>@error</p>
 }
 else
 {
     <div>
+        <label for="date">Todo Date</label>
+        <input class="form-control" id="date" type="datetime" value="2021-03-01"/>
+        <label for="name">Todo Name</label>
+        <input class="form-control" id="name" value="Do something"/>
         <button class="btn btn-primary" @onclick="Add">Add</button>
     </div>
-    
+
     <table class="table">
         <thead>
-            <tr>
-                <th>Name</th>
-                <th>User</th>
-            </tr>
+        <tr>
+            <th>Name</th>
+            <th>User</th>
+        </tr>
         </thead>
-        
+
         <tbody>
-            @foreach (var todo in todos)
-            {
-                <tr>
-                    <td>@todo.Name</td>
-                    <td>@todo.User</td>
-                </tr>
-            }
+        @foreach (var todo in todos)
+        {
+            <tr>
+                <td>@todo.Name</td>
+                <td>@todo.User</td>
+            </tr>
+        }
         </tbody>
     </table>
 }
@@ -51,9 +57,10 @@ else
             error = "Error contacting API: " + response.StatusCode.ToString();
         }
     }
-    
+
     private void Add()
     {
-        todos.Add(new ToDo { Name = "knockout!", User = "dom"});
+        todos.Add(new ToDo { Name = "knockout!", User = "dom" });
     }
+
 }
