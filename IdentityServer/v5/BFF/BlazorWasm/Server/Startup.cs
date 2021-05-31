@@ -93,14 +93,14 @@ namespace Blazor.Server
                 
                 endpoints.MapRazorPages();
                 
-                // if you want the TODOs API local
+                // local APIs
                 endpoints.MapControllers()
                     .RequireAuthorization()
                     .AsLocalBffApiEndpoint();
-
-                // if you want the TODOs API remote
-                //endpoints.MapRemoteBffApiEndpoint("/todos", "https://localhost:5020/todos")
-                //    .RequireAccessToken(Duende.Bff.TokenType.User);
+                
+                // remote API
+                endpoints.MapRemoteBffApiEndpoint("/remote", "https://demo.duendesoftware.com/api/test")
+                    .RequireAccessToken();
                 
                 endpoints.MapFallbackToFile("index.html");
             });
