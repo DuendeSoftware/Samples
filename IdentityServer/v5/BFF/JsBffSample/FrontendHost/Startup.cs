@@ -15,7 +15,7 @@ namespace FrontendHost
             services.AddBff();
 
             // registers HTTP client that uses the managed user access token
-            services.AddUserAccessTokenClient("api_client", configureClient: client =>
+            services.AddUserAccessTokenHttpClient("api_client", configureClient: client =>
             {
                 client.BaseAddress = new Uri("https://localhost:5002/");
             });
@@ -65,6 +65,7 @@ namespace FrontendHost
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseBff();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
