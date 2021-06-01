@@ -94,16 +94,7 @@ namespace IdentityServerHost
                     Authority = "https://demo.duendesoftware.com",
                     ClientId = "login",
                 }.ToEntity());
-                context.IdentityProviders.Add(new OidcProvider
-                {
-                    Scheme = "google",
-                    DisplayName = "Google",
-                    Authority = "https://accounts.google.com",
-                    ClientId = "998042782978-gkes3j509qj26omrh6orvrnu0klpflh6.apps.googleusercontent.com",
-                    Scope = "openid profile email"
-                }.ToEntity());
-                context.SaveChanges();
-                
+
                 context.IdentityProviders.Add(new WsFedProvider
                 {
                     Scheme = "adfs",

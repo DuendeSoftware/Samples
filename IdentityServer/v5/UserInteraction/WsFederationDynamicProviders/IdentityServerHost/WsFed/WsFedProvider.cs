@@ -7,15 +7,12 @@ namespace IdentityServerHost.WsFed
 {
     public class WsFedProvider : IdentityProvider
     {
-        public WsFedProvider()
+        public WsFedProvider() : base("wsfed")
         {
-            // this must match the value used in the call to AddProviderType
-            Type = "wsfed";
         }
 
-        public WsFedProvider(IdentityProvider other) : base(other)
+        public WsFedProvider(IdentityProvider other) : base("wsfed", other)
         {
-            if (other.Type != "wsfed") throw new System.Exception($"Invalid type '{other.Type}'");
         }
 
         public string MetadataAddress 

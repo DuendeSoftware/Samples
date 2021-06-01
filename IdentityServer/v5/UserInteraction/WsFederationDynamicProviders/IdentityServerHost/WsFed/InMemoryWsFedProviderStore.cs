@@ -18,6 +18,14 @@ namespace IdentityServerHost.WsFed
             _providers = providers;
         }
 
+        public Task<IEnumerable<IdentityProviderName>> GetAllSchemeNamesAsync()
+        {
+            return Task.FromResult(_providers.Select(x=>new IdentityProviderName 
+            {
+                DisplayName = x.DisplayName, Enabled = x.Enabled, Scheme = x.Scheme
+            }));
+        }
+
         public Task<IdentityProvider> GetBySchemeAsync(string scheme)
         {
             var provider = _providers.SingleOrDefault(x => x.Scheme == scheme);
