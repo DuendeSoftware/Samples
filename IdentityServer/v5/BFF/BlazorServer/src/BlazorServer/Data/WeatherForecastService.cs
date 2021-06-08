@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using IdentityModel.Client;
+using IdentityModel.AspNetCore.AccessTokenManagement;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,17 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlazorServer.Data;
 using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
+using IdentityModel.AspNetCore.AccessTokenManagement;
 
 namespace BlazorServer
 {
@@ -32,17 +27,19 @@ namespace BlazorServer
             services.AddServerSideBlazor();
             services.AddHttpContextAccessor();
             services.AddHttpClient();
-            
+
             services.AddSingleton<WeatherForecastService>();
 
             services.AddBff();
-            
+
             // registers HTTP client that uses the managed user access token
-            services.AddUserAccessTokenClient("api_client", configureClient: client =>
+            services.AddUserAccessTokenHttpClient("api_client", configureClient: client =>
             {
                 client.BaseAddress = new Uri("https://localhost:5002/");
             });
-            
+
+            services.AddSingleton<IUserAccessTokenStore, CustomTokenStore>();
+
             services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = "cookie";
@@ -73,9 +70,16 @@ namespace BlazorServer
                     options.Scope.Add("offline_access");
 
                     options.TokenValidationParameters = new()
-                    {   
+                    {
                         NameClaimType = "name",
                         RoleClaimType = "role"
+                    };
+
+                    options.Events.OnTokenValidated = async n => 
+                    {
+                        var svc = n.HttpContext.RequestServices.GetRequiredService<IUserAccessTokenStore>();
+                        var exp = DateTimeOffset.UtcNow.AddSeconds(Double.Parse(n.TokenEndpointResponse.ExpiresIn));
+                        await svc.StoreTokenAsync(n.Principal, n.TokenEndpointResponse.AccessToken, exp, n.TokenEndpointResponse.RefreshToken);
                     };
                 });
         }
@@ -95,6 +99,7 @@ namespace BlazorServer
 
             app.UseRouting();
             app.UseAuthentication();
+            app.UseBff();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
