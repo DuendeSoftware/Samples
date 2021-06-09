@@ -18,7 +18,7 @@ window.addEventListener("load", async () => {
             let claims = await resp.json();
             console.log("user claims", claims);
 
-            let logoutUrlClaim = claims.find(claim => claim.type === 'bff:logout');
+            let logoutUrlClaim = claims.find(claim => claim.type === 'bff:logout_url');
             if (logoutUrlClaim) {
                 document.getElementById("logoutLink").href = logoutUrlClaim.value;
             }
