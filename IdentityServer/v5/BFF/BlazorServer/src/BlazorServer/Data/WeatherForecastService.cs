@@ -1,9 +1,12 @@
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using IdentityModel.AspNetCore.AccessTokenManagement;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,12 +14,17 @@ namespace BlazorServer.Data
 {
     public class WeatherForecastService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
+        private readonly IUserAccessTokenManagementService _userAccessTokenManagementService;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public WeatherForecastService(IHttpContextAccessor httpContextAccessor, IHttpClientFactory httpClientFactory)
+        public WeatherForecastService(
+            AuthenticationStateProvider authenticationStateProvider, 
+            IUserAccessTokenManagementService userAccessTokenManagementService,
+            IHttpClientFactory httpClientFactory)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _authenticationStateProvider = authenticationStateProvider;
+            _userAccessTokenManagementService = userAccessTokenManagementService;
             _httpClientFactory = httpClientFactory;
         }
         
@@ -28,18 +36,21 @@ namespace BlazorServer.Data
         public async Task<Weather> GetForecastAsync(DateTime startDate)
         {
             var weather = new Weather();
+
+            var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
             
-            var context = _httpContextAccessor.HttpContext;
-            
-            if (!context.User.Identity.IsAuthenticated)
+            if (!state.User.Identity.IsAuthenticated)
             {
                 weather.User = "anonymous";
             }
             else
             {
+                var token = await _userAccessTokenManagementService.GetUserAccessTokenAsync(state.User);
                 var client = _httpClientFactory.CreateClient("api_client");
+                client.SetBearerToken(token);
+                
                 var userName = await client.GetStringAsync("identity");
-
+                
                 weather.User = userName;
             }
             

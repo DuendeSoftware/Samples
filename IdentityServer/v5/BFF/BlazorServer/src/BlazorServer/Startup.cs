@@ -28,14 +28,13 @@ namespace BlazorServer
             services.AddHttpContextAccessor();
             services.AddHttpClient();
 
-            services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<WeatherForecastService>();
 
             services.AddBff();
 
-            // registers HTTP client that uses the managed user access token
-            services.AddUserAccessTokenHttpClient("api_client", configureClient: client =>
+            services.AddHttpClient("api_client", configureClient =>
             {
-                client.BaseAddress = new Uri("https://localhost:5002/");
+                configureClient.BaseAddress = new Uri("https://localhost:5002/");
             });
 
             services.AddSingleton<IUserAccessTokenStore, CustomTokenStore>();
