@@ -96,7 +96,7 @@ namespace Blazor.Server
                 // local APIs
                 endpoints.MapControllers()
                     .RequireAuthorization()
-                    .AsLocalBffApiEndpoint();
+                    .AsBffApiEndpoint();
                 
                 // remote API
                 endpoints.MapRemoteBffApiEndpoint("/remote", "https://demo.duendesoftware.com/api/test")

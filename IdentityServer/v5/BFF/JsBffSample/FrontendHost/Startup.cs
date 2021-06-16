@@ -75,7 +75,7 @@ namespace FrontendHost
                 // if you want the TODOs API local
                 endpoints.MapControllers()
                     .RequireAuthorization()
-                    .AsLocalBffApiEndpoint();
+                    .AsBffApiEndpoint();
 
                 // if you want the TODOs API remote
                 //endpoints.MapRemoteBffApiEndpoint("/todos", "https://localhost:5020/todos")
