@@ -55,10 +55,11 @@ namespace JwtSecuredFunction
                 IssuerSigningKeys = config.SigningKeys
             };
 
+            var handler = new JsonWebTokenHandler();
+
             var tries = 0;
             while (tries <= 1)
             {
-                var handler = new JsonWebTokenHandler();
                 var result = handler.ValidateToken(values[1], validationParameter);
 
                 if (result.IsValid)
@@ -66,17 +67,24 @@ namespace JwtSecuredFunction
                     logger.LogInformation("Valid token, returning identity.");
                     return result.ClaimsIdentity;
                 }
-
-                if (result.Exception is SecurityTokenSignatureKeyNotFoundException)
+                else
                 {
-                    logger.LogInformation("Trying to refresh keys.");
+                    if (result.Exception is SecurityTokenSignatureKeyNotFoundException)
+                    {
+                        logger.LogInformation("Trying to refresh keys.");
 
-                    ConfigurationManager.RequestRefresh();
-                    tries++;
+                        ConfigurationManager.RequestRefresh();
+                        tries++;
+                    }
+                    else
+                    {
+                        logger.LogInformation("invalid token.");
+                        return null;
+                    }
                 }
             }
 
-            logger.LogInformation("invalid token.");
+            logger.LogInformation("invalid token signature.");
             return null;
         }
     }
