@@ -207,3 +207,4 @@ tools/
 tempkey.jwk
 keys
 Users.db
+*.db
