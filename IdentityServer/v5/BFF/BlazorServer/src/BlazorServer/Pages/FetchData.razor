@@ -2,6 +2,9 @@
 
 @using BlazorServer.Data
 @using Microsoft.AspNetCore.Http
+
+@attribute [Authorize]
+
 @inject WeatherForecastService ForecastService
 
 <h1>Weather forecast</h1>
@@ -17,7 +20,7 @@ else
     <h4>
         Weather report for @weather.User
     </h4>
-    
+
     <table class="table">
         <thead>
             <tr>
