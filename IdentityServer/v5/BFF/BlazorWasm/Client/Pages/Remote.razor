@@ -1,6 +1,7 @@
 @page "/remote"
 @using System.Text.Json
 
+@attribute [Authorize]
 @inject HttpClient Http
 
 <h1>Remote API</h1>
@@ -27,7 +28,7 @@ else
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadFromJsonAsync<List<claim>>();
-            data = JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true });    
+            data = JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true });
         }
         else
         {

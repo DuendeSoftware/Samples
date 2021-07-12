@@ -1,4 +1,6 @@
 @page "/todos"
+
+@attribute [Authorize]
 @using Blazor.Shared
 
 @inject HttpClient Http
@@ -14,31 +16,35 @@
 }
 else
 {
-    <div>
-        <label for="name">Todo Name</label>
-        <input class="form-control" id="name" @bind="newName" />
-        
-        <button class="btn btn-primary" @onclick="Add">Add</button>
+    <div class="row my-2">
+        <label class="col-md-2" for="name">Todo Name</label>
+        <input class="col-md-6 form-control" id="name" @bind="newName" />
+
+        <button class="btn btn-primary col-md-4" @onclick="Add">Add</button>
     </div>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>User</th>
-        </tr>
-        </thead>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>User</th>
+                    </tr>
+                </thead>
 
-        <tbody>
-        @foreach (var todo in todos)
-        {
-            <tr>
-                <td>@todo.Name</td>
-                <td>@todo.User</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+                <tbody>
+                    @foreach (var todo in todos)
+                    {
+                        <tr>
+                            <td>@todo.Name</td>
+                            <td>@todo.User</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }
 
 @code {
@@ -63,7 +69,7 @@ else
     private async Task Add()
     {
         var model = new ToDo { Name = newName };
-        
+
         var response = await Http.PostAsJsonAsync("todos", model);
         if (response.IsSuccessStatusCode)
         {
