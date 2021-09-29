@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Duende.Bff.Yarp;
 
 namespace FrontendHost
 {
@@ -12,7 +13,8 @@ namespace FrontendHost
         {
             services.AddControllers();
 
-            services.AddBff();
+            services.AddBff()
+                .AddRemoteApis();
 
             // registers HTTP client that uses the managed user access token
             services.AddUserAccessTokenHttpClient("api_client", configureClient: client =>
@@ -71,15 +73,15 @@ namespace FrontendHost
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBffManagementEndpoints();
-
+                
                 // if you want the TODOs API local
                 endpoints.MapControllers()
                     .RequireAuthorization()
                     .AsBffApiEndpoint();
 
                 // if you want the TODOs API remote
-                //endpoints.MapRemoteBffApiEndpoint("/todos", "https://localhost:5020/todos")
-                //    .RequireAccessToken(Duende.Bff.TokenType.User);
+                // endpoints.MapRemoteBffApiEndpoint("/todos", "https://localhost:5020/todos")
+                //     .RequireAccessToken(Duende.Bff.TokenType.User);
             });
         }
     }
