@@ -113,6 +113,10 @@ namespace FrontendHost
 
                 // if you want the TODOs API remote
                 endpoints.MapBffReverseProxy();
+                
+                // which is equivalent to
+                //endpoints.MapReverseProxy()
+                //    .AsBffApiEndpoint();
             });
         }
     }
