@@ -23,6 +23,34 @@ namespace PAT
                 new ApiScope("scope2"),
             };
 
+        // API resources to enable introspection (if needed)
+        public static IEnumerable<ApiResource> ApiResources =>
+            new ApiResource[]
+            {
+                new ApiResource("api1")
+                {
+                    Scopes =
+                    {
+                        "scope1"
+                    },
+                    ApiSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    }
+                },
+                new ApiResource("api2")
+                {
+                    Scopes =
+                    {
+                        "scope2"
+                    },
+                    ApiSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    }
+                }
+            };
+
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
@@ -43,7 +71,7 @@ namespace PAT
                 {
                     ClientId = "interactive",
                     ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
-                    
+
                     AllowedGrantTypes = GrantTypes.Code,
 
                     RedirectUris = { "https://localhost:44300/signin-oidc" },
