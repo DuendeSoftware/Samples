@@ -49,9 +49,17 @@ namespace IdentityServerHost.Pages.PAT
                 },
                 AccessTokenType = View.IsReferenceToken ? AccessTokenType.Reference : AccessTokenType.Jwt
             };
-            
-            if (View.ForScope1) token.Claims.Add(new ("scope", "scope1"));
-            if (View.ForScope2) token.Claims.Add(new ("scope", "scope1"));
+
+            if (View.ForApi1)
+            {
+                token.Claims.Add(new ("aud", "api1"));
+                token.Claims.Add(new ("scope", "scope1"));
+            }
+
+            if (View.ForApi2)
+            {
+                token.Claims.Add(new ("scope", "scope1"));
+            }
             
             Token = await _tokenService.CreateSecurityTokenAsync(token);
             return Page();
