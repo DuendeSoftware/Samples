@@ -57,13 +57,11 @@ namespace PAT
                 // m2m client credentials flow client
                 new Client
                 {
-                    ClientId = "m2m.client",
-                    ClientName = "Client Credentials Client",
-
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientId = "pat.client",
                     ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
 
-                    AllowedScopes = { "scope1" }
+                    AllowedScopes = { "scope1", "scope2" }
                 },
 
                 // interactive client using code flow + pkce

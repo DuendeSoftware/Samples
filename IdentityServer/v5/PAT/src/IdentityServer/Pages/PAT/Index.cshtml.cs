@@ -42,10 +42,12 @@ namespace IdentityServerHost.Pages.PAT
             {
                 Issuer = await _issuerNameService.GetCurrentAsync(),
                 Lifetime = Convert.ToInt32(TimeSpan.FromDays(View.LifetimeDays).TotalSeconds),
+                CreationTime = DateTime.UtcNow,
+                ClientId = "pat.client",
 
                 Claims = new List<Claim>
                 {
-                    new("client_id", "pat_client"),
+                    new("client_id", "pat.client"),
                     new("sub", User.GetSubjectId())
                 },
                 
