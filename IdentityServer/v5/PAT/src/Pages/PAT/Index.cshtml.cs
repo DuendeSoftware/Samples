@@ -60,7 +60,7 @@ namespace IdentityServerHost.Pages.PAT
             if (View.ForApi2)
             {
                 token.Audiences.Add("api2");
-                token.Claims.Add(new ("scope", "scope2"));
+                token.Claims.Add(new("scope", "scope2"));
             }
             
             Token = await _tokenService.CreateSecurityTokenAsync(token);
