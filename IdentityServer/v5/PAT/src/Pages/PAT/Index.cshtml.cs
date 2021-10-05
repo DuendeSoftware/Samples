@@ -19,7 +19,8 @@ namespace IdentityServerHost.Pages.PAT
         private readonly ITokenService _tokenService;
         private readonly IIssuerNameService _issuerNameService;
 
-        [BindProperty] 
+
+        [BindProperty]
         public ViewModel View { get; set; }
 
         public string Token { get; set; }
@@ -45,11 +46,12 @@ namespace IdentityServerHost.Pages.PAT
                 Claims = new List<Claim>
                 {
                     new("client_id", "pat_client"),
-                    new("sub", User.GetSubjectId()),
+                    new("sub", User.GetSubjectId())
                 },
                 
                 AccessTokenType = View.IsReferenceToken ? AccessTokenType.Reference : AccessTokenType.Jwt
             };
+
 
             if (View.ForApi1)
             {
