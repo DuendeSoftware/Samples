@@ -19,7 +19,8 @@ namespace IdentityServerHost.Pages.PAT
         private readonly ITokenService _tokenService;
         private readonly IIssuerNameService _issuerNameService;
 
-        [BindProperty] public ViewModel View { get; set; }
+        [BindProperty] 
+        public ViewModel View { get; set; }
 
         public string Token { get; set; }
 
@@ -45,20 +46,21 @@ namespace IdentityServerHost.Pages.PAT
                 {
                     new("client_id", "pat_client"),
                     new("sub", User.GetSubjectId()),
-                    new("name", User.GetDisplayName())
                 },
+                
                 AccessTokenType = View.IsReferenceToken ? AccessTokenType.Reference : AccessTokenType.Jwt
             };
 
             if (View.ForApi1)
             {
-                token.Claims.Add(new ("aud", "api1"));
+                token.Audiences.Add("api1");
                 token.Claims.Add(new ("scope", "scope1"));
             }
 
             if (View.ForApi2)
             {
-                token.Claims.Add(new ("scope", "scope1"));
+                token.Audiences.Add("api2");
+                token.Claims.Add(new ("scope", "scope2"));
             }
             
             Token = await _tokenService.CreateSecurityTokenAsync(token);
