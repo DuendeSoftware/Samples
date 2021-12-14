@@ -4,6 +4,7 @@ using IdentityModel.AspNetCore.AccessTokenManagement;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Client
@@ -13,12 +14,18 @@ namespace Client
         private readonly AssertionService _assertionService;
 
         public AssertionConfigurationService(
-            IOptions<AccessTokenManagementOptions> accessTokenManagementOptions,
-            IOptionsMonitor<OpenIdConnectOptions> oidcOptions,
-            IAuthenticationSchemeProvider schemeProvider,
-            AssertionService assertionService) : base(accessTokenManagementOptions,
-            oidcOptions,
-            schemeProvider)
+            UserAccessTokenManagementOptions userAccessTokenManagementOptions,
+            ClientAccessTokenManagementOptions clientAccessTokenManagementOptions,
+            IOptionsMonitor<OpenIdConnectOptions> oidcOptions, IAuthenticationSchemeProvider schemeProvider,
+            ILogger<AssertionConfigurationService> logger,
+            AssertionService assertionService) 
+            
+            : base(
+                userAccessTokenManagementOptions,
+                clientAccessTokenManagementOptions, 
+                oidcOptions, 
+                schemeProvider, 
+                logger)
         {
             _assertionService = assertionService;
         }
@@ -33,5 +40,7 @@ namespace Client
 
             return Task.FromResult(assertion);
         }
+
+       
     }
 }
