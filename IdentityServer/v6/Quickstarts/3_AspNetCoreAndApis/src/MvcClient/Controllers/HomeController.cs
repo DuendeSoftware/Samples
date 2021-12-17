@@ -4,9 +4,9 @@ using MvcClient.Models;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Newtonsoft.Json.Linq;
 
 namespace MvcClient.Controllers
 {
@@ -32,7 +32,9 @@ namespace MvcClient.Controllers
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var content = await client.GetStringAsync("https://localhost:6001/identity");
 
-            ViewBag.Json = JArray.Parse(content).ToString();
+            var doc = JsonDocument.Parse(content).RootElement;
+            ViewBag.Json = JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true });
+            
             return View("json");
         }
 

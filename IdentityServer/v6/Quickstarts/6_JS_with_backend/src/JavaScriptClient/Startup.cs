@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IdentityModel.Tokens.Jwt;
+using Duende.Bff.Yarp;
 
 namespace JavaScriptClient
 {
@@ -16,10 +17,9 @@ namespace JavaScriptClient
             services.AddControllers();
             services.AddAuthorization();
 
-            services.AddBff();
-
-            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-
+            services.AddBff()
+                .AddRemoteApis();
+            
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
@@ -39,6 +39,7 @@ namespace JavaScriptClient
 
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
+                options.MapInboundClaims = false;
             });
         }
 
