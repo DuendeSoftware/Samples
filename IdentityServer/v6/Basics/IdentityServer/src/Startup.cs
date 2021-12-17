@@ -3,7 +3,6 @@
 
 
 using Duende.IdentityServer;
-using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +24,7 @@ namespace IdentityServerHost
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddRazorPages();
 
             var builder = services.AddIdentityServer(options =>
             {
@@ -75,7 +74,7 @@ namespace IdentityServerHost
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
         }
     }

@@ -68,7 +68,7 @@ namespace Client
             services.AddAccessTokenManagement();
 
             // add HTTP client to call protected API
-            services.AddUserAccessTokenClient("client", client =>
+            services.AddUserAccessTokenHttpClient("client", configureClient: client =>
             {
                 client.BaseAddress = new Uri(Urls.SampleApi);
             });

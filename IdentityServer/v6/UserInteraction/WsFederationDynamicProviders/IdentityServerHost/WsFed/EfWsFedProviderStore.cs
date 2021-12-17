@@ -5,13 +5,15 @@ using Duende.IdentityServer.EntityFramework.Interfaces;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using Duende.IdentityServer.EntityFramework.Stores;
 using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Services;
 using Microsoft.Extensions.Logging;
 
 namespace IdentityServerHost.WsFed
 {
     public class EfWsFedProviderStore : IdentityProviderStore
     {
-        public EfWsFedProviderStore(IConfigurationDbContext context, ILogger<IdentityProviderStore> logger) : base(context, logger)
+        public EfWsFedProviderStore(IConfigurationDbContext context, ILogger<IdentityProviderStore> logger, ICancellationTokenProvider cancellationTokenProvider) 
+            : base(context, logger, cancellationTokenProvider)
         {
         }
 

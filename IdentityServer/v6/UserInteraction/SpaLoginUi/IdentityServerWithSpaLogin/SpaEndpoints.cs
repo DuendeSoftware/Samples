@@ -45,11 +45,13 @@ namespace IdentityServerHost.Spa
     public class SpaEndpoints : ControllerBase
     {
         private readonly IIdentityServerInteractionService _interaction;
+        private readonly IServerUrls _serverUrls;
         private readonly TestUserStore _users;
 
-        public SpaEndpoints(IIdentityServerInteractionService interaction)
+        public SpaEndpoints(IIdentityServerInteractionService interaction, IServerUrls serverUrls)
         {
             _interaction = interaction;
+            _serverUrls = serverUrls;
             _users = new TestUserStore(TestUsers.Users);
         }
 
@@ -88,7 +90,7 @@ namespace IdentityServerHost.Spa
                 }
                 else
                 {
-                    response.ValidReturnUrl = HttpContext.GetIdentityServerBaseUrl();
+                    response.ValidReturnUrl = _serverUrls.BaseUrl;
                 }
 
                 var user = _users.FindByUsername(model.Username);

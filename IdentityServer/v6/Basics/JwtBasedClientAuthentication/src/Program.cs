@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 
 namespace Client
 {
@@ -84,7 +83,7 @@ namespace Client
             var response = await client.GetStringAsync("identity");
 
             "\n\nService claims:".ConsoleGreen();
-            Console.WriteLine(JArray.Parse(response));
+            Console.WriteLine(response.PrettyPrintJson());
         }
     }
 }

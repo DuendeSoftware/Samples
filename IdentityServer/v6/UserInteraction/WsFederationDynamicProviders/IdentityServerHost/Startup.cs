@@ -91,7 +91,6 @@ namespace IdentityServerHost
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
 
             app.UseStaticFiles();
