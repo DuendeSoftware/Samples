@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace IdentityServerHost.Pages.Ciba
 {
+    [AllowAnonymous]
     [SecurityHeaders]
     public class IndexModel : PageModel
     {
@@ -27,7 +28,7 @@ namespace IdentityServerHost.Pages.Ciba
 
         public async Task<IActionResult> OnGet(string id)
         {
-            LoginRequest = await _backchannelAuthenticationInteraction.GetLoginRequestById(id);
+            LoginRequest = await _backchannelAuthenticationInteraction.GetLoginRequestByInternalIdAsync(id);
             if (LoginRequest == null)
             {
                 _logger.LogWarning("Invalid backchannel login id {id}", id);

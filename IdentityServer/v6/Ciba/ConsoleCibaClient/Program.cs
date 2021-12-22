@@ -3,9 +3,8 @@ using IdentityModel;
 using IdentityModel.Client;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
-using System.Text.Json;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,46 +27,47 @@ namespace ConsoleCibaClient
             await CallServiceAsync(tokenResponse.AccessToken);
         }
 
-        static async Task<BackchannelLoginResponse> RequestBackchannelLoginAsync()
+        static async Task<BackchannelAuthenticationResponse> RequestBackchannelLoginAsync()
         {
             var disco = await _cache.GetAsync();
             if (disco.IsError) throw new Exception(disco.Error);
 
-            var cibaEp = disco.TryGetString("backchannel_authentication_endpoint");
+            var cibaEp = disco.BackchannelAuthenticationEndpoint;
 
             var username = "alice";
             var bindingMessage = Guid.NewGuid().ToString("N").Substring(0, 10);
 
-            var client = new HttpClient();
-            var body = new Dictionary<string, string>
+            var req = new BackchannelAuthenticationRequest()
             {
-                {"client_id", "ciba"},
-                {"client_secret", "secret"},
-                {"scope", "openid profile scope1 offline_access"},
-                {"login_hint", username},
-                {"binding_message", bindingMessage },
+                Address = cibaEp,
+                ClientId = "ciba",
+                ClientSecret = "secret",
+                Scope = "openid profile scope1 offline_access",
+                LoginHint = username,
+                //IdTokenHint = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkYyNjZCQzA3NTFBNjIyNDkzMzFDMzI4QUQ1RkIwMkJGIiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIiwibmJmIjoxNjM4NDc3MDE2LCJpYXQiOjE2Mzg0NzcwMTYsImV4cCI6MTYzODQ3NzMxNiwiYXVkIjoiY2liYSIsImFtciI6WyJwd2QiXSwiYXRfaGFzaCI6ImE1angwelVQZ2twczBVS1J5VjBUWmciLCJzaWQiOiIzQTJDQTJDNjdBNTAwQ0I2REY1QzEyRUZDMzlCQTI2MiIsInN1YiI6IjgxODcyNyIsImF1dGhfdGltZSI6MTYzODQ3NzAwOCwiaWRwIjoibG9jYWwifQ.GAIHXYgEtXw5NasR0zPMW3jSKBuWujzwwnXJnfHdulKX-I3r47N0iqHm5v5V0xfLYdrmntjLgmdm0DSvdXswtZ1dh96DqS1zVm6yQ2V0zsA2u8uOt1RG8qtjd5z4Gb_wTvks4rbUiwi008FOZfRuqbMJJDSscy_YdEJqyQahdzkcUnWZwdbY8L2RUTxlAAWQxktpIbaFnxfr8PFQpyTcyQyw0b7xmYd9ogR7JyOff7IJIHPDur0wbRdpI1FDE_VVCgoze8GVAbVxXPtj4CtWHAv07MJxa9SdA_N-lBcrZ3PHTKQ5t1gFXwdQvp3togUJl33mJSru3lqfK36pn8y8ow",
+                BindingMessage = bindingMessage,
+                RequestedExpiry = 200
             };
-            
-            var response = await client.PostAsync(cibaEp, new FormUrlEncodedContent(body));
-            var json = await response.Content.ReadAsStringAsync();
-            var loginResponse = JsonSerializer.Deserialize<BackchannelLoginResponse>(json);
 
-            if (loginResponse.IsError) throw new Exception(loginResponse.error);
+            var client = new HttpClient();
+            var response = await client.RequestBackchannelAuthenticationAsync(req);
+
+            if (response.IsError) throw new Exception(response.Error);
 
             Console.WriteLine($"Login Hint                  : {username}");
             Console.WriteLine($"Binding Message             : {bindingMessage}");
-            Console.WriteLine($"Authentication Request Id   : {loginResponse.auth_req_id}");
-            Console.WriteLine($"Expires In                  : {loginResponse.expires_in}");
-            Console.WriteLine($"Interval                    : {loginResponse.interval}");
+            Console.WriteLine($"Authentication Request Id   : {response.AuthenticationRequestId}");
+            Console.WriteLine($"Expires In                  : {response.ExpiresIn}");
+            Console.WriteLine($"Interval                    : {response.Interval}");
             Console.WriteLine();
 
             Console.WriteLine($"\nPress enter to start polling the token endpoint.");
             Console.ReadLine();
 
-            return loginResponse;
+            return response;
         }
 
-        private static async Task<TokenResponse> RequestTokenAsync(BackchannelLoginResponse authorizeResponse)
+        private static async Task<TokenResponse> RequestTokenAsync(BackchannelAuthenticationResponse authorizeResponse)
         {
             var disco = await _cache.GetAsync();
             if (disco.IsError) throw new Exception(disco.Error);
@@ -76,16 +76,12 @@ namespace ConsoleCibaClient
 
             while (true)
             {
-                var response = await client.RequestTokenAsync(new TokenRequest
+                var response = await client.RequestBackchannelAuthenticationTokenAsync(new BackchannelAuthenticationTokenRequest
                 {
                     Address = disco.TokenEndpoint,
                     ClientId = "ciba",
                     ClientSecret = "secret",
-                    GrantType = "urn:openid:params:grant-type:ciba",
-                    Parameters = 
-                    {
-                        { "auth_req_id", authorizeResponse.auth_req_id }
-                    }
+                    AuthenticationRequestId = authorizeResponse.AuthenticationRequestId
                 });
 
                 if (response.IsError)
@@ -93,7 +89,7 @@ namespace ConsoleCibaClient
                     if (response.Error == OidcConstants.TokenErrors.AuthorizationPending || response.Error == OidcConstants.TokenErrors.SlowDown)
                     {
                         Console.WriteLine($"{response.Error}...waiting.");
-                        Thread.Sleep(authorizeResponse.interval * 1000);
+                        Thread.Sleep(authorizeResponse.Interval.Value * 1000);
                     }
                     else
                     {
@@ -122,38 +118,5 @@ namespace ConsoleCibaClient
             "\n\nService claims:".ConsoleGreen();
             Console.WriteLine(response.PrettyPrintJson());
         }
-    }
-
-    public class BackchannelLoginResponse
-    {
-        /// <summary>
-        /// Indicates if this response represents an error.
-        /// </summary>
-        public bool IsError => !String.IsNullOrWhiteSpace(error);
-
-        /// <summary>
-        /// Gets or sets the error.
-        /// </summary>
-        public string error { get; set; }
-
-        /// <summary>
-        /// Gets or sets the error description.
-        /// </summary>
-        public string error_description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the authentication request id.
-        /// </summary>
-        public string auth_req_id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the expires in.
-        /// </summary>
-        public int expires_in { get; set; }
-
-        /// <summary>
-        /// Gets or sets the interval.
-        /// </summary>
-        public int interval { get; set; }
     }
 }
