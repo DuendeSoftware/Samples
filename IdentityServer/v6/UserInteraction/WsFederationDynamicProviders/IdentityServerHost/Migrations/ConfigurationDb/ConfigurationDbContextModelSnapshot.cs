@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace IdentityServerHost.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
@@ -13,8 +15,7 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.13");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResource", b =>
                 {
@@ -23,19 +24,19 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("AllowedAccessTokenSigningAlgorithms")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("INTEGER");
@@ -45,8 +46,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("NonEditable")
                         .HasColumnType("INTEGER");
@@ -65,7 +66,7 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ApiResources");
+                    b.ToTable("ApiResources", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResourceClaim", b =>
@@ -79,14 +80,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApiResourceId");
+                    b.HasIndex("ApiResourceId", "Type")
+                        .IsUnique();
 
-                    b.ToTable("ApiResourceClaims");
+                    b.ToTable("ApiResourceClaims", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResourceProperty", b =>
@@ -100,19 +102,20 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApiResourceId");
+                    b.HasIndex("ApiResourceId", "Key")
+                        .IsUnique();
 
-                    b.ToTable("ApiResourceProperties");
+                    b.ToTable("ApiResourceProperties", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResourceScope", b =>
@@ -126,14 +129,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Scope")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApiResourceId");
+                    b.HasIndex("ApiResourceId", "Scope")
+                        .IsUnique();
 
-                    b.ToTable("ApiResourceScopes");
+                    b.ToTable("ApiResourceScopes", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResourceSecret", b =>
@@ -149,27 +153,27 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(4000);
+                        .HasMaxLength(4000)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApiResourceId");
 
-                    b.ToTable("ApiResourceSecrets");
+                    b.ToTable("ApiResourceSecrets", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiScope", b =>
@@ -178,13 +182,16 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Emphasize")
                         .HasColumnType("INTEGER");
@@ -192,10 +199,16 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                     b.Property<bool>("Enabled")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Required")
                         .HasColumnType("INTEGER");
@@ -203,12 +216,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                     b.Property<bool>("ShowInDiscoveryDocument")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ApiScopes");
+                    b.ToTable("ApiScopes", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiScopeClaim", b =>
@@ -222,14 +238,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ScopeId");
+                    b.HasIndex("ScopeId", "Type")
+                        .IsUnique();
 
-                    b.ToTable("ApiScopeClaims");
+                    b.ToTable("ApiScopeClaims", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiScopeProperty", b =>
@@ -240,22 +257,23 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ScopeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ScopeId");
+                    b.HasIndex("ScopeId", "Key")
+                        .IsUnique();
 
-                    b.ToTable("ApiScopeProperties");
+                    b.ToTable("ApiScopeProperties", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.Client", b =>
@@ -286,8 +304,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("AllowedIdentityTokenSigningAlgorithms")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("AlwaysIncludeUserClaimsInIdToken")
                         .HasColumnType("INTEGER");
@@ -302,25 +320,28 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("BackChannelLogoutUri")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CibaLifetime")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ClientClaimsPrefix")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ClientName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ClientUri")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("ConsentLifetime")
                         .HasColumnType("INTEGER");
@@ -329,8 +350,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("DeviceCodeLifetime")
                         .HasColumnType("INTEGER");
@@ -345,8 +366,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FrontChannelLogoutUri")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("IdentityTokenLifetime")
                         .HasColumnType("INTEGER");
@@ -358,20 +379,23 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LogoUri")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("NonEditable")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PairWiseSubjectSalt")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("PollingInterval")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ProtocolType")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("RefreshTokenExpiration")
                         .HasColumnType("INTEGER");
@@ -401,8 +425,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserCodeType")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("UserSsoLifetime")
                         .HasColumnType("INTEGER");
@@ -412,7 +436,7 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                     b.HasIndex("ClientId")
                         .IsUnique();
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientClaim", b =>
@@ -426,19 +450,20 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId", "Type", "Value")
+                        .IsUnique();
 
-                    b.ToTable("ClientClaims");
+                    b.ToTable("ClientClaims", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientCorsOrigin", b =>
@@ -452,14 +477,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Origin")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(150);
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId", "Origin")
+                        .IsUnique();
 
-                    b.ToTable("ClientCorsOrigins");
+                    b.ToTable("ClientCorsOrigins", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientGrantType", b =>
@@ -473,14 +499,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("GrantType")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId", "GrantType")
+                        .IsUnique();
 
-                    b.ToTable("ClientGrantTypes");
+                    b.ToTable("ClientGrantTypes", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientIdPRestriction", b =>
@@ -494,14 +521,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Provider")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId", "Provider")
+                        .IsUnique();
 
-                    b.ToTable("ClientIdPRestrictions");
+                    b.ToTable("ClientIdPRestrictions", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientPostLogoutRedirectUri", b =>
@@ -515,14 +543,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("PostLogoutRedirectUri")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(400)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId", "PostLogoutRedirectUri")
+                        .IsUnique();
 
-                    b.ToTable("ClientPostLogoutRedirectUris");
+                    b.ToTable("ClientPostLogoutRedirectUris", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientProperty", b =>
@@ -536,19 +565,20 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId", "Key")
+                        .IsUnique();
 
-                    b.ToTable("ClientProperties");
+                    b.ToTable("ClientProperties", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientRedirectUri", b =>
@@ -562,14 +592,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("RedirectUri")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(400)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId", "RedirectUri")
+                        .IsUnique();
 
-                    b.ToTable("ClientRedirectUris");
+                    b.ToTable("ClientRedirectUris", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientScope", b =>
@@ -583,14 +614,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Scope")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId", "Scope")
+                        .IsUnique();
 
-                    b.ToTable("ClientScopes");
+                    b.ToTable("ClientScopes", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientSecret", b =>
@@ -606,27 +638,27 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(4000);
+                        .HasMaxLength(4000)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientSecrets");
+                    b.ToTable("ClientSecrets", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.IdentityProvider", b =>
@@ -635,11 +667,20 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("DisplayName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Enabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("NonEditable")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Properties")
@@ -647,17 +688,23 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Scheme")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("IdentityProviders");
+                    b.HasIndex("Scheme")
+                        .IsUnique();
+
+                    b.ToTable("IdentityProviders", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.IdentityResource", b =>
@@ -670,12 +717,12 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Emphasize")
                         .HasColumnType("INTEGER");
@@ -685,8 +732,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("NonEditable")
                         .HasColumnType("INTEGER");
@@ -705,7 +752,7 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("IdentityResources");
+                    b.ToTable("IdentityResources", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.IdentityResourceClaim", b =>
@@ -719,14 +766,15 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdentityResourceId");
+                    b.HasIndex("IdentityResourceId", "Type")
+                        .IsUnique();
 
-                    b.ToTable("IdentityResourceClaims");
+                    b.ToTable("IdentityResourceClaims", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.IdentityResourceProperty", b =>
@@ -740,19 +788,20 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdentityResourceId");
+                    b.HasIndex("IdentityResourceId", "Key")
+                        .IsUnique();
 
-                    b.ToTable("IdentityResourceProperties");
+                    b.ToTable("IdentityResourceProperties", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResourceClaim", b =>
@@ -762,6 +811,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ApiResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApiResource");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResourceProperty", b =>
@@ -771,6 +822,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ApiResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApiResource");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResourceScope", b =>
@@ -780,6 +833,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ApiResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApiResource");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResourceSecret", b =>
@@ -789,6 +844,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ApiResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApiResource");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiScopeClaim", b =>
@@ -798,6 +855,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ScopeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Scope");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiScopeProperty", b =>
@@ -807,6 +866,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ScopeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Scope");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientClaim", b =>
@@ -816,6 +877,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientCorsOrigin", b =>
@@ -825,6 +888,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientGrantType", b =>
@@ -834,6 +899,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientIdPRestriction", b =>
@@ -843,6 +910,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientPostLogoutRedirectUri", b =>
@@ -852,6 +921,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientProperty", b =>
@@ -861,6 +932,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientRedirectUri", b =>
@@ -870,6 +943,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientScope", b =>
@@ -879,6 +954,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ClientSecret", b =>
@@ -888,6 +965,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.IdentityResourceClaim", b =>
@@ -897,6 +976,8 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("IdentityResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("IdentityResource");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.IdentityResourceProperty", b =>
@@ -906,6 +987,54 @@ namespace IdentityServerHost.Migrations.ConfigurationDb
                         .HasForeignKey("IdentityResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("IdentityResource");
+                });
+
+            modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResource", b =>
+                {
+                    b.Navigation("Properties");
+
+                    b.Navigation("Scopes");
+
+                    b.Navigation("Secrets");
+
+                    b.Navigation("UserClaims");
+                });
+
+            modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiScope", b =>
+                {
+                    b.Navigation("Properties");
+
+                    b.Navigation("UserClaims");
+                });
+
+            modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.Client", b =>
+                {
+                    b.Navigation("AllowedCorsOrigins");
+
+                    b.Navigation("AllowedGrantTypes");
+
+                    b.Navigation("AllowedScopes");
+
+                    b.Navigation("Claims");
+
+                    b.Navigation("ClientSecrets");
+
+                    b.Navigation("IdentityProviderRestrictions");
+
+                    b.Navigation("PostLogoutRedirectUris");
+
+                    b.Navigation("Properties");
+
+                    b.Navigation("RedirectUris");
+                });
+
+            modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.IdentityResource", b =>
+                {
+                    b.Navigation("Properties");
+
+                    b.Navigation("UserClaims");
                 });
 #pragma warning restore 612, 618
         }

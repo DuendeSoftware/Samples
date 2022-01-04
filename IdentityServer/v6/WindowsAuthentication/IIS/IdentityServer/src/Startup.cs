@@ -29,7 +29,7 @@ namespace IdentityServerHost
                 iis.AutomaticAuthentication = false;
             });
 
-            services.AddControllersWithViews();
+            services.AddRazorPages();
 
             var builder = services.AddIdentityServer();
             
@@ -52,7 +52,7 @@ namespace IdentityServerHost
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
         }
     }

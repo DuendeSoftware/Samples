@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using IdentityModel.Client;
+using System.Threading.Tasks;
 
 namespace Client
 {
@@ -53,6 +54,12 @@ namespace Client
                     {
                         NameClaimType = "name",
                         RoleClaimType = "role"
+                    };
+
+                    options.Events.OnRedirectToIdentityProvider = n => 
+                    {
+                        n.ProtocolMessage.AcrValues = "idp:Windows";
+                        return Task.CompletedTask;
                     };
                 });
         }

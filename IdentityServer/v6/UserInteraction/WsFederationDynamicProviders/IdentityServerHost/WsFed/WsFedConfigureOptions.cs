@@ -51,6 +51,11 @@ namespace IdentityServerHost.WsFed
                     {
                         url += uri.Query;
                     }
+                    else
+                    {
+                        // empty value to trigger logic in OnRemoteFailure below
+                        url += "?" + identityServerOptions.UserInteraction.LogoutIdParameter + "=";
+                    }
 
                     ctx.ProtocolMessage.Wreply = url;
                 }

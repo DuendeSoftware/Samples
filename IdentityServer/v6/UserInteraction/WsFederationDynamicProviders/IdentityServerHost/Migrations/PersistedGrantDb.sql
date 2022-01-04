@@ -3,6 +3,8 @@
     "ProductVersion" TEXT NOT NULL
 );
 
+BEGIN TRANSACTION;
+
 CREATE TABLE "DeviceCodes" (
     "UserCode" TEXT NOT NULL CONSTRAINT "PK_DeviceCodes" PRIMARY KEY,
     "DeviceCode" TEXT NOT NULL,
@@ -54,5 +56,7 @@ CREATE INDEX "IX_PersistedGrants_SubjectId_ClientId_Type" ON "PersistedGrants" (
 CREATE INDEX "IX_PersistedGrants_SubjectId_SessionId_Type" ON "PersistedGrants" ("SubjectId", "SessionId", "Type");
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20210601183558_Grants', '3.1.13');
+VALUES ('20220104195544_Grants', '6.0.0');
+
+COMMIT;
 
