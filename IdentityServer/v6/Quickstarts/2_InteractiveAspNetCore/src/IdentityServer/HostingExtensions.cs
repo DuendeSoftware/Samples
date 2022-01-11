@@ -6,6 +6,8 @@ internal static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddRazorPages();
+
         builder.Services.AddIdentityServer()
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients);
@@ -20,7 +22,15 @@ internal static class HostingExtensions
         {
             app.UseDeveloperExceptionPage();
         }
+
+        app.UseStaticFiles();
+        app.UseRouting();
+            
         app.UseIdentityServer();
+
+        app.UseAuthorization();
+        app.MapRazorPages().RequireAuthorization();
+
         return app;
     }
 }
