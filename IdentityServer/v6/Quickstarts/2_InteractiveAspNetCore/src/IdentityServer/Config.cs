@@ -48,7 +48,7 @@ public static class Config
                 RedirectUris = { "https://localhost:5002/signin-oidc" },
 
                 // where to redirect after logout
-                PostLogoutRedirectUris = { "https://localhost:5002/singout-callback-oidc" },
+                PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
 
                 AllowedScopes = new List<string>
                 {
