@@ -16,11 +16,12 @@ builder.Services.AddAuthentication(options =>
     .AddOpenIdConnect("oidc", options =>
     {
         options.Authority = "https://localhost:5001";
+        options.SignedOutCallbackPath = "https://localhost:5002";
 
         options.ClientId = "mvc";
         options.ClientSecret = "secret";
         options.ResponseType = "code";
-
+        
         options.SaveTokens = true;
     });
 
