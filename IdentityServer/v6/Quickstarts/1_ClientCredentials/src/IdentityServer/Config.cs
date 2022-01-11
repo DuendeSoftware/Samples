@@ -3,37 +3,35 @@
 
 
 using Duende.IdentityServer.Models;
-using System.Collections.Generic;
 
-namespace IdentityServer
+namespace IdentityServer;
+
+public static class Config
 {
-    public static class Config
-    {
-        public static IEnumerable<ApiScope> ApiScopes =>
-            new List<ApiScope>
-            {
-                new ApiScope("api1", "My API")
-            };
+    public static IEnumerable<ApiScope> ApiScopes =>
+        new List<ApiScope>
+        { 
+            new ApiScope("api1", "My API") 
+        };
 
-        public static IEnumerable<Client> Clients =>
-            new List<Client>
+    public static IEnumerable<Client> Clients =>
+        new List<Client>
+        {
+            new Client
             {
-                new Client
+                ClientId = "client",
+
+                // no interactive user, use the clientid/secret for authentication
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                // secret for authentication
+                ClientSecrets =
                 {
-                    ClientId = "client",
+                    new Secret("secret".Sha256())
+                },
 
-                    // no interactive user, use the clientid/secret for authentication
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-
-                    // secret for authentication
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-
-                    // scopes that client has access to
-                    AllowedScopes = { "api1" }
-                }
-            };
-    }
+                // scopes that client has access to
+                AllowedScopes = { "api1" }
+            }
+        };
 }
