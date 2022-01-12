@@ -22,6 +22,9 @@ builder.Services.AddAuthentication(options =>
         options.ResponseType = "code";
         
         options.SaveTokens = true;
+
+        options.Scope.Add("profile");
+        options.GetClaimsFromUserInfoEndpoint = true;
     });
 
 var app = builder.Build();
