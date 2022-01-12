@@ -6,7 +6,7 @@ namespace IdentityServer;
 public static class Config
 {
     public static IEnumerable<IdentityResource> IdentityResources =>
-        new IdentityResource[]
+        new List<IdentityResource>
         { 
             new IdentityResources.OpenId(),
             new IdentityResources.Profile()
