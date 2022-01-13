@@ -24,6 +24,7 @@ builder.Services.AddAuthentication(options =>
         
         options.SaveTokens = true;
 
+        options.Scope.Add("profile");
         options.Scope.Add("email");
         options.ClaimActions.MapJsonKey("email", "email");
         options.ClaimActions.MapJsonKey("email_verified", "email_verified");
