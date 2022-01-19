@@ -17,7 +17,7 @@ builder.Services.AddAuthentication(options =>
     {
         options.Authority = "https://localhost:5001";
 
-        options.ClientId = "mvc";
+        options.ClientId = "web";
         options.ClientSecret = "secret";
         options.ResponseType = "code";
 
