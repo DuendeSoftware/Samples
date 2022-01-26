@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace IdentityServerHost
 {
+    // The IProfileService lets IdentityServer know what claims
+    // to include in tokens for a user.
+    //
+    // if you're using ASP.NET Identity for your user database, then we provide
+    // a ProfileService<TUser> base class that you might want to derive from rather
+    // than implementing IProfileService from scratch.
     public class CustomProfileService : IProfileService
     {
         // in this sample, the TestUserStore is our user "database"
