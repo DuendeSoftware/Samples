@@ -1,8 +1,10 @@
-﻿using Duende.IdentityServer.Extensions;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Test;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace IdentityServerHost
@@ -24,7 +26,7 @@ namespace IdentityServerHost
         }
 
         // GetProfileDataAsync is what controls what claims are issued in the response
-        // the sample code below shows a few different approaches, and you can adjust 
+        // the sample code below shows a *many* different approaches, and you can adjust 
         // these based on your needs and requirements.
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
@@ -33,14 +35,17 @@ namespace IdentityServerHost
             // context.Subject.Claims is the claims collection from the user's session cookie at login time
             // context.IssuedClaims is the collection of claims that your logic has decided to return in the response
 
+            // OPTION 1: emit claims based on the requested claims
             // context.RequestedClaimTypes represents the claims requested based on the resources requested and the
             // corresponding UserClaims configured on those resources (IdentityResource, ApiScope, and/or ApiResource)
             if (context.RequestedClaimTypes.Any())
             {
+                // OPTION 1A: load claims from the user's session cookie
                 // AddRequestedClaims will inspect the claims passed and only add the ones 
                 // that match the claim types in the RequestedClaimTypes collection.
                 context.AddRequestedClaims(context.Subject.Claims);
 
+                // OPTION 1B: load claims from the user databse
                 // this adds any claims that were requested from the claims in the user store
                 var user = _users.FindBySubjectId(context.Subject.GetSubjectId());
                 if (user != null)
@@ -49,6 +54,7 @@ namespace IdentityServerHost
                 }
             }
 
+            // OPTION 2: always emit claims (regardless based on the requested claims)
             // this checks if the user's session cookie contains a "picture" claim
             // and if present we add it to the result (if it's not already in there from above, possibly due to RequestedClaimTypes)
             // notice this is always done, regardless of the RequestedClaimTypes, which means
@@ -60,6 +66,22 @@ namespace IdentityServerHost
                 {
                     context.IssuedClaims.Add(picture);
                 }
+            }
+
+            // OPTION 3: always emit claims based on client (regardless based on the requested claims)
+            // context.Client holds the client making the request
+            if (context.Client.ClientId == "client1")
+            {
+                // sample adding a tenant claim based on the client obtaining the tokens
+                context.IssuedClaims.Add(new Claim("tenant", "tenant1"));
+            }
+
+            // OPTION 4: always emit claims based on the token (regardless based on the requested claims)
+            // context.Caller describes why the claims are needed (access token, id token, userinfo endpoint)
+            if (context.Caller == IdentityServerConstants.ProfileDataCallers.ClaimsProviderAccessToken)
+            {
+                // sample adding a tenant claim based on the type of token
+                context.IssuedClaims.Add(new Claim("foo", "bar"));
             }
 
             return Task.CompletedTask;
