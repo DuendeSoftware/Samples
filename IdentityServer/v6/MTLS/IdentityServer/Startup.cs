@@ -82,13 +82,6 @@ namespace IdentityServerHost
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.Use(async (ctx, next) => {
-                if (ctx.Request.Host.Value == "mtls.localhost:5099")
-                {
-                    var x = 5;
-                }
-                await next();
-            });
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
