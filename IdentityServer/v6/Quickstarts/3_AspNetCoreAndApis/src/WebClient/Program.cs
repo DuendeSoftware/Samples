@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +22,12 @@ builder.Services.AddAuthentication(options =>
         options.ClientSecret = "secret";
         options.ResponseType = "code";
 
-        options.Scope.Add("profile");
-        options.GetClaimsFromUserInfoEndpoint = true;
-        
         options.SaveTokens = true;
+
+        options.Scope.Add("profile");
+        options.Scope.Add("api1");
+        options.Scope.Add("offline_access");
+        options.GetClaimsFromUserInfoEndpoint = true;
     });
 
 var app = builder.Build();
