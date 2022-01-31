@@ -13,7 +13,7 @@ public static class Config
             new IdentityResources.Profile(),
             new IdentityResource()
             {
-                Name = "email",
+                Name = "verification",
                 UserClaims = new List<string> 
                 { 
                     JwtClaimTypes.Email,
@@ -64,7 +64,7 @@ public static class Config
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
-                    "email"
+                    "verification"
                 }
             }
         };
