@@ -10,7 +10,16 @@ public static class Config
         new List<IdentityResource>
         { 
             new IdentityResources.OpenId(),
-            new IdentityResources.Profile()
+            new IdentityResources.Profile(),
+            new IdentityResource()
+            {
+                Name = "verification",
+                UserClaims = new List<string> 
+                { 
+                    JwtClaimTypes.Email,
+                    JwtClaimTypes.EmailVerified
+                }
+            }
         };
 
     public static IEnumerable<ApiScope> ApiScopes =>
@@ -37,10 +46,10 @@ public static class Config
                 // scopes that client has access to
                 AllowedScopes = { "api1" }
             },
-            // interactive ASP.NET Core MVC client
+            // interactive ASP.NET Core Web App
             new Client
             {
-                ClientId = "mvc",
+                ClientId = "web",
                 ClientSecrets = { new Secret("secret".Sha256()) },
 
                 AllowedGrantTypes = GrantTypes.Code,
@@ -50,9 +59,9 @@ public static class Config
 
                 // where to redirect after logout
                 PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
-                
+
                 AllowOfflineAccess = true,
-                
+
                 AllowedScopes = new List<string>
                 {
                     IdentityServerConstants.StandardScopes.OpenId,

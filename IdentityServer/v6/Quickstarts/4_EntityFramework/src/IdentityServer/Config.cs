@@ -37,10 +37,10 @@ public static class Config
                 // scopes that client has access to
                 AllowedScopes = { "api1" }
             },
-            // interactive ASP.NET Core MVC client
+            // interactive ASP.NET Core Web App
             new Client
             {
-                ClientId = "mvc",
+                ClientId = "web",
                 ClientSecrets = { new Secret("secret".Sha256()) },
 
                 AllowedGrantTypes = GrantTypes.Code,

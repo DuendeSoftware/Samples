@@ -13,7 +13,7 @@ public static class Config
             new IdentityResources.Profile(),
             new IdentityResource()
             {
-                Name = "email",
+                Name = "verification",
                 UserClaims = new List<string> 
                 { 
                     JwtClaimTypes.Email,
@@ -46,10 +46,10 @@ public static class Config
                 // scopes that client has access to
                 AllowedScopes = { "api1" }
             },
-            // interactive ASP.NET Core MVC client
+            // interactive ASP.NET Core Web App
             new Client
             {
-                ClientId = "mvc",
+                ClientId = "web",
                 ClientSecrets = { new Secret("secret".Sha256()) },
 
                 AllowedGrantTypes = GrantTypes.Code,
@@ -64,7 +64,7 @@ public static class Config
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
-                    "email"
+                    "verification"
                 }
             }
         };
