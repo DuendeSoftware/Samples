@@ -32,10 +32,10 @@ public static class Config
                 AllowedScopes = { "api1" }
             },
 
-            // interactive ASP.NET Core MVC client
+            // interactive ASP.NET Core Web App
             new Client
             {
-                ClientId = "mvc",
+                ClientId = "web",
                 ClientSecrets = { new Secret("secret".Sha256()) },
 
                 AllowedGrantTypes = GrantTypes.Code,
