@@ -1,28 +1,44 @@
-﻿// Copyright (c) Duende Software. All rights reserved.
+// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
+using Microsoft.IdentityModel.Tokens;
 
-using System;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace Api
-{
-    public class Program
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer(options =>
     {
-        public static void Main(string[] args)
-        {
-            Console.Title = "API";
+        options.Authority = "https://localhost:5001";
+        options.TokenValidationParameters.ValidateAudience = false;
+    });
+builder.Services.AddAuthorization(options =>
+    options.AddPolicy("ApiScope", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("scope", "api1");
+    })
+);
 
-            CreateHostBuilder(args).Build().Run();
-        }
+var app = builder.Build();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers().RequireAuthorization("ApiScope");
+
+app.Run();
