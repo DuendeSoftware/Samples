@@ -53,9 +53,18 @@ internal static class HostingExtensions
 
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapGet("/local/identity", [Authorize] (ClaimsPrincipal user) =>
+            {
+                var name = user.FindFirst("name")?.Value ?? user.FindFirst("sub")?.Value;
+                return Results.Json(new { message = "Local API Success!", user = name });
+            }).AsBffApiEndpoint();
+
             endpoints.MapBffManagementEndpoints();
+
+            endpoints.MapRemoteBffApiEndpoint("/remote", "https://localhost:6001")
+                .RequireAccessToken(Duende.Bff.TokenType.User);
         });
-        
+
         return app;
     }
 }

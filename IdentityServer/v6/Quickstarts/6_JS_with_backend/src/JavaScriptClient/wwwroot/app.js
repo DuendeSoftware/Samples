@@ -56,6 +56,42 @@ function logout() {
   }
 }
 
-async function localApi() {}
+async function localApi() {
+  var req = new Request("/local/identity", {
+    headers: new Headers({
+      "X-CSRF": "1",
+    }),
+  });
 
-async function remoteApi() {}
+  try {
+    var resp = await fetch(req);
+
+    let data;
+    if (resp.ok) {
+      data = await resp.json();
+    }
+    log("Local API Result: " + resp.status, data);
+  } catch (e) {
+    log("error calling local API");
+  }
+}
+
+async function remoteApi() {
+  var req = new Request("/remote/identity", {
+    headers: new Headers({
+      "X-CSRF": "1",
+    }),
+  });
+
+  try {
+    var resp = await fetch(req);
+
+    let data;
+    if (resp.ok) {
+      data = await resp.json();
+    }
+    log("Remote API Result: " + resp.status, data);
+  } catch (e) {
+    log("error calling remote API");
+  }
+}
