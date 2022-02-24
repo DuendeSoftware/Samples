@@ -1,52 +1,27 @@
-using System.IdentityModel.Tokens.Jwt;
-using Duende.Bff.Yarp;
+using JavaScriptClient;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
-builder.Services.AddAuthorization();
-builder.Services
-    .AddBff()
-    .AddRemoteApis();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-builder.Services
-    .AddAuthentication(options =>
-    {
-        options.DefaultScheme = "Cookies";
-        options.DefaultChallengeScheme = "oidc";
-        options.DefaultSignOutScheme = "oidc";
-    })
-    .AddCookie("Cookies")
-    .AddOpenIdConnect("oidc", options =>
-    {
-        options.Authority = "https://localhost:5001";
-        options.ClientId = "bff";
-        options.ClientSecret = "secret";
-        options.ResponseType = "code";
-        options.Scope.Add("api1");
-        options.SaveTokens = true;
-        options.GetClaimsFromUserInfoEndpoint = true;
-    });
+Log.Information("Starting up");
 
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseDeveloperExceptionPage();
+    var builder = WebApplication.CreateBuilder(args);
+    var app = builder
+        .ConfigureServices()
+        .ConfigurePipeline();
+
+    app.Run();
 }
-
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
-app.UseRouting();
-app.UseAuthentication();
-
-app.UseBff();
-
-app.UseAuthorization();
-
-app.UseEndpoints(endpoints =>
+catch (Exception ex)
 {
-    endpoints.MapBffManagementEndpoints();
-});
-app.Run();
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+}
