@@ -50,7 +50,7 @@ internal static class HostingExtensions
 
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
-        var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
+        var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
         const string connectionString = @"Data Source=Duende.IdentityServer.Quickstart.EntityFramework.db";
 
         builder.Services.AddRazorPages();
