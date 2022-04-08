@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Duende.IdentityServer;
+using System;
 
 namespace IdentityServerHost
 {
@@ -38,6 +39,9 @@ namespace IdentityServerHost
 
                 // see https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
                 options.EmitStaticAudienceClaim = true;
+
+                // this controls how long the dynamic providers are cached, if caching is enabled (see AddConfigurationStoreCache() below)
+                options.Caching.IdentityProviderCacheDuration = TimeSpan.FromMinutes(15);
             })
                 .AddTestUsers(TestUsers.Users)
                 // this adds the config data from DB (clients, resources, CORS)
@@ -54,7 +58,9 @@ namespace IdentityServerHost
 
                     // this enables automatic token cleanup. this is optional.
                     options.EnableTokenCleanup = true;
-                });
+                })
+                // this enables caching for data loaded from the configuration store (including dynamic providers)
+                .AddConfigurationStoreCache(); 
 
 
             services.AddAuthentication()
