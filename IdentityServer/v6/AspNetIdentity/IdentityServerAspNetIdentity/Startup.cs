@@ -42,7 +42,8 @@ namespace IdentityServerAspNetIdentity
                     new Client
                     {
                         ClientId = "client",
-                        AllowedGrantTypes = GrantTypes.Implicit,
+                        ClientSecrets = new List<Secret> {new("secret".Sha512())},
+                        AllowedGrantTypes = GrantTypes.Code,
                         RedirectUris = { "https://localhost:5002/signin-oidc" },
                         PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
                         FrontChannelLogoutUri = "https://localhost:5002/signout-oidc",

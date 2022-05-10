@@ -35,7 +35,10 @@ namespace Client
                 {
                     options.Authority = "https://localhost:5001";
                     options.ClientId = "client";
+                    options.ClientSecret = "secret";
+                    options.ResponseType = "code";
                     options.MapInboundClaims = false;
+                    options.GetClaimsFromUserInfoEndpoint = true;
                     options.SaveTokens = true;
                 });
         }
