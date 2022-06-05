@@ -1,10 +1,41 @@
+using Duende.Bff;
 using Duende.Bff.Yarp;
+using Yarp.ReverseProxy.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddBff()
-    .AddRemoteApis();
+builder.Services.AddBff();
+
+var yarp = builder.Services.AddReverseProxy()
+    .AddBffExtensions();
+
+yarp.LoadFromMemory(
+    new[]
+    {
+        new RouteConfig()
+        {
+            RouteId = "todos",
+            ClusterId = "cluster1",
+
+            Match = new RouteMatch
+            {
+                Path = "/todos/{**catch-all}"
+            }
+        }.WithAccessToken(TokenType.User),
+    },
+    new[]
+    {
+        new ClusterConfig
+        {
+            ClusterId = "cluster1",
+
+            Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "destination1", new DestinationConfig() { Address = "https://localhost:5020" } },
+            }
+        }
+    });
 
 builder.Services.AddAuthentication(options =>
 {
@@ -48,10 +79,11 @@ app.UseAuthentication();
 app.UseBff();
 app.UseAuthorization();
 app.MapBffManagementEndpoints();
+app.MapBffReverseProxy();
 
-app.MapControllers()
-    .RequireAuthorization()
-    .AsBffApiEndpoint();
+// app.MapControllers()
+//     .RequireAuthorization()
+//     .AsBffApiEndpoint();
 
 // app.MapRemoteBffApiEndpoint("/todos", "https://localhost:5020/todos")
 //     .RequireAccessToken(Duende.Bff.TokenType.User);
