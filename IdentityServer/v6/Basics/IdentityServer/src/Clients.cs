@@ -139,6 +139,22 @@ namespace IdentityServerHost
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "scope1", "scope2" }
                 },
+
+                // WebForms basic sample
+                new Client
+                {
+                    ClientId = "interactive.webforms.sample",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    RedirectUris = { "https://localhost:44306/signin-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:44306/" },
+                    //FrontChannelLogoutUri = "https://localhost:44306/signout-oidc",
+
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "scope1", "scope2" }
+                },
             };
     }
 }
