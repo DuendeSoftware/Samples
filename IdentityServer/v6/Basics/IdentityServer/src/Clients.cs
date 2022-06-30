@@ -150,10 +150,11 @@ namespace IdentityServerHost
 
                     RedirectUris = { "https://localhost:44306/signin-oidc" },
                     PostLogoutRedirectUris = { "https://localhost:44306/" },
-                    //FrontChannelLogoutUri = "https://localhost:44306/signout-oidc",
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "scope1", "scope2" }
+                    AllowedScopes = { "openid", "profile", "scope1", "scope2" },
+
+                    AccessTokenLifetime = 10, // Artifically low value to cause refresh during testing
                 },
             };
     }

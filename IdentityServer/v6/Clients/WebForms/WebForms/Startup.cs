@@ -40,7 +40,7 @@ namespace WebForms
                 PostLogoutRedirectUri = "https://localhost:44306/",
 
                 ResponseType = "code",
-                Scope = "openid profile",
+                Scope = "openid profile offline_access",
 
                 UseTokenLifetime = false,
                 SaveTokens = true,
