@@ -31,12 +31,12 @@ namespace WebForms
                 AuthenticationType = "oidc",
                 SignInAsAuthenticationType = "cookies",
 
-                Authority = "https://localhost:5001/",
+                Authority = "https://demo.duendesoftware.com/",
 
                 ClientId = "interactive.webforms.sample",
                 ClientSecret = "secret",
 
-                RedirectUri = "https://localhost:44306/signin-oidc",
+                RedirectUri = "https://localhost:44306/",
                 PostLogoutRedirectUri = "https://localhost:44306/",
 
                 ResponseType = "code",

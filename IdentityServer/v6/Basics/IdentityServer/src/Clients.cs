@@ -148,7 +148,7 @@ namespace IdentityServerHost
 
                     AllowedGrantTypes = GrantTypes.Code,
 
-                    RedirectUris = { "https://localhost:44306/signin-oidc" },
+                    RedirectUris = { "https://localhost:44306/" },
                     PostLogoutRedirectUris = { "https://localhost:44306/" },
 
                     AllowOfflineAccess = true,

@@ -66,8 +66,8 @@ namespace WebForms
                 var refreshRequest = new RefreshTokenRequest
                 {
                     // For simplicity, we're hardcoding the address of the token endpoint,
-                    // rather than mucking about with discovery.
-                    Address = "https://localhost:5001/connect/token",
+                    // rather than mucking about with discovery
+                    Address = "https://demo.duendesoftware.com/connect/token",
 
                     ClientId = "interactive.webforms.sample",
                     ClientSecret = "secret",
