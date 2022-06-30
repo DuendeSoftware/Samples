@@ -1,0 +1,59 @@
+<header>
+  <nav
+    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
+  >
+    <div class="container">
+      <a class="navbar-brand" [routerLink]="['/']">Angular Bff Sample</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target=".navbar-collapse"
+        aria-label="Toggle navigation"
+        [attr.aria-expanded]="isExpanded"
+        (click)="toggle()"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div
+        class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
+        [ngClass]="{ show: isExpanded }"
+      >
+        <ul class="navbar-nav flex-grow">
+          <li
+            class="nav-item"
+            [routerLinkActive]="['link-active']"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <a class="nav-link text-dark" [routerLink]="['/home']">Home</a>
+          </li>
+
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/todo']">Todos</a>
+          </li>
+
+          <li
+            *ngIf="loggedIn"
+            class="nav-item"
+            [routerLinkActive]="['link-active']"
+          >
+            <a class="nav-link text-dark" [routerLink]="['/user-session']">
+              User Session
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <div class="login-button">
+              <button
+                class="btn btn-primary"
+                (click)="loggedIn ? logout.emit() : login.emit()"
+              >
+                {{ loggedIn ? "Logout" : "Login" }}
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

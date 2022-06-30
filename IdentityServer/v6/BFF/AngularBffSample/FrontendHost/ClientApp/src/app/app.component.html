@@ -1,0 +1,11 @@
+<body>
+  <app-nav-menu
+    [loggedIn]="loggedIn$ | async"
+    (login)="login()"
+    (logout)="logout()"
+  ></app-nav-menu>
+
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</body>

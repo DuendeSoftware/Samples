@@ -1,0 +1,25 @@
+<h1 id="tabelLabel">User Session</h1>
+<p>This pages shows the current user's session.</p>
+
+<table
+  *ngIf="userSessionInfo$ | async as userSessionInfo; else loading"
+  aria-labelledby="tabelLabel"
+  class="table table-striped"
+>
+  <thead>
+    <tr>
+      <th>Claim Type</th>
+      <th>Claim Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let claim of userSessionInfo">
+      <td>{{ claim.type }}</td>
+      <td>{{ claim.value }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #loading>
+  <p><em>Loading...</em></p>
+</ng-template>
