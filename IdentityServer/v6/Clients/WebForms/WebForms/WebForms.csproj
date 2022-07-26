@@ -299,6 +299,12 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
+  <!-- Constants and helpers -->
+  <ItemGroup>
+	<Compile Include="..\..\..\Basics\Shared\Constants.cs">
+	  <Link>Shared\Constants.cs</Link>
+	</Compile>
+  </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>

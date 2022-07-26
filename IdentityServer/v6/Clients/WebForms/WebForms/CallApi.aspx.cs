@@ -1,4 +1,5 @@
-﻿using IdentityModel.Client;
+﻿using Client;
+using IdentityModel.Client;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Owin.Security;
 using System;
@@ -59,19 +60,18 @@ namespace WebForms
             return expirationTime < DateTime.UtcNow;
         }
 
+        internal static DiscoveryCache _discoveryCache = new DiscoveryCache(Urls.IdentityServer);
+
         private async Task<TokenResponse> RefreshToken(AuthenticationProperties props, ClaimsIdentity identity)
         {
             if (props.Dictionary.TryGetValue("refresh_token", out var refreshToken))
             {
+                var disco = await _discoveryCache.GetAsync();
                 var refreshRequest = new RefreshTokenRequest
                 {
-                    // For simplicity, we're hardcoding the address of the token endpoint,
-                    // rather than mucking about with discovery
-                    Address = "https://demo.duendesoftware.com/connect/token",
-
+                    Address = disco.TokenEndpoint,
                     ClientId = "interactive.webforms.sample",
                     ClientSecret = "secret",
-
                     RefreshToken = refreshToken
                 };
                 var http = new HttpClient();
@@ -100,7 +100,7 @@ namespace WebForms
                 }
                 var http = new HttpClient();
                 http.SetBearerToken(accessToken);
-                var response = await http.GetStringAsync("https://localhost:5002/identity");
+                var response = await http.GetStringAsync(Urls.SampleOwinApi + "identity");
                 var parsed = JsonDocument.Parse(response);
 
                 Payload = JsonSerializer.Serialize(parsed, new JsonSerializerOptions { WriteIndented = true });

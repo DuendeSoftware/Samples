@@ -33,7 +33,7 @@ namespace IdentityServerHost
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
 
-                // see https://docs.duendesoftware.com/identityserver/v5/basics/resources
+                // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/api_scopes
                 options.EmitStaticAudienceClaim = true;
             })
                 .AddTestUsers(TestUsers.Users);

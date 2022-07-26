@@ -153,8 +153,6 @@ namespace IdentityServerHost
 
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "scope1", "scope2" },
-
-                    AccessTokenLifetime = 10, // Artifically low value to cause refresh during testing
                 },
             };
     }

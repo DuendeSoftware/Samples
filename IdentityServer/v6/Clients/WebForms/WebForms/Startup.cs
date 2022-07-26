@@ -1,12 +1,14 @@
-﻿using Microsoft.IdentityModel.Logging;
+﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Owin;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Notifications;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using Client;
 
 [assembly: OwinStartup(typeof(WebForms.Startup))]
 
@@ -31,7 +33,7 @@ namespace WebForms
                 AuthenticationType = "oidc",
                 SignInAsAuthenticationType = "cookies",
 
-                Authority = "https://demo.duendesoftware.com/",
+                Authority = Urls.IdentityServer,
 
                 ClientId = "interactive.webforms.sample",
                 ClientSecret = "secret",
@@ -48,22 +50,28 @@ namespace WebForms
                 UsePkce = true,
                 Notifications = new OpenIdConnectAuthenticationNotifications
                 {
-                    // Set the id_token_hint parameter during logout so that IdentityServer can safely redirect back
-                    // here after logout. Unlike .NET Core, the Katana handler doesn't do this for us.
-                    RedirectToIdentityProvider = async (msg) => {
-                        if(msg.ProtocolMessage.PostLogoutRedirectUri != null)
-                        {
-                            var auth = await msg.OwinContext.Authentication.AuthenticateAsync("cookies");
-                            if (auth.Properties.Dictionary.TryGetValue("id_token", out var idToken))
-                            {
-                                msg.ProtocolMessage.IdTokenHint = idToken;
-                            }
-                        }
-                    }
+                    RedirectToIdentityProvider = SetIdTokenHintOnLogout
                 }
-            });
+            }) ;
 
             app.UseStageMarker(PipelineStage.Authenticate);
+        }
+
+        // Set the id_token_hint parameter during logout so that
+        // IdentityServer can safely redirect back here after
+        // logout. Unlike .NET Core authentication handler, the Owin
+        // middleware doesn't do this automatically.
+        private async Task SetIdTokenHintOnLogout(
+            RedirectToIdentityProviderNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> notification)
+        {
+            if (notification.ProtocolMessage.PostLogoutRedirectUri != null)
+            {
+                var auth = await notification.OwinContext.Authentication.AuthenticateAsync("cookies");
+                if (auth.Properties.Dictionary.TryGetValue("id_token", out var idToken))
+                {
+                    notification.ProtocolMessage.IdTokenHint = idToken;
+                }
+            }
         }
     }
 }
