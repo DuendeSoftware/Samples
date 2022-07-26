@@ -4,10 +4,12 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Net.Http;
+using SimpleOwinApi;
 
 namespace SampleOwinApi
 {
     [Authorize]
+    [RequireScope("scope1")]
     public class IdentityController : ApiController
     {
         // this action simply echoes the claims back to the client

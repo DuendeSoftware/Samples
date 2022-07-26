@@ -10,9 +10,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Client;
 
-[assembly: OwinStartup(typeof(WebForms.Startup))]
+[assembly: OwinStartup(typeof(OwinMvc.Startup))]
 
-namespace WebForms
+namespace OwinMvc
 {
     public class Startup
     {
@@ -35,11 +35,11 @@ namespace WebForms
 
                 Authority = Urls.IdentityServer,
 
-                ClientId = "interactive.webforms.sample",
+                ClientId = "interactive.mvc.owin.sample",
                 ClientSecret = "secret",
 
-                RedirectUri = "https://localhost:44306/",
-                PostLogoutRedirectUri = "https://localhost:44306/",
+                RedirectUri = "https://localhost:44341/",
+                PostLogoutRedirectUri = "https://localhost:44341/",
 
                 ResponseType = "code",
                 Scope = "openid profile scope1 offline_access",
@@ -52,7 +52,7 @@ namespace WebForms
                 {
                     RedirectToIdentityProvider = SetIdTokenHintOnLogout
                 }
-            }) ;
+            });
 
             app.UseStageMarker(PipelineStage.Authenticate);
         }
