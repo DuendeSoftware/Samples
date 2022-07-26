@@ -45,7 +45,14 @@ internal static class HostingExtensions
         {
             builder
                 .AddConsoleExporter()
-                .AddSource(IdentityServerConstants.Tracing.ServiceName)
+                
+                // all avavilabe sources
+                .AddSource(IdentityServerConstants.Tracing.Basic)
+                .AddSource(IdentityServerConstants.Tracing.Cache)
+                .AddSource(IdentityServerConstants.Tracing.Services)
+                .AddSource(IdentityServerConstants.Tracing.Stores)
+                .AddSource(IdentityServerConstants.Tracing.Validation)
+                
                 .SetResourceBuilder(
                     ResourceBuilder.CreateDefault()
                         .AddService("IdentityServerHost.Sample"))
