@@ -1,0 +1,30 @@
+﻿@model Microsoft.Owin.Security.AuthenticateResult 
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Claims</h2>
+        <dl>
+            @foreach (var claim in Model.Identity.Claims)
+            {
+                <dt>@claim.Type</dt>
+                <dd>@claim.Value</dd>
+            }
+        </dl>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Authentication Properties</h2>
+        <dl>
+            @foreach (var item in Model.Properties.Dictionary)
+            {
+                <dt>@item.Key</dt>
+                <dd>@item.Value</dd>
+            }
+        </dl>
+    </div>
+</div>
