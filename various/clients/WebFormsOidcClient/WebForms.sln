@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebForms", "WebForms\WebFor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerHost", "..\..\..\IdentityServer\v6\Basics\IdentityServer\src\IdentityServerHost.csproj", "{03DECF2F-5704-4220-B82B-F35E7AAA9435}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOwinApi", "..\..\..\IdentityServer\v6\Basics\Apis\SimpleOwinApi\SimpleOwinApi.csproj", "{07A0AF39-8342-404E-B889-A515E1BA135A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOwinApi", "..\..\apis\SimpleOwinApi\SimpleOwinApi.csproj", "{07A0AF39-8342-404E-B889-A515E1BA135A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

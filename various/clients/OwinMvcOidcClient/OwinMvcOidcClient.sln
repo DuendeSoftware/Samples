@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOwinApi", "..\..\..\IdentityServer\v6\Basics\Apis\SimpleOwinApi\SimpleOwinApi.csproj", "{07A0AF39-8342-404E-B889-A515E1BA135A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOwinApi", "..\..\apis\SimpleOwinApi\SimpleOwinApi.csproj", "{07A0AF39-8342-404E-B889-A515E1BA135A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerHost", "..\..\..\IdentityServer\v6\Basics\IdentityServer\src\IdentityServerHost.csproj", "{992D8A2C-7C5A-4AA8-B831-79E0FF62292F}"
 EndProject

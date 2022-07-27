@@ -133,7 +133,7 @@
   </ItemGroup>
   <!-- Constants and helpers -->
   <ItemGroup>
-    <Compile Include="..\..\..\Basics\Shared\Constants.cs">
+    <Compile Include="..\..\..\IdentityServer\v6\Basics\Shared\Constants.cs">
       <Link>Shared\Constants.cs</Link>
     </Compile>
   </ItemGroup>
