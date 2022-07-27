@@ -139,35 +139,6 @@ namespace IdentityServerHost
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "scope1", "scope2" }
                 },
-
-                // WebForms basic sample
-                new Client
-                {
-                    ClientId = "interactive.webforms.sample",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.Code,
-
-                    RedirectUris = { "https://localhost:44306/" },
-                    PostLogoutRedirectUris = { "https://localhost:44306/" },
-
-                    AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "scope1", "scope2" },
-                },
-                // MVC sample built with OWIN on .NET framework 4.8
-                new Client
-                {
-                    ClientId = "interactive.mvc.owin.sample",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.Code,
-
-                    RedirectUris = { "https://localhost:44341/" },
-                    PostLogoutRedirectUris = { "https://localhost:44341/" },
-
-                    AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "scope1", "scope2" },
-                },
             };
     }
 }
