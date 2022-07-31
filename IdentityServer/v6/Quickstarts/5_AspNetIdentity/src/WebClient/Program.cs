@@ -29,8 +29,10 @@ builder.Services.AddAuthentication(options =>
         options.Scope.Add("profile");
         options.Scope.Add("offline_access");
         options.Scope.Add("api1");
+        options.Scope.Add("color");
 
         options.GetClaimsFromUserInfoEndpoint = true;
+        options.ClaimActions.MapUniqueJsonKey("favorite_color", "favorite_color");
     });
 
 var app = builder.Build();
