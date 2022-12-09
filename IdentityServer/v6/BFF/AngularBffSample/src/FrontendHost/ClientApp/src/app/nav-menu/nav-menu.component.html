@@ -26,13 +26,13 @@
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
 
-          <li class="nav-item"
+          <li *ngIf="authenticated$ | async" class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/user-session']">Show User Session</a>
           </li>
 
-          <li class="nav-item">
+          <li *ngIf="anonymous$ | async" class="nav-item">
             <a class="nav-link text-dark" href="/bff/login">Login</a>
           </li>
         </ul>

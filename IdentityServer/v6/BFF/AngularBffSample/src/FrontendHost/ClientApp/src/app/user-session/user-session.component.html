@@ -1,8 +1,8 @@
 <h1 id="tableLabel">User Session</h1>
 
-<p *ngIf="!claims"><em>Loading...</em></p>
+<p *ngIf="!(authenticated$ | async)"><em>Loading...</em></p>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="claims">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="authenticated$ | async">
   <thead>
     <tr>
       <th>Type</th>
@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let claim of claims">
+    <tr *ngFor="let claim of session$ | async">
       <td>{{ claim.type }}</td>
       <td>{{ claim.value }}</td>
     </tr>

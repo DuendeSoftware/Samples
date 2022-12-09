@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AuthenticationService, Session } from '../authentication.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-session',
@@ -7,20 +9,11 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./user-session.component.css']
 })
 export class UserSessionComponent {
-  public claims: Claim[] = [];
+  public session$: Observable<Session>;
+  public authenticated$: Observable<boolean>;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<Claim[]>(baseUrl + 'bff/user', {
-      headers: {
-        "X-CSRF": "1"
-      }
-    }).subscribe(result => {
-      this.claims = result;
-    }, error => console.error(error));
+  constructor(auth: AuthenticationService) {
+    this.session$ = auth.session$
+    this.authenticated$ = auth.authenticated$;
   }
-}
-
-interface Claim {
-  type: string;
-  value: string;
 }

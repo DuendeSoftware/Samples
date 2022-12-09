@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -6,6 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
+  public username$ = this.auth.username$;
+  public authenticated$ = this.auth.authenticated$;
+  public anonymous$ = this.auth.anonymous$;
+
+  constructor(private auth: AuthenticationService) {
+    auth.getSession();
+  }
+
   isExpanded = false;
 
   collapse() {
