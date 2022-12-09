@@ -1,69 +1,54 @@
 {
-  "name": "cra_latest",
-  "version": "0.1.0",
+  "name": "frontendhost",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "prestart": "node aspnetcore-https",
+    "start": "run-script-os",
+    "start:windows": "ng serve --port 44451 --ssl --ssl-cert %APPDATA%\\ASP.NET\\https\\%npm_package_name%.pem --ssl-key %APPDATA%\\ASP.NET\\https\\%npm_package_name%.key",
+    "start:default": "ng serve --port 44451 --ssl --ssl-cert $HOME/.aspnet/https/${npm_package_name}.pem --ssl-key $HOME/.aspnet/https/${npm_package_name}.key",
+    "build": "ng build",
+    "build:ssr": "ng run FrontendHost:server:dev",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
   "private": true,
   "dependencies": {
-    "bootstrap": "^5.1.0",
-    "http-proxy-middleware": "^0.19.1",
-    "jquery": "^3.5.1",
-    "merge": "^2.1.1",
+    "@angular/animations": "^14.0.3",
+    "@angular/common": "^14.0.3",
+    "@angular/compiler": "^14.0.3",
+    "@angular/core": "^14.0.3",
+    "@angular/forms": "^14.0.3",
+    "@angular/platform-browser": "^14.0.3",
+    "@angular/platform-browser-dynamic": "^14.0.3",
+    "@angular/platform-server": "^14.0.3",
+    "@angular/router": "^14.0.3",
+    "bootstrap": "^5.1.3",
+    "jquery": "^3.6.0",
     "oidc-client": "^1.11.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-router-bootstrap": "^0.25.0",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.3",
-    "reactstrap": "^8.9.0",
-    "rimraf": "^2.6.2",
-    "web-vitals": "^0.2.4",                
-    "workbox-background-sync": "^5.1.3",   
-    "workbox-broadcast-update": "^5.1.3",  
-    "workbox-cacheable-response": "^5.1.3",
-    "workbox-core": "^5.1.3",              
-    "workbox-expiration": "^5.1.3",        
-    "workbox-google-analytics": "^5.1.3",  
-    "workbox-navigation-preload": "^5.1.3",
-    "workbox-precaching": "^5.1.3",        
-    "workbox-range-requests": "^5.1.3",    
-    "workbox-routing": "^5.1.3",           
-    "workbox-strategies": "^5.1.3",        
-    "workbox-streams": "^5.1.3"
+    "popper.js": "^1.16.0",
+    "run-script-os": "^1.1.6",
+    "rxjs": "~7.5.5",
+    "tslib": "^2.4.0",
+    "zone.js": "~0.11.6"
   },
   "devDependencies": {
-    "ajv": "^6.9.1",
-    "cross-env": "^7.0.3",
-    "eslint": "^7.25.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-flowtype": "^5.7.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.23.2",
-    "nan": "^2.14.2",
-    "typescript": "^4.2.4"
+    "@angular-devkit/build-angular": "^14.0.3",
+    "@angular/cli": "^14.0.3",
+    "@angular/compiler-cli": "^14.0.3",
+    "@types/jasmine": "~4.0.3",
+    "@types/jasminewd2": "~2.0.10",
+    "@types/node": "^18.0.0",
+    "jasmine-core": "~4.2.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.1.1",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "^2.0.0",
+    "typescript": "~4.7.4"
   },
-  "scripts": {
-"prestart": "node aspnetcore-https && node aspnetcore-react",
-    "start": "rimraf ./build && react-scripts start",
-    "build": "react-scripts build",
-    "test": "cross-env CI=true react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "lint": "eslint ./src/"
+  "overrides": {
+    "autoprefixer": "10.4.5"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "optionalDependencies": {}
 }

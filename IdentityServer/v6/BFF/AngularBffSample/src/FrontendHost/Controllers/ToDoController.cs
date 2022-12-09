@@ -1,12 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.Logging;
 
-namespace cra_latest.Controllers;
+namespace FrontendHost.Controllers;
 
-//[ApiController]
 public class ToDoController : ControllerBase
 {
     private readonly ILogger<ToDoController> _logger;
