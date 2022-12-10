@@ -13,6 +13,18 @@ export class AuthenticationService {
   constructor(private http: HttpClient) {
   }
 
+  public getSession(ignoreCache: boolean = false) {
+    if (!this.session$ || ignoreCache) {
+      this.session$ = this.http.get<Session>('bff/user').pipe(
+        catchError(err => {
+          return of(ANONYMOUS);
+        }),
+        shareReplay(CACHE_SIZE)
+      );
+    }
+    return this.session$;
+  }
+
   public getIsAuthenticated(ignoreCache: boolean = false) {
     return this.getSession(ignoreCache).pipe(
       map(UserIsAuthenticated)
@@ -32,16 +44,11 @@ export class AuthenticationService {
     );
   }
 
-  public getSession(ignoreCache: boolean = false) {
-    if (!this.session$ || ignoreCache) {
-      this.session$ = this.http.get<Session>('bff/user').pipe(
-        catchError(err => {
-          return of(ANONYMOUS);
-        }),
-        shareReplay(CACHE_SIZE)
-      );
-    }
-    return this.session$;
+  public getLogoutUrl(ignoreCache: boolean = false) {
+    return this.getSession(ignoreCache).pipe(
+      filter(UserIsAuthenticated),
+      map(s => s.find(c => c.type === 'bff:logout_url')?.value)
+    );
   }
 }
 

@@ -35,6 +35,10 @@
           <li *ngIf="anonymous$ | async" class="nav-item">
             <a class="nav-link text-dark" href="/bff/login">Login</a>
           </li>
+
+          <li *ngIf="authenticated$ | async" class="nav-item">
+            <a class="nav-link text-dark" href="{{logoutUrl$ | async}}">Signout</a>
+          </li>
         </ul>
       </div>
     </div>
