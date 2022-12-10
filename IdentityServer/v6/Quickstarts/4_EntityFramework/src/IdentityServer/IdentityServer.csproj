@@ -5,8 +5,8 @@
     <UserSecretsId>38ced442-cf32-4289-bb08-57d4a78831b3</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Duende.IdentityServer" Version="6.0.0-preview.6" />
-    <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.0.0" />
+    <PackageReference Include="Duende.IdentityServer" Version="6.1.2" />
+    <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
