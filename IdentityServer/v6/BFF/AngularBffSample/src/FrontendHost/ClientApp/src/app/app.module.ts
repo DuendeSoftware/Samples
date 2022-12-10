@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { UserSessionComponent } from './user-session/user-session.component';
 import { CsrfHeaderInterceptor } from './csrf-header.interceptor';
+import { TodosComponent } from './todos/todos.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { CsrfHeaderInterceptor } from './csrf-header.interceptor';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    UserSessionComponent
+    UserSessionComponent,
+    TodosComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
