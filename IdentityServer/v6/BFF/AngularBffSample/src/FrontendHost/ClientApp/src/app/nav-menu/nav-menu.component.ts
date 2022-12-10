@@ -7,9 +7,9 @@ import { AuthenticationService } from '../authentication.service';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
-  public username$ = this.auth.username$;
-  public authenticated$ = this.auth.authenticated$;
-  public anonymous$ = this.auth.anonymous$;
+  public username$ = this.auth.getUsername();
+  public authenticated$ = this.auth.getIsAuthenticated();
+  public anonymous$ = this.auth.getIsAnonymous();
 
   constructor(private auth: AuthenticationService) {
     auth.getSession();

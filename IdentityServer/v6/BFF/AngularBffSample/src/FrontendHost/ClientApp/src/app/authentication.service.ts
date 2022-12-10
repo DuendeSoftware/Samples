@@ -1,41 +1,47 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, filter, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, shareReplay } from 'rxjs';
 
-const Anonymous: Session = null;
+const ANONYMOUS: Session = null;
+const CACHE_SIZE = 1;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  
-  private readonly session = new BehaviorSubject<Session>(Anonymous)
-  public readonly session$: Observable<Session> = this.session
+  private session$: Observable<Session> | null = null
+  constructor(private http: HttpClient) {
+  }
 
-  public readonly authenticated$ = this.session$.pipe(
-    map(UserIsAuthenticated)
-  );
+  public getIsAuthenticated(ignoreCache: boolean = false) {
+    return this.getSession(ignoreCache).pipe(
+      map(UserIsAuthenticated)
+    );
+  }
 
-  public readonly anonymous$ = this.session$.pipe(
-    map(UserIsAnonymous)
-  );
+  public getIsAnonymous(ignoreCache: boolean = false) {
+    return this.getSession(ignoreCache).pipe(
+      map(UserIsAnonymous)
+    );
+  }
 
-  public readonly username$ = this.session$.pipe(
-    filter(UserIsAuthenticated),
-    map(s => s.find(c => c.type === 'name')?.value)
-    )
+  public getUsername(ignoreCache: boolean = false) {
+    return this.getSession(ignoreCache).pipe(
+      filter(UserIsAuthenticated),
+      map(s => s.find(c => c.type === 'name')?.value)
+    );
+  }
 
-  constructor(private http: HttpClient) { }
-
-  public getSession() {
-    this.http.get<Session>('bff/user').pipe(
-      catchError(err => {
-        return of(Anonymous);
-      })
-    )
-    .subscribe(session => {
-        this.session.next(session);
-    });
+  public getSession(ignoreCache: boolean = false) {
+    if (!this.session$ || ignoreCache) {
+      this.session$ = this.http.get<Session>('bff/user').pipe(
+        catchError(err => {
+          return of(ANONYMOUS);
+        }),
+        shareReplay(CACHE_SIZE)
+      );
+    }
+    return this.session$;
   }
 }
 

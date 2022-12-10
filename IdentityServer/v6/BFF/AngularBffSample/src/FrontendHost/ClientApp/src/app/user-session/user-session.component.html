@@ -1,8 +1,8 @@
 <h1 id="tableLabel">User Session</h1>
 
-<p *ngIf="!(authenticated$ | async)"><em>Loading...</em></p>
+<p *ngIf="isAnonymous$ | async"><em>Loading...</em></p>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="authenticated$ | async">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="isAuthenticated$ | async">
   <thead>
     <tr>
       <th>Type</th>
