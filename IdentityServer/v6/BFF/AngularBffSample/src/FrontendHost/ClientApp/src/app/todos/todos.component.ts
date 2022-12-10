@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-todos',
   templateUrl: './todos.component.html',
-  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodosComponent implements OnInit {
   private readonly todos = new BehaviorSubject<Todo[]>([]);
