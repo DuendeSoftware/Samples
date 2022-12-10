@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, catchError, filter, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-todos',
@@ -13,13 +14,23 @@ export class TodosComponent implements OnInit {
   private readonly errors = new BehaviorSubject<string>('');
   public readonly error$: Observable<string> = this.errors;
 
+  public isAuthenticated$: Observable<boolean> = new Observable();
+
   public date = "";
   public name = "";
 
-  public constructor(private http: HttpClient) { }
+  public constructor(
+    private http: HttpClient,
+    private auth: AuthenticationService) { }
 
   public ngOnInit(): void {
-    this.fetchTodos();
+    this.auth.getIsAuthenticated()
+      .pipe(
+        filter(isAuthenticated => isAuthenticated),
+        tap(() => {
+          this.fetchTodos();
+        })
+    ).subscribe();
   }
 
   public createTodo(): void {
@@ -39,9 +50,9 @@ export class TodosComponent implements OnInit {
     this.http.delete(`todos/${id}`)
       .pipe(catchError(this.showError))
       .subscribe(() => {
-      const todos = this.todos.getValue().filter((x) => x.id !== id);
-      this.todos.next(todos);
-    });
+        const todos = this.todos.getValue().filter((x) => x.id !== id);
+        this.todos.next(todos);
+      });
   }
 
   private fetchTodos(): void {
