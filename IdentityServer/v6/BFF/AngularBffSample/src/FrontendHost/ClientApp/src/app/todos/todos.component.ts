@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, Subject } from 'rxjs';
 
@@ -28,7 +28,7 @@ export class TodosComponent implements OnInit {
         name: this.name,
         date: this.date,
       })
-      .pipe(catchError(err => { this.errors.next(err); throw err; }))
+      .pipe(catchError(this.showError))
       .subscribe((todo) => {
         const todos = [...this.todos.getValue(), todo];
         this.todos.next(todos);
@@ -37,7 +37,7 @@ export class TodosComponent implements OnInit {
 
   public deleteTodo(id: number): void {
     this.http.delete(`todos/${id}`)
-      .pipe(catchError(err => { this.errors.next(err); throw err; }))
+      .pipe(catchError(this.showError))
       .subscribe(() => {
       const todos = this.todos.getValue().filter((x) => x.id !== id);
       this.todos.next(todos);
@@ -47,13 +47,17 @@ export class TodosComponent implements OnInit {
   private fetchTodos(): void {
     this.http
       .get<Todo[]>('todos')
-      .pipe(catchError(err => {
-        this.errors.next(err.message);
-        throw err;
-      }))
+      .pipe(catchError(this.showError))
       .subscribe((todos) => {
         this.todos.next(todos);
       });
+  }
+
+  private readonly showError = (err: HttpErrorResponse) => {
+    if (err.status !== 401) {
+      this.errors.next(err.message);
+    }
+    throw err;
   }
 }
 
