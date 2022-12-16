@@ -18,7 +18,7 @@
           "type": "coreclr",
           "request": "launch",
           "preLaunchTask": "build-client",
-          "program": "${workspaceFolder}/Client/bin/Debug/net7.0/Client.dll",
+          "program": "${workspaceFolder}/Client/bin/Debug/net6.0/Client.dll",
           "args": [],
           "cwd": "${workspaceFolder}/Client",
           "serverReadyAction": {
@@ -34,7 +34,7 @@
           "type": "coreclr",
           "request": "launch",
           "preLaunchTask": "build-api",
-          "program": "${workspaceFolder}/Api/bin/Debug/net7.0/Api.dll",
+          "program": "${workspaceFolder}/Api/bin/Debug/net6.0/Api.dll",
           "args": [],
           "cwd": "${workspaceFolder}/Api",
           "env": {
