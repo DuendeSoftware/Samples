@@ -1,11 +1,9 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 
-namespace IdentityServerHost.Pages.Diagnostics;
+namespace IdentityServerAspNetIdentity.Pages.Diagnostics;
 
 [SecurityHeaders]
 [Authorize]

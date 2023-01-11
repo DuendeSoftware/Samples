@@ -11,13 +11,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
-    [Migration("20220114223432_InitialIdentityServerConfigurationDbMigration")]
+    [Migration("20230112015554_InitialIdentityServerConfigurationDbMigration")]
     partial class InitialIdentityServerConfigurationDbMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.13");
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResource", b =>
                 {
@@ -348,6 +348,9 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.Property<int?>("ConsentLifetime")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool?>("CoordinateLifetimeWithUserSession")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
@@ -545,7 +548,7 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
 
                     b.Property<string>("PostLogoutRedirectUri")
                         .IsRequired()
-                        .HasMaxLength(2000)
+                        .HasMaxLength(400)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -594,7 +597,7 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
 
                     b.Property<string>("RedirectUri")
                         .IsRequired()
-                        .HasMaxLength(2000)
+                        .HasMaxLength(400)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

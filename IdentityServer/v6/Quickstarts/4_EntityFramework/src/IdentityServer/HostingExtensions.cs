@@ -5,7 +5,6 @@ using IdentityServerHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using System.Reflection;
 
 namespace IdentityServer;
 
