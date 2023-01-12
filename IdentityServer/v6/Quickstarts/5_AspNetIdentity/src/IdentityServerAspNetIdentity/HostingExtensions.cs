@@ -1,6 +1,6 @@
 using Duende.IdentityServer;
 using IdentityServerAspNetIdentity.Data;
-using IdentityServerHost.Models;
+using IdentityServerAspNetIdentity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;

@@ -50,7 +50,9 @@ namespace IdentityServer.Data.Migrations.IdentityServer.PersistedGrantDb
                 name: "PersistedGrants",
                 columns: table => new
                 {
-                    Key = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Key = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
                     Type = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     SubjectId = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
                     SessionId = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
@@ -63,7 +65,28 @@ namespace IdentityServer.Data.Migrations.IdentityServer.PersistedGrantDb
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PersistedGrants", x => x.Key);
+                    table.PrimaryKey("PK_PersistedGrants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServerSideSessions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Key = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Scheme = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    SubjectId = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    SessionId = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    DisplayName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Renewed = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Expires = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Data = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServerSideSessions", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
@@ -93,6 +116,12 @@ namespace IdentityServer.Data.Migrations.IdentityServer.PersistedGrantDb
                 column: "Expiration");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PersistedGrants_Key",
+                table: "PersistedGrants",
+                column: "Key",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_SubjectId_ClientId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "ClientId", "Type" });
@@ -101,6 +130,32 @@ namespace IdentityServer.Data.Migrations.IdentityServer.PersistedGrantDb
                 name: "IX_PersistedGrants_SubjectId_SessionId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "SessionId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServerSideSessions_DisplayName",
+                table: "ServerSideSessions",
+                column: "DisplayName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServerSideSessions_Expires",
+                table: "ServerSideSessions",
+                column: "Expires");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServerSideSessions_Key",
+                table: "ServerSideSessions",
+                column: "Key",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServerSideSessions_SessionId",
+                table: "ServerSideSessions",
+                column: "SessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServerSideSessions_SubjectId",
+                table: "ServerSideSessions",
+                column: "SubjectId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -113,6 +168,9 @@ namespace IdentityServer.Data.Migrations.IdentityServer.PersistedGrantDb
 
             migrationBuilder.DropTable(
                 name: "PersistedGrants");
+
+            migrationBuilder.DropTable(
+                name: "ServerSideSessions");
         }
     }
 }

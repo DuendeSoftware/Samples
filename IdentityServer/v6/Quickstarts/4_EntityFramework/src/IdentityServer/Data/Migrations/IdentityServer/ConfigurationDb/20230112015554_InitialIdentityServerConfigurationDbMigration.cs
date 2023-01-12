@@ -102,6 +102,7 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     DeviceCodeLifetime = table.Column<int>(type: "INTEGER", nullable: false),
                     CibaLifetime = table.Column<int>(type: "INTEGER", nullable: true),
                     PollingInterval = table.Column<int>(type: "INTEGER", nullable: true),
+                    CoordinateLifetimeWithUserSession = table.Column<bool>(type: "INTEGER", nullable: true),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Updated = table.Column<DateTime>(type: "TEXT", nullable: true),
                     LastAccessed = table.Column<DateTime>(type: "TEXT", nullable: true),
@@ -368,7 +369,7 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    PostLogoutRedirectUri = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
+                    PostLogoutRedirectUri = table.Column<string>(type: "TEXT", maxLength: 400, nullable: false),
                     ClientId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -409,7 +410,7 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    RedirectUri = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
+                    RedirectUri = table.Column<string>(type: "TEXT", maxLength: 400, nullable: false),
                     ClientId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
