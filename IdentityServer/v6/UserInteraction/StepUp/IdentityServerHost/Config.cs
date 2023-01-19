@@ -4,18 +4,26 @@ namespace IdentityServerHost;
 
 public static class Config
 {
+    private static IdentityResources.OpenId _openid;
+
+    static Config()
+    {
+        _openid = new IdentityResources.OpenId();
+        _openid.UserClaims.Add("acr");
+    }
+
     public static IEnumerable<IdentityResource> IdentityResources =>
         new IdentityResource[]
         {
-            new IdentityResources.OpenId(),
+            _openid,
             new IdentityResources.Profile(),
         };
 
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-            new ApiScope("scope1"),
-            new ApiScope("scope2"),
+            new ApiScope("scope1", new[]{ "acr" }),
+            new ApiScope("scope2", new[]{ "acr" }),
         };
 
     public static IEnumerable<Client> Clients =>
@@ -32,7 +40,7 @@ public static class Config
                 FrontChannelLogoutUri = "https://localhost:6001/signout-oidc",
                 PostLogoutRedirectUris = { "https://localhost:6001/signout-callback-oidc" },
 
-                AllowedScopes = { "openid", "profile"}
+                AllowedScopes = { "openid", "profile", "scope1" }
             },
         };
 }

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,6 +25,8 @@ builder.Services.AddAuthentication(opt =>
         opt.ClientId = "step-up";
         opt.ClientSecret = "secret";
         opt.ResponseType = "code";
+        opt.Scope.Add("scope1");
+        opt.ClaimActions.Remove("acr");
         opt.SaveTokens = true;
         opt.GetClaimsFromUserInfoEndpoint = true;
         opt.MapInboundClaims = false;
@@ -41,7 +45,6 @@ builder.Services.AddAuthentication(opt =>
             }
             return Task.CompletedTask;
         };
-
     });
 
 var app = builder.Build();

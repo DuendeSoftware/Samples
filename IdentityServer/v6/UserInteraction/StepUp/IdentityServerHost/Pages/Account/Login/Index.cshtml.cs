@@ -116,6 +116,7 @@ public class Index : PageModel
                 if (Input.SimulateMfa)
                 {
                     isuser.AuthenticationMethods = new[] { "pwd", "mfa" };
+                    isuser.AdditionalClaims.Add(new System.Security.Claims.Claim("acr", "1"));
                 }
 
                 await HttpContext.SignInAsync(isuser, props);

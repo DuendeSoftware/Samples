@@ -1,5 +1,6 @@
 using Duende.IdentityServer;
 using Duende.IdentityServer.ResponseHandling;
+using Duende.IdentityServer.Services;
 using IdentityServerHost;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Serilog;

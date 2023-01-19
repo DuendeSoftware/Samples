@@ -33,7 +33,7 @@ builder.Services.AddAuthorization(opt =>
     {
         p.RequireAuthenticatedUser();
         p.RequireClaim("amr", "mfa");
-        p.AddRequirements(new MaxAgeRequirement(TimeSpan.FromMinutes(1)));
+        p.AddRequirements(new MaxAgeRequirement(TimeSpan.FromSeconds(30)));
     });
 });
 
