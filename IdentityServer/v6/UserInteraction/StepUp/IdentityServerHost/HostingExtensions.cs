@@ -32,6 +32,8 @@ internal static class HostingExtensions
         isBuilder.AddInMemoryApiScopes(Config.ApiScopes);
         isBuilder.AddInMemoryClients(Config.Clients);
 
+        builder.Services.AddTransient<IDiscoveryResponseGenerator, AcrDiscoveryDocumentGenerator>();
+
 
         // if you want to use server-side sessions: https://blog.duendesoftware.com/posts/20220406_session_management/
         // then enable it
