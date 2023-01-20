@@ -1,0 +1,37 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+          "name": "FrontendHost",
+          "type": "coreclr",
+          "request": "launch",
+          "preLaunchTask": "build-frontendHost",
+          "program": "${workspaceFolder}/FrontendHost/bin/Debug/net6.0/FrontendHost.dll",
+          "args": [],
+          "cwd": "${workspaceFolder}/FrontendHost",
+          "serverReadyAction": {
+              "action": "openExternally",
+              "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+          },
+          "env": {
+              "ASPNETCORE_ENVIRONMENT": "Development"
+          }
+        },
+        {
+          "name": "BackendApiHost",
+          "type": "coreclr",
+          "request": "launch",
+          "preLaunchTask": "build-backendApiHost",
+          "program": "${workspaceFolder}/BackendApiHost/bin/Debug/net6.0/BackendApiHost.dll",
+          "args": [],
+          "cwd": "${workspaceFolder}/BackendApiHost",
+          "serverReadyAction": {
+              "action": "openExternally",
+              "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+          },
+          "env": {
+              "ASPNETCORE_ENVIRONMENT": "Development"
+          }
+        }
+    ]
+}

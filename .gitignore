@@ -201,7 +201,7 @@ docs/_build/
 tools/
 
 # Visual Studio Code workspace options
-.vscode
+**/.vscode/settings.json
 
 # IdentityServer temp files
 tempkey.jwk
