@@ -28,18 +28,6 @@ public class StepUpInteractionResponseGenerator : AuthorizeInteractionResponseGe
             {
                 result.RedirectUrl = "/Account/Mfa";
             }
-
-            if(request.MaxAge != null)
-            {
-                var claimValue = request.Subject.FindFirst("auth_time").Value;
-                var authTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(claimValue));
-                var authAge = DateTime.UtcNow - authTime;
-
-                if(authAge.TotalSeconds > request.MaxAge)
-                {
-                    result.IsLogin = true;
-                }
-            }
         }
         return result;
     }
