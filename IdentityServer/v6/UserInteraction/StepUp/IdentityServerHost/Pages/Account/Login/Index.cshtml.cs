@@ -113,12 +113,6 @@ public class Index : PageModel
                     DisplayName = user.Username,
                 };
 
-                if (Input.SimulateMfa)
-                {
-                    isuser.AuthenticationMethods = new[] { "pwd", "mfa" };
-                    isuser.AdditionalClaims.Add(new System.Security.Claims.Claim("acr", "1"));
-                }
-
                 await HttpContext.SignInAsync(isuser, props);
 
                 if (context != null)
@@ -223,7 +217,6 @@ public class Index : PageModel
             AllowRememberLogin = LoginOptions.AllowRememberLogin,
             EnableLocalLogin = allowLocal && LoginOptions.AllowLocalLogin,
             ExternalProviders = providers.ToArray(),
-            RequireMfa = context?.AcrValues?.Contains("mfa") ?? false
         };
     }
 }

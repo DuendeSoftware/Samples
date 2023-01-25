@@ -26,7 +26,7 @@ public class StepUpInteractionResponseGenerator : AuthorizeInteractionResponseGe
             if(request.AuthenticationContextReferenceClasses.Contains("mfa") &&
                 request.Subject.FindFirst(c => c.Type == "amr" && c.Value == "mfa") == null) 
             {
-                result.IsLogin = true;
+                result.RedirectUrl = "/Account/Mfa";
             }
 
             if(request.MaxAge != null)

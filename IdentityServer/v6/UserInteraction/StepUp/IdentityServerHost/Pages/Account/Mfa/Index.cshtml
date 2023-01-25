@@ -1,0 +1,15 @@
+﻿@page
+@model IdentityServerHost.Pages.Mfa.Index
+
+<h2>This Page Fakes MFA</h2>
+
+<p>In a real implementation, there would be more user interaction here. The 
+    intent of this page is to show how to get to custom pages where you can 
+    perform additional actions. See 
+    StepUpInteractionResponseGenerator.cs for more details.</p>
+
+<form asp-page="/Account/Mfa/Index">
+    <input type="hidden" asp-for="Input.ReturnUrl" />
+
+    <button class="btn btn-primary" name="Input.Button" value="fake">Fake MFA</button>
+</form>

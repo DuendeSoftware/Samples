@@ -9,16 +9,6 @@
 
     <partial name="_ValidationSummary" />
 
-
-    @if(Model.View.RequireMfa)
-    {
-    <div class="row">
-        <div class="col-sm-6">
-            MFA is required.
-        </div>
-    </div>
-    }
-
     <div class="row">
 
         @if (Model.View.EnableLocalLogin)
@@ -53,16 +43,6 @@
                                     </div>
                                 </div>
                             }
-
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" asp-for="Input.SimulateMfa">
-                                    <label class="form-check-label" asp-for="Input.SimulateMfa">
-                                        Simulate MFA by Checking this box
-                                    </label>
-                                </div>
-                            </div>
-
                             
                             <button class="btn btn-primary" name="Input.Button" value="login">Login</button>
                             <button class="btn btn-secondary" name="Input.Button" value="cancel">Cancel</button>
