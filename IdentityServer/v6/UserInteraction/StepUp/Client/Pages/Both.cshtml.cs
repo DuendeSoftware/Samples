@@ -17,7 +17,7 @@ public class BothModel : PageModel
 
     private readonly HttpClient _http;
 
-    public string ApiResponse { get; private set; }
+    public string? ApiResponse { get; private set; }
 
     public async Task OnGet()
     {

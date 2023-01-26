@@ -34,7 +34,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Both">Recent Auth with MFA</a>
                         </li>
-                        @if(User.Identity.IsAuthenticated)
+                        @if(User.Identity?.IsAuthenticated ?? false)
                         {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Logout">Logout</a>

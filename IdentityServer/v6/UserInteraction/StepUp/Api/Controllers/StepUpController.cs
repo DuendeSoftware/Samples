@@ -7,13 +7,6 @@ namespace Api.Controllers;
 [Route("step-up")]
 public class StepUp : ControllerBase
 {
-    private readonly ILogger<StepUp> _logger;
-
-    public StepUp(ILogger<StepUp> logger)
-    {
-        _logger = logger;
-    }
-
     [HttpGet]
     [Route("max-age")]
     [Authorize("MaxAgeOneMinute")]

@@ -1,12 +1,11 @@
-using System.Net.Http.Headers;
-using System.Text;
 using Api.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Authorization.Policy;
-using Microsoft.Net.Http.Headers;
 
-public class StepUpAuthorizationMiddlewareResultHandler 
+namespace Api.Authorization;
+
+public class StepUpAuthorizationMiddlewareResultHandler
     : IAuthorizationMiddlewareResultHandler
 {
     private readonly AuthorizationMiddlewareResultHandler defaultHandler = new();
@@ -53,7 +52,8 @@ public class StepUpAuthorizationMiddlewareResultHandler
 public class StepUpWWWAuthenticateHeader
 {
     private readonly string Error = "insufficient_user_authentication";
-    private string ErrorDescription {
+    private string ErrorDescription
+    {
         get
         {
             var ret = string.Empty;
@@ -77,11 +77,11 @@ public class StepUpWWWAuthenticateHeader
             $"Bearer error=\"{Error}\"",
             $"error_description=\"{ErrorDescription}\""
         };
-        if(MaxAge != null)
+        if (MaxAge != null)
         {
             props.Add($"max_age={MaxAge}");
         }
-        if(AcrValues != null)
+        if (AcrValues != null)
         {
             props.Add($"acr_values={AcrValues}");
         }

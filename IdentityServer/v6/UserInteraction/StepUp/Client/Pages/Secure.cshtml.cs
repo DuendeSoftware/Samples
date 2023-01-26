@@ -16,7 +16,7 @@ public class SecureModel : PageModel
     private readonly ILogger<SecureModel> _logger;
     private readonly HttpClient _http;
 
-    public string ApiResponse { get; private set; }
+    public string? ApiResponse { get; private set; }
 
     public async Task OnGet()
     {

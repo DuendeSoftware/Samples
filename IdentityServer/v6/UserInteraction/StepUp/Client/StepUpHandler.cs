@@ -28,11 +28,11 @@ public class StepUpHandler : DelegatingHandler
 
             var props = new AuthenticationProperties();
 
-            if (attributes.TryGetValue("max_age", out string maxAge))
+            if (attributes.TryGetValue("max_age", out string? maxAge))
             {
                 props.Items.Add("max_age", maxAge);
             }
-            if (attributes.TryGetValue("acr_values", out string acrValues))
+            if (attributes.TryGetValue("acr_values", out string? acrValues))
             {
                 props.Items.Add("acr_values", acrValues);
             }
