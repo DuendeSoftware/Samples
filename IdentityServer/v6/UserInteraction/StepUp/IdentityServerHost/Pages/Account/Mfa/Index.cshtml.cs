@@ -19,9 +19,11 @@ public class Index : PageModel
     [BindProperty]
     public InputModel Input { get; set; }
 
-    public void OnGetAsync(string returnUrl)
+    public ViewModel View { get; set; }
+
+    public async Task OnGetAsync(string returnUrl)
     {
-        BuildModel(returnUrl);
+        await BuildModelAsync(returnUrl);
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -43,15 +45,27 @@ public class Index : PageModel
             }
         }
         // something went wrong, show form with error
-        BuildModel(Input.ReturnUrl);
+        await BuildModelAsync(Input.ReturnUrl);
         return Page();
     }
 
-    public void BuildModel(string returnUrl)
+    public async Task BuildModelAsync(string returnUrl)
     {
-        Input = new InputModel
+        var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+
+        if (context != null)
         {
-            ReturnUrl = returnUrl
-        };
+            Input = new InputModel
+            {
+                ReturnUrl = returnUrl
+            };
+
+            View = new ViewModel
+            {
+                ClientName = context.Client.ClientName,
+                MfaRequestedByClient = context.AcrValues.Contains("mfa")
+            };
+        }
+
     }
 }

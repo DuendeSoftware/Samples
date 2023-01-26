@@ -32,6 +32,7 @@ public static class Config
             new Client
             {
                 ClientId = "step-up",
+                ClientName = "Step Up Demo",
                 ClientSecrets = { new Secret("secret".Sha256()) },
                     
                 AllowedGrantTypes = GrantTypes.Code,

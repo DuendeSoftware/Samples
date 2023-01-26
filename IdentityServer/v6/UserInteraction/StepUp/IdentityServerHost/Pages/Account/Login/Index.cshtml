@@ -5,6 +5,10 @@
     <div class="lead">
         <h1>Login</h1>
         <p>Choose how to login</p>
+        @if(Model.View.FreshLoginRequested)
+        {
+            <p>The @Model.View.ClientName application requires a fresh login.</p>
+        }
     </div>
 
     <partial name="_ValidationSummary" />

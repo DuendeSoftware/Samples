@@ -14,6 +14,8 @@ public class ViewModel
     public bool IsExternalLoginOnly => EnableLocalLogin == false && ExternalProviders?.Count() == 1;
     public string ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
 
+    public string ClientName { get; set; } = string.Empty;
+    public bool FreshLoginRequested { get; set; } = false;
 
     public class ExternalProvider
     {
