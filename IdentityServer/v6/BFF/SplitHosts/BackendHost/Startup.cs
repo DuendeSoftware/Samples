@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using Duende.Bff.Yarp;
 using Duende.Bff;
 
@@ -16,9 +11,10 @@ namespace BackendHost
             {
                 opt.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("https://localhost:5011")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
+                    policy
+                        .WithOrigins("https://localhost:5011")
+                        .WithHeaders("x-csrf", "content-type")
+                        .WithMethods("DELETE")
                         .AllowCredentials();
                 });
             });

@@ -3,7 +3,7 @@
 window.addEventListener("load", async () => {
   var req = new Request(userUrl, {
     headers: new Headers({
-      "X-CSRF": "1",
+      "x-csrf": "1",
     }),
     credentials: "include",
   });
@@ -45,7 +45,7 @@ window.addEventListener("load", async () => {
 document.querySelector(".show_session").addEventListener("click", async () => {
   var req = new Request(userUrl, {
     headers: new Headers({
-      "X-CSRF": "1",
+      "x-csrf": "1",
     }),
     credentials: "include",
   });
