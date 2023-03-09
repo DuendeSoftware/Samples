@@ -37,7 +37,7 @@ namespace IdentityServerHost
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
 
-                // see https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
+                // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
                 options.EmitStaticAudienceClaim = true;
 
                 // this controls how long the dynamic providers are cached, if caching is enabled (see AddConfigurationStoreCache() below)
@@ -74,6 +74,8 @@ namespace IdentityServerHost
                     options.ClientId = "copy client ID from Google here";
                     options.ClientSecret = "copy client secret from Google here";
                 });
+
+            services.ConfigureOptions<CustomOidcConfigureOptions>();
         }
 
         public void Configure(IApplicationBuilder app)
