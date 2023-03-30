@@ -1,0 +1,15 @@
+﻿@page
+@model IdentityServerHost.Pages.TestModel
+@{
+    var thumbprint = HttpContext.Connection.ClientCertificate?.Thumbprint;
+    var name = HttpContext.Connection.ClientCertificate?.SubjectName?.Name;
+}
+
+<div>
+    Client Certificate Thumbprint: @thumbprint
+</div>
+
+<div>
+    Client Certificate Subject Name: @name
+</div>
+

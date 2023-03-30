@@ -1,0 +1,22 @@
+{
+  "profiles": {
+    "Api": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:5002"
+    },
+    "IIS": {
+      "commandName": "IIS"
+    }
+  },
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "https://api.mtls.dev:44301",
+      "sslPort": 0
+    }
+  }
+}
