@@ -65,4 +65,5 @@ Add the following to the C:\Windows\System32\drivers\etc\hosts file:
 - Configure IdentityServer's client
   - Change the secret in IdentityServer\Clients.cs to either be the thumbprint or name of your client.mtls.dev certificate. 
 
-- Copy client cert to client folder
+- Configure client certificate
+  - Change the thumbprint or name to match your client certificate in the GetHandler method, or copy the client's certificate to the build output, and switch to loading the certificate by filename.
