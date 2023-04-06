@@ -118,3 +118,14 @@ tab and add the following to the JSON config:
 ```
 "dns": ["1.1.1.1"]
 ```
+
+## Connect IIS manager to the docker container
+If you want to examine the IIS configuration of the docker container:
+
+0. Install [IIS Manager for Remote Administration 1.2](https://www.microsoft.com/en-us/download/details.aspx?id=41177)
+1. Get the container's IP address: `docker inspect --format '{{ .NetworkSettings.Networks.nat.IPAddress }}' iis-with-mtls`
+2. In IIS Manager, Right Click on Start Page -> Connect to a server -> enter the container's ip address -> enter the credentials iisadmin:Password~1234
+
+## Log Files
+IIS writes logs to C:\inetput\logs in the container. Each site writes its standard output to its ./logs directory.
+
