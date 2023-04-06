@@ -74,17 +74,18 @@ The IdentityServerHost and Api can be run as containerized applications within w
 Here are the build steps necessary:
 
 ## Install docker
-Docker deskop is a convenient way to get all the tools you need. It can be downloaded from
+Docker desktop is a convenient way to get the docker tools you need. It can be downloaded from
 https://www.docker.com/products/docker-desktop/
 
-Alternatively, you can install docker desktop via chocoloately:
+Alternatively, you can install docker desktop via chocolatey:
 ```
 choco install docker-desktop
 ```
 
 ## Enable windows containers
-As these containers will be windows containers, we need to enable the feature in the host 
-operating system. From an elevated powershell command prompt, run the following:
+As these containers will be windows containers, we need to enable the windows
+containers feature in the host operating system. From an elevated powershell
+command prompt, run the following:
 
 ```
 Enable-WindowsOptionalFeature -Online -FeatureName $("Microsoft-Hyper-V", "Containers") -All
@@ -99,7 +100,7 @@ From the ~/IdentityServerHost directory, run `dotnet publish`, and from the ~/Ap
 `dotnet publish` again.
 
 ## Copy certificates to the ~/certificates folder
-Copy api.mtls.dev.p12, identity.mtls.dev.p12, and rootCA.pem to the ~/certificates folder.
+Copy the api.mtls.dev.p12, identity.mtls.dev.p12, and rootCA.pem to the ~/certificates folder.
 
 ## Build and run the container
 From the ~/ directory, run 
