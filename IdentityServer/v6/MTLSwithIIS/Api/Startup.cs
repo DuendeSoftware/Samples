@@ -19,7 +19,7 @@ namespace SampleApi
             services.AddAuthentication("token")
                 .AddJwtBearer("token", options =>
                 {
-                    options.Authority = "https://identity.mtls.dev";
+                    options.Authority = "https://identity.mtls.dev:5001";
                     options.TokenValidationParameters.ValidateAudience = false;
                     options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                 });

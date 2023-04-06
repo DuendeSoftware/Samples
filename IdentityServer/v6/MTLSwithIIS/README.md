@@ -67,3 +67,53 @@ Add the following to the C:\Windows\System32\drivers\etc\hosts file:
 
 - Configure client certificate
   - Change the thumbprint or name to match your client certificate in the GetHandler method, or copy the client's certificate to the build output, and switch to loading the certificate by filename.
+
+
+# Container Builds
+The IdentityServerHost and Api can be run as containerized applications within windows containers.
+Here are the build steps necessary:
+
+## Install docker
+Docker deskop is a convenient way to get all the tools you need. It can be downloaded from
+https://www.docker.com/products/docker-desktop/
+
+Alternatively, you can install docker desktop via chocoloately:
+```
+choco install docker-desktop
+```
+
+## Enable windows containers
+As these containers will be windows containers, we need to enable the feature in the host 
+operating system. From an elevated powershell command prompt, run the following:
+
+```
+Enable-WindowsOptionalFeature -Online -FeatureName $("Microsoft-Hyper-V", "Containers") -All
+```
+
+## Switch to windows containers
+To switch docker to use windows containers, right click on docker desktop in the system tray and 
+choose "Switch to windows containers".
+
+## Publish the IdentityServerHost and Api Projects
+From the ~/IdentityServerHost directory, run `dotnet publish`, and from the ~/Api directory, run 
+`dotnet publish` again.
+
+## Copy certificates to the ~/certificates folder
+Copy api.mtls.dev.p12, identity.mtls.dev.p12, and rootCA.pem to the ~/certificates folder.
+
+## Build and run the container
+From the ~/ directory, run 
+```
+docker build -t iis-mtls .
+docker run --name iis-with-mtls -d -p 5001:5001 -p 6001:6001 iis-mtls
+```
+
+# Troubleshooting
+## Set dns settings
+If you get build failures related to failure to download files, you may need to configure DNS for docker. 
+To do so in Docker Desktop, go to Settings (the gear icon in the upper right), choose the "Docker Engine" 
+tab and add the following to the JSON config:
+
+```
+"dns": ["1.1.1.1"]
+```

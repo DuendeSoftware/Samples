@@ -16,7 +16,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "https://identity.mtls.dev",
+      "applicationUrl": "https://identity.mtls.dev:5001",
       "sslPort": 0
     }
   }

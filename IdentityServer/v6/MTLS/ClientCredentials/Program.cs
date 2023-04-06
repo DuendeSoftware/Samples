@@ -10,7 +10,7 @@ namespace Client
 {
     public static class Urls
     {
-        public const string IdentityServer = "https://localhost:5001";
+        public const string IdentityServer = "https://identity.mtls.dev:5001";
 
         public const string ApiBaseMtls = "https://api.localhost:6002";
         public const string ApiMtls = ApiBaseMtls + "/identity";
@@ -25,7 +25,7 @@ namespace Client
             var response = await RequestTokenAsync();
             response.Show();
 
-            await CallServiceAsync(response.AccessToken);
+            //await CallServiceAsync(response.AccessToken);
         }
 
         static async Task<TokenResponse> RequestTokenAsync()

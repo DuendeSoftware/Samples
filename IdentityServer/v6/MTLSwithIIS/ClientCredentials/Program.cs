@@ -12,8 +12,8 @@ namespace Client
 {
     public static class Urls
     {
-        public const string IdentityServer = "https://identity.mtls.dev";
-        public const string ApiBaseMtls = "https://api.mtls.dev:44301";
+        public const string IdentityServer = "https://identity.mtls.dev:5001";
+        public const string ApiBaseMtls = "https://api.mtls.dev:6001";
         public const string ApiMtls = ApiBaseMtls + "/identity";
     }
 
@@ -56,10 +56,14 @@ namespace Client
             var client = new HttpClient(GetHandler());
             client.SetBearerToken(token);
 
-            var response = await client.GetStringAsync(Urls.ApiMtls);
 
-            "\n\nService claims:".ConsoleGreen();
-            Console.WriteLine(JsonSerializer.Serialize(JsonDocument.Parse(response), new JsonSerializerOptions { WriteIndented = true }));
+           
+
+            var response = await client.GetAsync(Urls.ApiMtls);
+            var content = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(content);
+            //"\n\nService claims:".ConsoleGreen();
+            //Console.WriteLine(JsonSerializer.Serialize(JsonDocument.Parse(response), new JsonSerializerOptions { WriteIndented = true }));
         }
 
         static SocketsHttpHandler GetHandler()
