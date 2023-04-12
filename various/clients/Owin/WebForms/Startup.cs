@@ -91,14 +91,6 @@ namespace WebForms
                 notification.HandleResponse();
                 notification.OwinContext.Response.Redirect("/Forbidden");
             }
-            if (notification.ProtocolMessage.PostLogoutRedirectUri != null)
-            {
-                var auth = await notification.OwinContext.Authentication.AuthenticateAsync("cookies");
-                if (auth.Properties.Dictionary.TryGetValue("id_token", out var idToken))
-                {
-                    notification.ProtocolMessage.IdTokenHint = idToken;
-                }
-            }
         }
     }
 }

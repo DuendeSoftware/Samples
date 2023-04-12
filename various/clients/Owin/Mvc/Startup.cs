@@ -43,7 +43,7 @@ namespace OwinMvc
 
                 ResponseType = "code",
                 Scope = "openid profile scope1 offline_access",
-
+                
                 UseTokenLifetime = false,
                 SaveTokens = true,
                 RedeemCode = true,
@@ -90,14 +90,6 @@ namespace OwinMvc
             {
                 notification.HandleResponse();
                 notification.OwinContext.Response.Redirect("/home/forbidden");
-            }
-            if (notification.ProtocolMessage.PostLogoutRedirectUri != null)
-            {
-                var auth = await notification.OwinContext.Authentication.AuthenticateAsync("cookies");
-                if (auth.Properties.Dictionary.TryGetValue("id_token", out var idToken))
-                {
-                    notification.ProtocolMessage.IdTokenHint = idToken;
-                }
             }
         }
     }
