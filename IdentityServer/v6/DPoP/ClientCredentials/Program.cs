@@ -25,7 +25,6 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
-        var x = "905e4892-7610-44cb-a122-6209b38c882f".ToSha256();
         var host = Host.CreateDefaultBuilder(args)
             .UseSerilog()
                 
