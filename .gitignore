@@ -200,9 +200,6 @@ docs/_build/
 # Local .NET CLI tools
 tools/
 
-# Visual Studio Code workspace options
-.vscode
-
 # IdentityServer temp files
 tempkey.jwk
 keys
