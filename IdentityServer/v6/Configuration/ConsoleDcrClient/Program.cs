@@ -26,7 +26,7 @@ Console.ReadLine();
 await CallServiceAsync(dynamicClientToken.AccessToken);
 Console.ReadLine();
 
-static async Task<DynamicClientRegistrationResponse> RegisterClient(string? accessToken)
+static async Task<DynamicClientRegistrationResponse> RegisterClient(string accessToken)
 {
     var client = new HttpClient();
     client.SetBearerToken(accessToken);
