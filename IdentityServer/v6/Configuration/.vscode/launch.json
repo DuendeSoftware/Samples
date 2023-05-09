@@ -36,7 +36,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build-configuration",
-            "program": "${workspaceFolder}/Configuration/bin/Debug/net7.0/Configuration.dll",
+            "program": "${workspaceFolder}/Configuration/bin/Debug/net6.0/Configuration.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Configuration",
             "env": {
