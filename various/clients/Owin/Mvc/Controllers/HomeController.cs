@@ -24,6 +24,18 @@ namespace Mvc.Controllers
             return View(result);
         }
 
+        [Authorize(Roles = "deliberately_absent")]
+        public async Task<ActionResult> AlwaysUnauthorized()
+        {
+            return View();
+        }
+
+        public async Task<ActionResult> Forbidden()
+        {
+            return View();
+        }
+
+        [Authorize]
         public async Task<ActionResult> CallApi()
         {
             var authResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("cookies");

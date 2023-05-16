@@ -194,6 +194,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AlwaysUnauthorized\AlwaysUnauthorized.aspx" />
+    <Content Include="Forbidden.aspx" />
     <Content Include="CallApi.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -212,6 +214,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="AlwaysUnauthorized\Web.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Logout.aspx" />
     <Content Include="Scripts\bootstrap.js" />
@@ -251,6 +254,20 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="AlwaysUnauthorized\AlwaysUnauthorized.aspx.cs">
+      <DependentUpon>AlwaysUnauthorized.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AlwaysUnauthorized\AlwaysUnauthorized.aspx.designer.cs">
+      <DependentUpon>AlwaysUnauthorized.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Forbidden.aspx.cs">
+      <DependentUpon>Forbidden.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Forbidden.aspx.designer.cs">
+      <DependentUpon>Forbidden.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CallApi.aspx.cs">
       <DependentUpon>CallApi.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

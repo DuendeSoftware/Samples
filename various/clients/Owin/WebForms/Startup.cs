@@ -50,11 +50,18 @@ namespace WebForms
                 UsePkce = true,
                 Notifications = new OpenIdConnectAuthenticationNotifications
                 {
-                    RedirectToIdentityProvider = SetIdTokenHintOnLogout
+                    RedirectToIdentityProvider = OnRedirectToIdentityProviderActions
                 }
             });
 
             app.UseStageMarker(PipelineStage.Authenticate);
+        }
+
+        private async Task OnRedirectToIdentityProviderActions(
+           RedirectToIdentityProviderNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> notification)
+        {
+            await SetIdTokenHintOnLogout(notification);
+            await ForbidInsteadOfChallengeIfAuthenticated(notification);
         }
 
         // Set the id_token_hint parameter during logout so that
@@ -71,6 +78,18 @@ namespace WebForms
                 {
                     notification.ProtocolMessage.IdTokenHint = idToken;
                 }
+            }
+        }
+
+        // Do not challenge if the user is already authenticated, otherwise you get an inifinte loop on authorization failure
+        private async Task ForbidInsteadOfChallengeIfAuthenticated(
+            RedirectToIdentityProviderNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> notification)
+        {
+            if (notification.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication &&
+               notification.OwinContext.Authentication.User.Identity.IsAuthenticated)
+            {
+                notification.HandleResponse();
+                notification.OwinContext.Response.Redirect("/Forbidden");
             }
         }
     }
