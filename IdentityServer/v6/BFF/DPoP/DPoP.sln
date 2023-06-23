@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPoP.Api", "DPoP.Api\DPoP.Api.csproj", "{BE70C059-F307-4F30-B61C-DDA7863E4600}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPoP.BFF", "DPoP.BFF\DPoP.BFF.csproj", "{1D52DA36-A51A-4536-BD63-8CEF52589A51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPoP.Bff", "DPoP.Bff\DPoP.Bff.csproj", "{1D52DA36-A51A-4536-BD63-8CEF52589A51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
