@@ -113,7 +113,7 @@ public class Startup
                 options.SlidingExpiration = false;
 
                 // host prefixed cookie name
-                options.Cookie.Name = "__Host-spa6-dpop";
+                options.Cookie.Name = "__Host-bff-dpop";
 
                 // strict SameSite handling
                 options.Cookie.SameSite = SameSiteMode.Strict;
@@ -204,6 +204,7 @@ public class Startup
 
         // On this path, we require the user token
         endpoints.MapRemoteBffApiEndpoint("/api/user-token", "https://localhost:6001")
+        .WithUserAccessTokenParameter(new BffUserAccessTokenParameters(resource: "urn:example-api"))
             .RequireAccessToken(TokenType.User);
     }
 }
