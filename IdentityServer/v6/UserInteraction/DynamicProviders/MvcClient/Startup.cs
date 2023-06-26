@@ -55,12 +55,6 @@ namespace Client
                         NameClaimType = "name",
                         RoleClaimType = "role"
                     };
-
-                    options.Events.OnRedirectToIdentityProvider = ctx => 
-                    {
-                        ctx.ProtocolMessage.AcrValues = "idp:adfs";
-                        return Task.CompletedTask;
-                    };
                 });
         }
 
