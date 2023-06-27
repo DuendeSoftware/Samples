@@ -45,6 +45,7 @@ namespace SimpleApi
         private IEnumerable<SecurityKey> LoadKeys(string token, SecurityToken securityToken, string kid, TokenValidationParameters validationParameters)
         {
             var disco = _discoveryCache.GetAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+            if (disco.IsError) { throw new Exception("Failed to retrieve discovery information - " + disco.Error); }
 
             var keys = disco.KeySet.Keys
                 .Where(x => x.N != null && x.E != null)
