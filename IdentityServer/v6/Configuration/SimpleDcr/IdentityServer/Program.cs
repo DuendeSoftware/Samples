@@ -2,6 +2,8 @@
 using Serilog;
 using System.Globalization;
 
+Console.Title = "IdentityServer Host";
+
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
     .CreateBootstrapLogger();

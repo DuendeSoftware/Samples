@@ -4,6 +4,8 @@ using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.EntityFrameworkCore;
 
+Console.Title = "Configuration API";
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddIdentityServerConfiguration(opt => {})
     .AddClientConfigurationStore();
