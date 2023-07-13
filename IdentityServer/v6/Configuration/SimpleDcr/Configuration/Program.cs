@@ -11,7 +11,11 @@ builder.Services.AddIdentityServerConfiguration(opt => {})
     .AddClientConfigurationStore();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddConfigurationDbContext<ConfigurationDbContext>();
+builder.Services.AddConfigurationDbContext<ConfigurationDbContext>(options =>
+{
+    options.ConfigureDbContext = b =>
+        b.UseSqlite(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+});
 
 builder.Services.AddAuthentication("token")
     .AddJwtBearer("token", options =>
