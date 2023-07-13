@@ -1,23 +1,41 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using ConsoleDcrClient;
 using IdentityModel.Client;
 
 
 Console.Title = "Dynamic Client Registration - Client Credentials Flow";
 
-"Obtaining initial access token".ConsoleYellow();
-var tokenResponse = await RequestTokenAsync();
-tokenResponse.Show();
+"Obtaining initial access token (which does not allow setting client ids)".ConsoleYellow();
+var badTokenResponse = await RequestTokenAsync(scope: "IdentityServer.Configuration");
+badTokenResponse.Show();
 Console.ReadLine();
 
-"\n\nRegistering dynamic client".ConsoleYellow();
-var dcrResponse = await RegisterClient(tokenResponse.AccessToken);
+"\n\nAttempting to register a dynamic client with a specific client secret, but without needed scope".ConsoleYellow();
+var badDcrResponse = await RegisterClient(badTokenResponse.AccessToken);
+"This succeeded, but ignored our attempt to set a client secret.".ConsoleYellow();
+Console.ReadLine();
+  
+$"\n\nObtaining access token for dynamic client using clientId: {badDcrResponse.ClientId} and secret {badDcrResponse.ClientSecret}".ConsoleYellow();
+var badDynamicClientToken = await RequestTokenAsync(badDcrResponse.ClientId, badDcrResponse.ClientSecret);
+badDynamicClientToken.Show();
 Console.ReadLine();
 
-"\n\nObtaining access token for dynamic client".ConsoleYellow();
-var dynamicClientToken = await RequestTokenAsync(dcrResponse.ClientId, dcrResponse.ClientSecret);
+"Obtaining a new access token (which does allow setting client ids)".ConsoleYellow();
+var goodTokenResponse = await RequestTokenAsync(scope: "IdentityServer.Configuration IdentityServer.Configuration:SetClientSecret");
+goodTokenResponse.Show();
+Console.ReadLine();
+
+"\n\nReattempting to register a dynamic client with a specific client secret".ConsoleYellow();
+var goodDcrResponse = await RegisterClient(goodTokenResponse.AccessToken);
+"This succeeded, and respected our attempt to set a client secret.".ConsoleYellow();
+Console.ReadLine();
+
+$"\n\nObtaining access token for dynamic client using clientId: {goodDcrResponse.ClientId} and secret {goodDcrResponse.ClientSecret}".ConsoleYellow();
+var dynamicClientToken = await RequestTokenAsync(goodDcrResponse.ClientId, goodDcrResponse.ClientSecret);
 dynamicClientToken.Show();
 Console.ReadLine();
 
@@ -41,6 +59,8 @@ static async Task<DynamicClientRegistrationResponse> RegisterClient(string acces
         }
     };
 
+    request.Document.Extensions.Add("client_secret", "hunter2");
+
     var response = await client.RegisterClientAsync(request);
 
     if (response.IsError)
@@ -48,12 +68,13 @@ static async Task<DynamicClientRegistrationResponse> RegisterClient(string acces
         Console.WriteLine(response.Error);
         return null;
     }
-    Console.WriteLine(JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true }));
+
+    response.Show();
 
     return response;
 }
 
-static async Task<TokenResponse> RequestTokenAsync(string clientId = "client", string clientSecret = "secret")
+static async Task<TokenResponse> RequestTokenAsync(string clientId = "client", string clientSecret = "secret", string scope = null)
 {
     var client = new HttpClient();
 
@@ -66,6 +87,7 @@ static async Task<TokenResponse> RequestTokenAsync(string clientId = "client", s
 
         ClientId = clientId,
         ClientSecret = clientSecret,
+        Scope = scope
     });
 
     if (response.IsError) throw new Exception(response.Error);

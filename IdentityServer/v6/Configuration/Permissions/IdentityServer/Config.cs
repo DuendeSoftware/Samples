@@ -30,7 +30,7 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets = { new Secret("secret".Sha256()) },
 
-                AllowedScopes = { "IdentityServer.Configuration" }
+                AllowedScopes = { "IdentityServer.Configuration", "IdentityServer.Configuration:SetClientSecret" }
             }
 
         };

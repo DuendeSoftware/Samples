@@ -11,9 +11,6 @@ public static class TokenResponseExtensions
     {
         if (!response.IsError)
         {
-            "Token response:".ConsoleGreen();
-            Console.WriteLine(response.Json);
-
             if (response.AccessToken.Contains("."))
             {
                 "\nAccess Token (decoded):".ConsoleGreen();
@@ -24,6 +21,10 @@ public static class TokenResponseExtensions
 
                 Console.WriteLine(PrettyPrintJson(Encoding.UTF8.GetString(Base64Url.Decode(header))));
                 Console.WriteLine(PrettyPrintJson(Encoding.UTF8.GetString(Base64Url.Decode(payload))));
+            } else
+            {
+                "Token response:".ConsoleGreen();
+                Console.WriteLine(response.Json);
             }
         }
         else
