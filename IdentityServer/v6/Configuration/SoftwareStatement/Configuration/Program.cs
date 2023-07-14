@@ -1,5 +1,7 @@
+using Configuration;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Configuration.EntityFramework;
+using Duende.IdentityServer.Configuration.Validation.DynamicClientRegistration;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +36,8 @@ builder.Services.AddAuthorization(opt =>
         policy.RequireClaim("scope", "IdentityServer.Configuration");
     });
 });
+
+builder.Services.AddTransient<IDynamicClientRegistrationValidator, SoftwareStatementValidator>();
 
 var app = builder.Build();
 
