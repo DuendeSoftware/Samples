@@ -41,6 +41,8 @@ builder.Services.AddTransient<IDynamicClientRegistrationValidator, SoftwareState
 
 var app = builder.Build();
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapDynamicClientRegistration().RequireAuthorization("DCR");
 
 app.Run();

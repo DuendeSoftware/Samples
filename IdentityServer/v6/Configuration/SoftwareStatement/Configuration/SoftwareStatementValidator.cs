@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using Duende.IdentityServer.Configuration.Models;
 using Duende.IdentityServer.Configuration.Models.DynamicClientRegistration;
 using Duende.IdentityServer.Configuration.Validation.DynamicClientRegistration;
+using IdentityModel;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,7 +17,7 @@ public class SoftwareStatementValidator : DynamicClientRegistrationValidator
     protected override Task<IStepResult> ValidateSoftwareStatementAsync(DynamicClientRegistrationContext context)
     {
         var rawSoftwareStatement = context.Request.SoftwareStatement;
-        if (!string.IsNullOrEmpty(rawSoftwareStatement))
+        if (string.IsNullOrEmpty(rawSoftwareStatement))
         {
             return StepResult.Success();
         }
@@ -39,10 +40,10 @@ public class SoftwareStatementValidator : DynamicClientRegistrationValidator
 
         var parms = new TokenValidationParameters
         {
-            ValidIssuer = "https://authority.example.com",
-            ValidAudience = "IdentityServer.Configuration",
             IssuerSigningKey = key,
-            ValidTypes = { }
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            ValidateLifetime = false
         };
 
         var validateResult = handler.ValidateToken(rawSoftwareStatement, parms);
@@ -54,25 +55,20 @@ public class SoftwareStatementValidator : DynamicClientRegistrationValidator
             // software statement", or "a mixture of both", with the claims in
             // the software statement taking precedence.
 
-            // TODO - replace with identity model constants
-            if (validateResult.Claims.ContainsKey("software_id"))
+            if (validateResult.Claims.ContainsKey(OidcConstants.ClientMetadata.SoftwareStatement))
             {
-                context.Request.SoftwareId = validateResult.Claims["software_id"].ToString();
+                context.Request.SoftwareId = validateResult.Claims[OidcConstants.ClientMetadata.SoftwareStatement].ToString();
             }
 
-            if (validateResult.Claims.ContainsKey("client_name"))
+            if (validateResult.Claims.ContainsKey(OidcConstants.ClientMetadata.ClientName))
             {
-                context.Request.ClientName = validateResult.Claims["client_name"].ToString();
+                context.Request.ClientName = validateResult.Claims[OidcConstants.ClientMetadata.ClientName].ToString();
             }
-
-            // TODO - set client id and secret from software statement
 
             return StepResult.Success();
         }
         else
         {
-            // TODO Logging
-            // _logger.LogCritical(validateResult.Exception, "Error validating the software statement");
             return StepResult.Failure("Invalid software statement", "invalid_software_statement");
         }
 
