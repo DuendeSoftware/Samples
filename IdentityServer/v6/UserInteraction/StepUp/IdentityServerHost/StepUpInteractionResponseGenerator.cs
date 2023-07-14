@@ -3,6 +3,7 @@ using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.ResponseHandling;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 
 namespace IdentityServerHost;
@@ -26,7 +27,14 @@ public class StepUpInteractionResponseGenerator : AuthorizeInteractionResponseGe
         {
             if (MfaRequired(request) && !AuthenticatedWithMfa(request.Subject))
             {
-                result.RedirectUrl = "/Account/Mfa";
+                if(UserDeclinedMfa(request.Subject))
+                {
+                    result.Error = OidcConstants.AuthorizeErrors.UnmetAuthenticationRequirements;
+                }
+                else
+                {
+                    result.RedirectUrl = "/Account/Mfa";
+                }
             }
         }
         return result;
@@ -51,4 +59,7 @@ public class StepUpInteractionResponseGenerator : AuthorizeInteractionResponseGe
 
     private bool AuthenticatedWithMfa(ClaimsPrincipal user) =>
         user.Claims.Any(c => c.Type == "amr" && c.Value == "mfa");
+
+    private bool UserDeclinedMfa(ClaimsPrincipal user) =>
+        user.Claims.Any(c => c.Type == "declined_mfa" && c.Value == "true");        
 }
