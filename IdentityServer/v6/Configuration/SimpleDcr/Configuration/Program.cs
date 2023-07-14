@@ -36,7 +36,8 @@ builder.Services.AddAuthorization(opt =>
 });
 
 var app = builder.Build();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapDynamicClientRegistration().RequireAuthorization("DCR");
 
 app.Run();
