@@ -45,6 +45,20 @@ builder.Services.AddAuthentication(opt =>
             }
             return Task.CompletedTask;
         };
+
+        opt.Events.OnRemoteFailure = ctx =>
+        {
+            if(ctx.Failure?.Data.Contains("error") ?? false)
+            {
+                var error = ctx.Failure.Data["error"] as string;
+                if(error == IdentityModel.OidcConstants.AuthorizeErrors.UnmetAuthenticationRequirements)
+                {
+                    ctx.HandleResponse();
+                    ctx.Response.Redirect("/MfaDeclined");
+                }
+            }
+            return Task.CompletedTask;
+        };
     });
 
 var app = builder.Build();

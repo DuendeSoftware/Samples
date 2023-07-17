@@ -31,9 +31,13 @@ public class Index : PageModel
         if (ModelState.IsValid)
         {
             var existingProps = (await HttpContext.AuthenticateAsync()).Properties;
-            var claims = User.Claims
-                .Append(new Claim(JwtClaimTypes.AuthenticationMethod, "mfa"))
-                .Append(new Claim(JwtClaimTypes.AuthenticationContextClassReference, "1"));
+
+            var claims = Input.Button == "fake" ?
+                User.Claims
+                    .Append(new Claim(JwtClaimTypes.AuthenticationMethod, "mfa"))
+                    .Append(new Claim(JwtClaimTypes.AuthenticationContextClassReference, "1")) :
+                User.Claims
+                    .Append(new Claim("declined_mfa", "true"));
             var newPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims, "mfa", "name", "role"));
             await HttpContext.SignInAsync(newPrincipal, existingProps);
 
