@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -46,20 +47,21 @@ namespace JwtSecuredFunction
                 return null;
             }
             
-            var config = await ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
-
-            var validationParameter = new TokenValidationParameters()
-            {
-                ValidIssuer = Authority,
-                ValidAudience = "api",
-                IssuerSigningKeys = config.SigningKeys
-            };
-
             var handler = new JsonWebTokenHandler();
 
             var tries = 0;
-            while (tries <= 1)
+            var maxTries = 1;
+            while (tries <= maxTries)
             {
+                var config = await ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
+
+                var validationParameter = new TokenValidationParameters()
+                {
+                    ValidIssuer = Authority,
+                    ValidAudience = "api",
+                    IssuerSigningKeys = config.SigningKeys
+                };
+
                 var result = handler.ValidateToken(values[1], validationParameter);
 
                 if (result.IsValid)
@@ -69,11 +71,13 @@ namespace JwtSecuredFunction
                 }
                 else
                 {
-                    if (result.Exception is SecurityTokenSignatureKeyNotFoundException)
+                    if (result.Exception is SecurityTokenSignatureKeyNotFoundException
+                        && tries < maxTries)
                     {
                         logger.LogInformation("Trying to refresh keys.");
 
                         ConfigurationManager.RequestRefresh();
+
                         tries++;
                     }
                     else
