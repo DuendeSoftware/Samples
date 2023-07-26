@@ -31,6 +31,22 @@ namespace JwtSecuredFunction
             );
         }
 
+        public static async Task<TokenValidationResult> ValidateTokenAsync(string token)
+        {
+            var handler = new JsonWebTokenHandler();
+
+            var config = await ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
+
+            var validationParameter = new TokenValidationParameters()
+            {
+                ValidIssuer = Authority,
+                ValidAudience = "api",
+                IssuerSigningKeys = config.SigningKeys
+            };
+
+            return handler.ValidateToken(token, validationParameter);
+        }
+
         public static async Task<ClaimsIdentity> ValidateAsync(HttpHeadersCollection headers, ILogger logger)
         {
             var found = headers.TryGetValues("Authorization", out var headerValues);
@@ -46,49 +62,25 @@ namespace JwtSecuredFunction
                 logger.LogInformation("Invalid authorization header.");
                 return null;
             }
-            
-            var handler = new JsonWebTokenHandler();
 
-            var tries = 0;
-            var maxTries = 1;
-            while (tries <= maxTries)
+            var result = await ValidateTokenAsync(values[1]);
+
+            if (result.Exception is SecurityTokenSignatureKeyNotFoundException)
             {
-                var config = await ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
+                logger.LogInformation("Trying to refresh keys.");
 
-                var validationParameter = new TokenValidationParameters()
-                {
-                    ValidIssuer = Authority,
-                    ValidAudience = "api",
-                    IssuerSigningKeys = config.SigningKeys
-                };
+                ConfigurationManager.RequestRefresh();
 
-                var result = handler.ValidateToken(values[1], validationParameter);
-
-                if (result.IsValid)
-                {
-                    logger.LogInformation("Valid token, returning identity.");
-                    return result.ClaimsIdentity;
-                }
-                else
-                {
-                    if (result.Exception is SecurityTokenSignatureKeyNotFoundException
-                        && tries < maxTries)
-                    {
-                        logger.LogInformation("Trying to refresh keys.");
-
-                        ConfigurationManager.RequestRefresh();
-
-                        tries++;
-                    }
-                    else
-                    {
-                        logger.LogInformation("invalid token.");
-                        return null;
-                    }
-                }
+                result = await ValidateTokenAsync(values[1]);
             }
 
-            logger.LogInformation("invalid token signature.");
+            if (result.IsValid)
+            {
+                logger.LogInformation("Valid token, returning identity.");
+                return result.ClaimsIdentity;
+            }
+
+            logger.LogInformation("invalid token.");
             return null;
         }
     }
