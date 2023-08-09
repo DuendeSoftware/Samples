@@ -2,6 +2,8 @@ using Duende.IdentityServer;
 using SessionMigration;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Serilog;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
 
 namespace SessionMigration;
 
@@ -28,18 +30,33 @@ internal static class HostingExtensions
         isBuilder.AddInMemoryApiScopes(Config.ApiScopes);
         isBuilder.AddInMemoryClients(Config.Clients);
 
+        // ********************
+        // *** INSTRUCTIONS ***
+        // This purpose of this sample is to show how to migrate existing client side session to server
+        // side session without the user having to login again. To test it, first run the sample as is
+        // and log in (user: alice, password: alice) to get a normal cookie based session in your
+        // browser. Then uncomment the following blocks and run the sample again. The first request
+        // from your browser to IdentityServer will cause the session to be migrated to be a server
+        // side session.
+        // Note that further restarts will invalidate your session as the server side session
+        // store in this sample is in memory only.
+        // Note that if server side sessions have been enabled and then are removed before another
+        // test run, you have to manually clear the cookie to be able to log in again.
 
-        // if you want to use server-side sessions: https://blog.duendesoftware.com/posts/20220406_session_management/
-        // then enable it
+        // ** This is the normal template code for activating server side sessions.
+
         //isBuilder.AddServerSideSessions();
-        //
-        // and put some authorization on the admin/management pages
+
         //builder.Services.AddAuthorization(options =>
         //       options.AddPolicy("admin",
         //           policy => policy.RequireClaim("sub", "1"))
         //   );
         //builder.Services.Configure<RazorPagesOptions>(options =>
         //    options.Conventions.AuthorizeFolder("/ServerSideSessions", "admin"));
+
+        // ** This is the code that adds migration of sessions. Enabling server side sessions through the
+        // ** block above without enabling this will invalidate all existing sessions. 
+        //builder.Services.AddTransient<IPostConfigureOptions<CookieAuthenticationOptions>, SessionMigrationPostConfigureOptions>();
 
         return builder.Build();
     }
