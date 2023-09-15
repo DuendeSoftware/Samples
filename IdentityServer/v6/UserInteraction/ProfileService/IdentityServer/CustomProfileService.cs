@@ -26,12 +26,12 @@ namespace IdentityServerHost
         }
 
         // GetProfileDataAsync is what controls what claims are issued in the response
-        // the sample code below shows a *many* different approaches, and you can adjust 
+        // the sample code below shows *many* different approaches, and you can adjust 
         // these based on your needs and requirements.
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             // context holds information about the request, the user, the client, the scopes, and the claims being requested
-            // context.Subject is the user for whom the result is request is being made
+            // context.Subject is the user for whom the result is being made
             // context.Subject.Claims is the claims collection from the user's session cookie at login time
             // context.IssuedClaims is the collection of claims that your logic has decided to return in the response
 
@@ -45,7 +45,7 @@ namespace IdentityServerHost
                 // that match the claim types in the RequestedClaimTypes collection.
                 context.AddRequestedClaims(context.Subject.Claims);
 
-                // OPTION 1B: load claims from the user databse
+                // OPTION 1B: load claims from the user database
                 // this adds any claims that were requested from the claims in the user store
                 var user = _users.FindBySubjectId(context.Subject.GetSubjectId());
                 if (user != null)
@@ -54,7 +54,7 @@ namespace IdentityServerHost
                 }
             }
 
-            // OPTION 2: always emit claims (regardless based on the requested claims)
+            // OPTION 2: always emit claims (regardless of the requested claims)
             // this checks if the user's session cookie contains a "picture" claim
             // and if present we add it to the result (if it's not already in there from above, possibly due to RequestedClaimTypes)
             // notice this is always done, regardless of the RequestedClaimTypes, which means
@@ -68,7 +68,7 @@ namespace IdentityServerHost
                 }
             }
 
-            // OPTION 3: always emit claims based on client (regardless based on the requested claims)
+            // OPTION 3: always emit claims based on client (regardless of the requested claims)
             // context.Client holds the client making the request
             if (context.Client.ClientId == "client1")
             {
@@ -76,7 +76,7 @@ namespace IdentityServerHost
                 context.IssuedClaims.Add(new Claim("tenant", "tenant1"));
             }
 
-            // OPTION 4: always emit claims based on the token (regardless based on the requested claims)
+            // OPTION 4: always emit claims based on the token (regardless of the requested claims)
             // context.Caller describes why the claims are needed (access token, id token, userinfo endpoint)
             if (context.Caller == IdentityServerConstants.ProfileDataCallers.ClaimsProviderAccessToken)
             {
@@ -92,7 +92,7 @@ namespace IdentityServerHost
         // if the user has an active session with IdentityServer.
         public Task IsActiveAsync(IsActiveContext context)
         {
-            // as above, context.Subject is the user for whom the result is request is being made
+            // as above, context.Subject is the user for whom the result is being made
             // setting context.IsActive to false allows your logic to indicate that the token should not be created
             // context.IsActive defauts to true
 
