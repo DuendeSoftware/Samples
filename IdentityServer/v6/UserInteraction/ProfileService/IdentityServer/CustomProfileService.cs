@@ -94,7 +94,7 @@ namespace IdentityServerHost
         {
             // as above, context.Subject is the user for whom the result is request is being made
             // setting context.IsActive to false allows your logic to indicate that the token should not be created
-            // context.IsActive defauts to true
+            // context.IsActive defaults to true
 
             return Task.CompletedTask;
         }
