@@ -36,7 +36,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    
+
+    - name: Setup net8
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+
     - name: Setup net6
       uses: actions/setup-dotnet@v1
       with:
