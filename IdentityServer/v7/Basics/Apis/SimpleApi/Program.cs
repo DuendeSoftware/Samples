@@ -5,13 +5,13 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace SampleApi
+namespace SimpleApi
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            Console.Title = "Sample API";
+            Console.Title = "Simple API";
 
             BuildWebHost(args).Run();
         }
@@ -29,7 +29,6 @@ namespace SampleApi
 
             return WebHost.CreateDefaultBuilder(args)
                     .UseStartup<Startup>()
-                    .UseSerilog()
                     .Build();
         }
     }

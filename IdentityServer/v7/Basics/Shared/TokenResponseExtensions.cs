@@ -44,7 +44,7 @@ namespace Client
                 }
             }
         }
-        
+    
         public static string PrettyPrintJson(this string raw)
         {
             var doc = JsonDocument.Parse(raw).RootElement;

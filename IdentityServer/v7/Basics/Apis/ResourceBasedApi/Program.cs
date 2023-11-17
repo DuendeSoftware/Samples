@@ -11,7 +11,7 @@ namespace ResourceBasedApi
     {
         public static void Main(string[] args)
         {
-            Console.Title = "Sample API";
+            Console.Title = "Simple API with Resources";
 
             BuildWebHost(args).Run();
         }
@@ -29,7 +29,6 @@ namespace ResourceBasedApi
 
             return WebHost.CreateDefaultBuilder(args)
                     .UseStartup<Startup>()
-                    .UseSerilog()
                     .Build();
         }
     }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 
-namespace SampleApi.Controllers
+namespace SimpleApi.Controllers
 {
     [Route("identity")]
     public class IdentityController : ControllerBase

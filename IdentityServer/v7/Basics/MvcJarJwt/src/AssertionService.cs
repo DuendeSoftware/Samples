@@ -6,7 +6,6 @@ using IdentityModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
 
 namespace Client
 {
@@ -18,12 +17,12 @@ namespace Client
         {
             _configuration = configuration;
         }
-        
+    
         public string CreateClientToken()
         {
             var now = DateTime.UtcNow;
             var clientId = _configuration.GetValue<string>("ClientId");
-            
+        
             // in production you should load that key from some secure location
             var key = _configuration.GetValue<string>("Secrets:Key");
 
@@ -43,7 +42,7 @@ namespace Client
 
             var tokenHandler = new JwtSecurityTokenHandler();
             tokenHandler.OutboundClaimTypeMap.Clear();
-            
+        
             return tokenHandler.WriteToken(token);
         }
 
@@ -51,7 +50,7 @@ namespace Client
         {
             var now = DateTime.UtcNow;
             var clientId = _configuration.GetValue<string>("ClientId");
-            
+        
             // in production you should load that key from some secure location
             var key = _configuration.GetValue<string>("Secrets:Key");
 
@@ -69,10 +68,10 @@ namespace Client
                 now.AddMinutes(1),
                 new SigningCredentials(new JsonWebKey(key), "RS256")
             );
-            
+        
             var tokenHandler = new JwtSecurityTokenHandler();
             tokenHandler.OutboundClaimTypeMap.Clear();
-            
+        
             return tokenHandler.WriteToken(token);
         }
     }
