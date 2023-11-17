@@ -139,37 +139,6 @@ namespace IdentityServerHost
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "scope1", "scope2" }
                 },
-
-                ///////////////////////////////////////////
-                // MVC PAR Sample
-                //////////////////////////////////////////
-                new Client
-                {
-                    ClientId = "mvc.par",
-                    ClientName = "MVC PAR Client",
-
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-
-                    RequireRequestObject = false,
-
-                    AllowedGrantTypes = GrantTypes.Code,
-                    
-                    RequirePushedAuthorization = true,
-
-                    // Note that redirect uris are optional for PAR clients when the
-                    // AllowUnregisteredPushedRedirectUris flag is enabled
-                    // RedirectUris = { "https://localhost:44300/signin-oidc" },
-
-                    FrontChannelLogoutUri = "https://localhost:44300/signout-oidc",
-                    PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
-
-                    AllowOfflineAccess = true,
-
-                    AllowedScopes = { "openid", "profile", "scope1", "scope2" }
-                },
             };
     }
 }

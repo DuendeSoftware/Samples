@@ -35,7 +35,6 @@ namespace IdentityServerHost
 
                 // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/api_scopes
                 options.EmitStaticAudienceClaim = true;
-                options.PushedAuthorization.AllowUnregisteredPushedRedirectUris = true;
             })
                 .AddTestUsers(TestUsers.Users);
             
