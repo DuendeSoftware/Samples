@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Client;
+using Serilog;
 
 namespace ResourceBasedApi
 {
@@ -8,6 +9,7 @@ namespace ResourceBasedApi
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSerilog();
             services.AddControllers();
 
             services.AddCors();

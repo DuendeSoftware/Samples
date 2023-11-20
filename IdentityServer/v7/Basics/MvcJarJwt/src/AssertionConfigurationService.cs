@@ -1,36 +1,20 @@
 using System.Threading.Tasks;
 using IdentityModel;
-using IdentityModel.AspNetCore.AccessTokenManagement;
 using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Duende.AccessTokenManagement;
 
 namespace Client
 {
-    public class AssertionConfigurationService : DefaultTokenClientConfigurationService
+    public class ClientAssertionService : IClientAssertionService
     {
         private readonly AssertionService _assertionService;
 
-        public AssertionConfigurationService(
-            UserAccessTokenManagementOptions userAccessTokenManagementOptions,
-            ClientAccessTokenManagementOptions clientAccessTokenManagementOptions,
-            IOptionsMonitor<OpenIdConnectOptions> oidcOptions, IAuthenticationSchemeProvider schemeProvider,
-            ILogger<AssertionConfigurationService> logger,
-            AssertionService assertionService) 
-            
-            : base(
-                userAccessTokenManagementOptions,
-                clientAccessTokenManagementOptions, 
-                oidcOptions, 
-                schemeProvider, 
-                logger)
+        public ClientAssertionService(AssertionService assertionService) 
         {
             _assertionService = assertionService;
         }
 
-        protected override Task<ClientAssertion> CreateAssertionAsync(string clientName = null)
+        public Task<ClientAssertion> GetClientAssertionAsync(string clientName = null, TokenRequestParameters parameters = null)
         {
             var assertion = new ClientAssertion
             {
@@ -40,7 +24,5 @@ namespace Client
 
             return Task.FromResult(assertion);
         }
-
-       
     }
 }

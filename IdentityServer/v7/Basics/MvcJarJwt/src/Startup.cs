@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using IdentityModel.AspNetCore.AccessTokenManagement;
 using Microsoft.Extensions.Configuration;
-using Client;
+using Duende.AccessTokenManagement;
 
 namespace Client
 {
@@ -19,7 +18,7 @@ namespace Client
         {
             _configuration = configuration;
         }
-        
+    
         public void ConfigureServices(IServiceCollection services)
         {
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
@@ -35,11 +34,11 @@ namespace Client
                 .AddCookie(options =>
                 {
                     options.Cookie.Name = "mvc";
-                    
+                
                     options.Events.OnSigningOut = async e =>
                     {
                         // automatically revoke refresh token at signout time
-                        await e.HttpContext.RevokeUserRefreshTokenAsync();
+                        await e.HttpContext.RevokeRefreshTokenAsync();
                     };
                 })
                 .AddOpenIdConnect("oidc", options =>
@@ -49,7 +48,7 @@ namespace Client
                     // no static client secret
                     // the secret id created dynamically
                     options.ClientId = _configuration.GetValue<string>("ClientId");
-                    
+                
                     // needed to add JWR / private_key_jwt support
                     options.EventsType = typeof(OidcEvents);
 
@@ -76,18 +75,18 @@ namespace Client
                         RoleClaimType = "role"
                     };
                 });
-            
+        
             // add service to create JWTs
             services.AddSingleton<AssertionService>();
-            
+        
             // add event handler for OIDC events
             services.AddTransient<OidcEvents>();
-            
+        
             // add automatic token management
-            services.AddAccessTokenManagement();
-            
+            services.AddOpenIdConnectAccessTokenManagement();
+        
             // add service to create assertions for token management
-            services.AddTransient<ITokenClientConfigurationService, AssertionConfigurationService>();
+            services.AddTransient<IClientAssertionService, ClientAssertionService>();
 
             // add HTTP client to call protected API
             services.AddUserAccessTokenHttpClient("client", configureClient: client =>

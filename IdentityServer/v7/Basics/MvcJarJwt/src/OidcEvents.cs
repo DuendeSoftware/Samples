@@ -12,7 +12,7 @@ namespace Client
         {
             _assertionService = assertionService;
         }
-        
+    
         public override Task AuthorizationCodeReceived(AuthorizationCodeReceivedContext context)
         {
             context.TokenEndpointRequest.ClientAssertionType = OidcConstants.ClientAssertionTypes.JwtBearer;
@@ -26,7 +26,7 @@ namespace Client
             var request = _assertionService.SignAuthorizationRequest(context.ProtocolMessage);
             var clientId = context.ProtocolMessage.ClientId;
             var redirectUri = context.ProtocolMessage.RedirectUri;
-            
+        
             context.ProtocolMessage.Parameters.Clear();
             context.ProtocolMessage.ClientId = clientId;
             context.ProtocolMessage.RedirectUri = redirectUri;

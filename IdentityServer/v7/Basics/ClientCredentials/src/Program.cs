@@ -31,7 +31,7 @@ namespace Client
 
                 ClientId = "client.credentials.sample",
                 ClientSecret = "secret",
-                
+            
                 Scope = "scope1"
             });
 
