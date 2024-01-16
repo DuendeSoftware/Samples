@@ -1,0 +1,6 @@
+@AngularBffSample.Server_HostAddress = http://localhost:5038
+
+GET {{AngularBffSample.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
