@@ -40,3 +40,11 @@ pre:empty {
 .buttons{
     float:right;
 }
+
+table#session-info {
+    table-layout: fixed;
+}
+
+table#session-info td {
+    overflow: clip;
+}
