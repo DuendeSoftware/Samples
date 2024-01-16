@@ -91,8 +91,8 @@ public class Startup
             var jwk = JsonSerializer.Serialize(jwkKey);
             options.DPoPJsonWebKey = jwk;
         })
-        .AddRemoteApis()
-        .AddServerSideSessions();
+        .AddRemoteApis();
+        // .AddServerSideSessions();
 
         // local APIs
         services.AddControllers();
@@ -204,7 +204,6 @@ public class Startup
 
         // On this path, we require the user token
         endpoints.MapRemoteBffApiEndpoint("/api/user-token", "https://localhost:6001")
-        .WithUserAccessTokenParameter(new BffUserAccessTokenParameters(resource: "urn:example-api"))
             .RequireAccessToken(TokenType.User);
     }
 }
