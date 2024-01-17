@@ -1,6 +1,45 @@
+using Duende.Bff.Yarp;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddBff()
+    .AddRemoteApis();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "cookie";
+    options.DefaultChallengeScheme = "oidc";
+    options.DefaultSignOutScheme = "oidc";
+}).AddCookie("cookie", options =>
+{
+    options.Cookie.Name = "__Host-bff";
+    options.Cookie.SameSite = SameSiteMode.Strict;
+}).AddOpenIdConnect("oidc", options =>
+{
+    options.Authority = "https://demo.duendesoftware.com";
+    options.ClientId = "interactive.confidential";
+    options.ClientSecret = "secret";
+    options.ResponseType = "code";
+    options.ResponseMode = "query";
+
+    options.GetClaimsFromUserInfoEndpoint = true;
+    options.MapInboundClaims = false;
+    options.SaveTokens = true;
+
+    options.Scope.Clear();
+    options.Scope.Add("openid");
+    options.Scope.Add("profile");
+    options.Scope.Add("api");
+    options.Scope.Add("offline_access");
+
+    options.TokenValidationParameters = new()
+    {
+        NameClaimType = "name",
+        RoleClaimType = "role"
+    };
+});
+
 
 var app = builder.Build();
 
@@ -10,30 +49,19 @@ app.UseStaticFiles();
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseBff();
+app.UseAuthorization();
+app.MapBffManagementEndpoints();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.MapGroup("/todos")
+    .RequireAuthorization()
+    .AsBffApiEndpoint();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-});
+// app.MapRemoteBffApiEndpoint("/todos", "https://localhost:5020/todos")
+//     .RequireAccessToken(Duende.Bff.TokenType.User);
 
 app.MapFallbackToFile("/index.html");
 
 app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
