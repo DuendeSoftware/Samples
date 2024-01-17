@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AngularBffSample.Bff;
 
@@ -7,9 +9,9 @@ public static class TodoEndpointGroup
 
     private static readonly List<ToDo> data = new List<ToDo>()
         {
-            new ToDo { Id = ToDo.NewId(), Date = DateTimeOffset.UtcNow, Name = "Demo ToDo API", User = "bob" },
-            new ToDo { Id = ToDo.NewId(), Date = DateTimeOffset.UtcNow.AddHours(1), Name = "Stop Demo", User = "bob" },
-            new ToDo { Id = ToDo.NewId(), Date = DateTimeOffset.UtcNow.AddHours(4), Name = "Have Dinner", User = "alice" },
+            new ToDo { Id = ToDo.NewId(), Date = DateTimeOffset.UtcNow, Name = "Demo ToDo API", User = "2 (Bob Smith)" },
+            new ToDo { Id = ToDo.NewId(), Date = DateTimeOffset.UtcNow.AddHours(1), Name = "Stop Demo", User = "2 (Bob Smith)" },
+            new ToDo { Id = ToDo.NewId(), Date = DateTimeOffset.UtcNow.AddHours(4), Name = "Have Dinner", User = "1 (Alice Smith)" },
         };
 
     public static RouteGroupBuilder ToDoGroup(this RouteGroupBuilder group)
@@ -22,12 +24,16 @@ public static class TodoEndpointGroup
         });
 
         // POST
-        group.MapPost("/", (ToDo model, ClaimsPrincipal User) =>
+        group.MapPost("/", (ToDo model, ClaimsPrincipal user, HttpContext context) =>
         {
             model.Id = ToDo.NewId();
-            model.User = $"{User.FindFirst("sub")?.Value} ({User.FindFirst("name")?.Value})";
+            model.User = $"{user.FindFirst("sub")?.Value} ({user.FindFirst("name")?.Value})";
             
             data.Add(model);
+            
+            var url = new Uri($"{context.Request.GetEncodedUrl()}/{model.Id}");
+            
+            return Results.Created(url, model);
         });
 
         // PUT

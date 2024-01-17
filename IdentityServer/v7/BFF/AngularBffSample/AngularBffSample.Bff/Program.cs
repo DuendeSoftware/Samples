@@ -1,3 +1,4 @@
+using AngularBffSample.Bff;
 using Duende.Bff.Yarp;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,10 +56,11 @@ app.UseAuthorization();
 app.MapBffManagementEndpoints();
 
 app.MapGroup("/todos")
+    .ToDoGroup()
     .RequireAuthorization()
     .AsBffApiEndpoint();
 
-// app.MapRemoteBffApiEndpoint("/todos", "https://localhost:5020/todos")
+// app.MapRemoteBffApiEndpoint("/todos", "https://localhost:7001/todos")
 //     .RequireAccessToken(Duende.Bff.TokenType.User);
 
 app.MapFallbackToFile("/index.html");

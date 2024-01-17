@@ -8,6 +8,7 @@
     <SpaRoot>..\angularbffsample.client</SpaRoot>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
+    <RootNamespace>AngularBffSample.Bff</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
