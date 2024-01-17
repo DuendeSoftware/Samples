@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace AngularBffSample.Bff;
+namespace AngularBffSample.Api;
 
 public static class TodoEndpointGroup
 {
-
     private static readonly List<ToDo> data = new List<ToDo>()
         {
             new ToDo { Id = ToDo.NewId(), Date = DateTimeOffset.UtcNow, Name = "Demo ToDo API", User = "2 (Bob Smith)" },

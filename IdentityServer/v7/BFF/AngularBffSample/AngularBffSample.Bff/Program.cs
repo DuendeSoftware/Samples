@@ -55,13 +55,15 @@ app.UseBff();
 app.UseAuthorization();
 app.MapBffManagementEndpoints();
 
+// Comment this out to use the external api
 app.MapGroup("/todos")
     .ToDoGroup()
     .RequireAuthorization()
     .AsBffApiEndpoint();
 
-// app.MapRemoteBffApiEndpoint("/todos", "https://localhost:7001/todos")
-//     .RequireAccessToken(Duende.Bff.TokenType.User);
+// Comment this in to use the external api
+//app.MapRemoteBffApiEndpoint("/todos", "https://localhost:7001/todos")
+//    .RequireAccessToken(Duende.Bff.TokenType.User);
 
 app.MapFallbackToFile("/index.html");
 
