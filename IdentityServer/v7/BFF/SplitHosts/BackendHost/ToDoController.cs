@@ -47,7 +47,7 @@ namespace BackendHost
         public IActionResult Post([FromBody] ToDo model)
         {
             model.Id = ToDo.NewId();
-            model.User = $"{User.FindFirst("sub").Value} ({User.FindFirst("name").Value})";
+            model.User = $"{User.FindFirst("sub")?.Value} ({User.FindFirst("name")?.Value})";
             
             __data.Add(model);
             _logger.LogInformation("Add {name}", model.Name);
@@ -92,7 +92,7 @@ namespace BackendHost
         
         public int Id { get; set; }
         public DateTimeOffset Date { get; set; }
-        public string Name { get; set; }
-        public string User { get; set; }
+        public string? Name { get; set; }
+        public string? User { get; set; }
     }
 }
