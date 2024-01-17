@@ -91,8 +91,8 @@ public class Startup
             var jwk = JsonSerializer.Serialize(jwkKey);
             options.DPoPJsonWebKey = jwk;
         })
-        .AddRemoteApis();
-        // .AddServerSideSessions();
+        .AddRemoteApis()
+        .AddServerSideSessions();
 
         // local APIs
         services.AddControllers();
