@@ -73,7 +73,7 @@ namespace FrontendHost
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBffManagementEndpoints();
-                
+
                 // if you want the TODOs API local
                 endpoints.MapControllers()
                     .RequireAuthorization()

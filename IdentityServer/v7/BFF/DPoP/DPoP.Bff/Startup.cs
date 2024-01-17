@@ -204,7 +204,6 @@ public class Startup
 
         // On this path, we require the user token
         endpoints.MapRemoteBffApiEndpoint("/api/user-token", "https://localhost:6001")
-        .WithUserAccessTokenParameter(new BffUserAccessTokenParameters(resource: "urn:example-api"))
             .RequireAccessToken(TokenType.User);
     }
 }

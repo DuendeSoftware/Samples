@@ -3,7 +3,7 @@
     "compounds": [
         {
             "name": "Run All",
-            "configurations": ["BFF", "API"],
+            "configurations": ["Frontend", "BFF", "API"],
             "presentation": {
                 "hidden": false,
                 "group": "",
@@ -17,9 +17,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build-api",
-            "program": "${workspaceFolder}/DPoP.Api/bin/Debug/net8.0/DPoP.Api.dll",
+            "program": "${workspaceFolder}/BackendApiHost/bin/Debug/net8.0/BackendApiHost.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/DPoP.Api",
+            "cwd": "${workspaceFolder}/BackendApiHost",
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
@@ -30,9 +30,22 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build-bff",
-            "program": "${workspaceFolder}/DPoP.Bff/bin/Debug/net8.0/DPoP.Bff.dll",
+            "program": "${workspaceFolder}/BackendHost/bin/Debug/net8.0/BackendHost.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/DPoP.Bff",
+            "cwd": "${workspaceFolder}/BackendHost",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "console": "externalTerminal",
+        },
+        {
+            "name": "Frontend",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-frontend",
+            "program": "${workspaceFolder}/FrontendHost/bin/Debug/net8.0/FrontendHost.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/FrontendHost",
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
@@ -41,6 +54,6 @@
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
             },
             "console": "externalTerminal",
-        }
+        },
     ]
 }

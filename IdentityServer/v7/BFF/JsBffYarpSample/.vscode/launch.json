@@ -17,9 +17,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build-api",
-            "program": "${workspaceFolder}/DPoP.Api/bin/Debug/net8.0/DPoP.Api.dll",
+            "program": "${workspaceFolder}/BackendApiHost/bin/Debug/net8.0/BackendApiHost.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/DPoP.Api",
+            "cwd": "${workspaceFolder}/BackendApiHost",
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
@@ -30,9 +30,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build-bff",
-            "program": "${workspaceFolder}/DPoP.Bff/bin/Debug/net8.0/DPoP.Bff.dll",
+            "program": "${workspaceFolder}/FrontendHost/bin/Debug/net8.0/FrontendHost.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/DPoP.Bff",
+            "cwd": "${workspaceFolder}/FrontendHost",
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
