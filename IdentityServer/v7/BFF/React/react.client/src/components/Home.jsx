@@ -87,27 +87,37 @@ export class Home extends Component {
           <div className="col">
             <h3>Add New</h3>
           </div>
-          <div className="form-inline">
-            <label htmlFor="date">Todo Date</label>
-            <input
-              className="form-control"
-              type="date"
-              value={this.state.todoDate}
-              onChange={(e) => this.setState({ todoDate: e.target.value })}
-            />
-            <label htmlFor="name">Todo Name</label>
-            <input
-              className="form-control"
-              value={this.state.todoName}
-              onChange={(e) => this.setState({ todoName: e.target.value })}
-            />
-            <button
-              className="form-control btn-success"
-              onClick={this.createTodo}
-            >
-              Create
-            </button>
-          </div>
+          
+          <form className="form-inline">
+            <div className="row g-3">
+              <div className="col-6">
+                <label htmlFor="date" className="form-label">Todo Date</label>
+                <input
+                  className="form-control"
+                  type="date"
+                  value={this.state.todoDate}
+                  onChange={(e) => this.setState({ todoDate: e.target.value })}
+                  />
+              </div>
+              <div className="col-6">
+                <label htmlFor="name" className="form-label">Todo Name</label>
+                <input
+                  className="form-control"
+                  value={this.state.todoName}
+                  onChange={(e) => this.setState({ todoName: e.target.value })}
+                  />
+              </div>
+
+              <div className="col-12">
+                <button
+                  className="btn btn-primary"
+                  onClick={this.createTodo}
+                  >
+                  Create
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
         {this.state.error !== null && (
           <div className="row">
