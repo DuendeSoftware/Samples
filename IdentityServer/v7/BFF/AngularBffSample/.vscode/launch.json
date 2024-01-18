@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "compounds": [
+      {
+        "name": "All",
+        "configurations": ["API", "BFF"],
+        "presentation": {
+          "hidden": false,
+          "group": "compunds",
+        }
+      },
+    ],
+    "configurations": [
+        {
+            "name": "API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-api",
+            "program": "${workspaceFolder}/AngularBffSample.Api/bin/Debug/net8.0/AngularBffSample.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/AngularBffSample.Api",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "console": "externalTerminal",
+        },
+        {
+            "name": "BFF",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-bff",
+            "program": "${workspaceFolder}/AngularBffSample.Bff/bin/Debug/net8.0/AngularBffSample.Bff.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/AngularBffSample.Bff",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "console": "externalTerminal",
+        },
+    ]
+}
