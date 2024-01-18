@@ -5,14 +5,14 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <SpaRoot>..\angularbffsample.client</SpaRoot>
+    <SpaRoot>..\angular.client</SpaRoot>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
-    <RootNamespace>AngularBffSample.Bff</RootNamespace>
+    <RootNamespace>Angular.Bff</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\angularbffsample.client\angularbffsample.client.esproj">
+    <ProjectReference Include="..\angular.client\angular.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

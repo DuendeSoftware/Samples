@@ -7,7 +7,7 @@
         "command": "dotnet",
         "args": [
             "build",
-            "${workspaceFolder}/AngularBffSample.sln",
+            "${workspaceFolder}/Angular.sln",
             "/property:GenerateFullPaths=true",
             "/consoleloggerparameters:NoSummary"
         ],
@@ -19,7 +19,7 @@
         "command": "dotnet",
         "args": [
             "build",
-            "${workspaceFolder}/AngularBffSample.Api/AngularBffSample.Api.csproj",
+            "${workspaceFolder}/Angular.Api/Angular.Api.csproj",
             "/property:GenerateFullPaths=true",
             "/consoleloggerparameters:NoSummary"
         ],
@@ -31,7 +31,7 @@
         "command": "dotnet",
         "args": [
             "build",
-            "${workspaceFolder}/AngularBffSample.Bff/AngularBffSample.Bff.csproj",
+            "${workspaceFolder}/Angular.Bff/Angular.Bff.csproj",
             "/property:GenerateFullPaths=true",
             "/consoleloggerparameters:NoSummary"
         ],

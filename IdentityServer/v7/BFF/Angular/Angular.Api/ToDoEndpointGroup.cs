@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 using System.Security.Claims;
 
-namespace AngularBffSample.Api;
+namespace Angular.Api;
 
 public static class TodoEndpointGroup
 {

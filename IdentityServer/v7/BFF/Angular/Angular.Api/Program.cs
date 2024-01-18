@@ -1,4 +1,4 @@
-using AngularBffSample.Api;
+using Angular.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 

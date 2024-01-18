@@ -1,4 +1,4 @@
-using AngularBffSample.Bff;
+using Angular.Bff;
 using Duende.Bff.Yarp;
 
 var builder = WebApplication.CreateBuilder(args);

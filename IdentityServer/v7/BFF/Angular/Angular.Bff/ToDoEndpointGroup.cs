@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace AngularBffSample.Bff;
+namespace Angular.Bff;
 
 public static class TodoEndpointGroup
 {
