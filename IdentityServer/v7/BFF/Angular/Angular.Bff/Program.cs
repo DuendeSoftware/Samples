@@ -3,7 +3,6 @@ using Duende.Bff.Yarp;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
 builder.Services.AddBff()
     .AddRemoteApis();
 
@@ -41,6 +40,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
