@@ -8,7 +8,7 @@ using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
 using IdentityModel;
 
-namespace IdentityServer;
+namespace IdentityServerHost;
 
 public class TokenExchangeGrantValidator : IExtensionGrantValidator
 {

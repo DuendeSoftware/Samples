@@ -5,7 +5,7 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace IdentityServer;
+namespace IdentityServerHost;
 
 public class Startup
 {

@@ -5,7 +5,7 @@ using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using IdentityModel;
 
-namespace IdentityServer;
+namespace IdentityServerHost;
 
 public class ProfileService : IProfileService
 {
