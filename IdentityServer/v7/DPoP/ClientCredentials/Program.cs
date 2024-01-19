@@ -2,14 +2,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
-using Duende.AccessTokenManagement;
 using Serilog.Sinks.SystemConsole.Themes;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text.Json;
-using IdentityModel;
 
-namespace ClientCredentialsDPoPClient;
+namespace ClientCredentials;
 
 public class Program
 {
