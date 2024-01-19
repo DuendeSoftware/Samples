@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace IdentityServerHost.Pages.Ciba;
+namespace IdentityServer.Pages.Ciba;
 
 [AllowAnonymous]
 [SecurityHeaders]

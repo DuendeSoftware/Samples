@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServerHost.Pages.Logout;
+namespace IdentityServer.Pages.Logout;
 
 [SecurityHeaders]
 [AllowAnonymous]

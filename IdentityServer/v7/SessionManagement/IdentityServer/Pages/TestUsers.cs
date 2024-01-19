@@ -9,7 +9,7 @@ using System.Text.Json;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Test;
 
-namespace IdentityServerHost;
+namespace IdentityServer;
 
 public class TestUsers
 {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
 
-namespace IdentityServerHost.Pages.ServerSideSessions
+namespace IdentityServer.Pages.ServerSideSessions
 {
     public class IndexModel : PageModel
     {

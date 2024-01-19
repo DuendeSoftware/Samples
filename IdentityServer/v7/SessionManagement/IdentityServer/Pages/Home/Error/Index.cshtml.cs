@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Hosting;
 
-namespace IdentityServerHost.Pages.Error;
+namespace IdentityServer.Pages.Error;
 
 [AllowAnonymous]
 [SecurityHeaders]

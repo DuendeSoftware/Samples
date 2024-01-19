@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace IdentityServerHost.Pages.Consent;
+namespace IdentityServer.Pages.Consent;
 
 public class InputModel
 {
