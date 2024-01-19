@@ -3,14 +3,14 @@
     "compounds": [
         {
           "name": "Run All (interactive)",
-          "configurations": ["IdentityServer", "Api", "Web"],
+          "configurations": ["IdentityServerHost", "Api", "Web"],
           "presentation": {
             "group": "10-compunds",
           }
         },
         {
             "name": "Run All (client credentials)",
-            "configurations": ["IdentityServer", "Api", "ClientCredentials"],
+            "configurations": ["IdentityServerHost", "Api", "ClientCredentials"],
             "presentation": {
               "group": "10-compunds",
             }
@@ -18,13 +18,13 @@
     ],
     "configurations": [
         {
-            "name": "IdentityServer",
+            "name": "IdentityServerHost",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build-identityserver",
-            "program": "${workspaceFolder}/IdentityServer/bin/Debug/net8.0/IdentityServer.dll",
+            "preLaunchTask": "build-IdentityServerHost",
+            "program": "${workspaceFolder}/IdentityServerHost/bin/Debug/net8.0/IdentityServerHost.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/IdentityServer",
+            "cwd": "${workspaceFolder}/IdentityServerHost",
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
