@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Security.Cryptography.X509Certificates;
 
-namespace IdentityServerHost
+namespace IdentityServer
 {
     public class Startup
     {

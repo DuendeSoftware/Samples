@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace IdentityServerHost.Pages.Ciba;
+namespace IdentityServer.Pages.Ciba;
 
 public class InputModel
 {

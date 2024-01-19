@@ -9,12 +9,14 @@ using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
 
-namespace IdentityServerHost
+namespace IdentityServer
 {
     public class Program
     {
         public static int Main(string[] args)
         {
+            Console.Title = "IdentityServer";
+            
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
