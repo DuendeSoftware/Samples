@@ -7,29 +7,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityServerHost.WsFed
+namespace IdentityServerHost;
+
+public class InMemoryWsFedProviderStore : IIdentityProviderStore
 {
-    public class InMemoryWsFedProviderStore : IIdentityProviderStore
+    private readonly IEnumerable<WsFedProvider> _providers;
+
+    public InMemoryWsFedProviderStore(IEnumerable<WsFedProvider> providers)
     {
-        private readonly IEnumerable<WsFedProvider> _providers;
+        _providers = providers;
+    }
 
-        public InMemoryWsFedProviderStore(IEnumerable<WsFedProvider> providers)
+    public Task<IEnumerable<IdentityProviderName>> GetAllSchemeNamesAsync()
+    {
+        return Task.FromResult(_providers.Select(x=>new IdentityProviderName 
         {
-            _providers = providers;
-        }
+            DisplayName = x.DisplayName, Enabled = x.Enabled, Scheme = x.Scheme
+        }));
+    }
 
-        public Task<IEnumerable<IdentityProviderName>> GetAllSchemeNamesAsync()
-        {
-            return Task.FromResult(_providers.Select(x=>new IdentityProviderName 
-            {
-                DisplayName = x.DisplayName, Enabled = x.Enabled, Scheme = x.Scheme
-            }));
-        }
-
-        public Task<IdentityProvider> GetBySchemeAsync(string scheme)
-        {
-            var provider = _providers.SingleOrDefault(x => x.Scheme == scheme);
-            return Task.FromResult<IdentityProvider>(provider);
-        }
+    public Task<IdentityProvider> GetBySchemeAsync(string scheme)
+    {
+        var provider = _providers.SingleOrDefault(x => x.Scheme == scheme);
+        return Task.FromResult<IdentityProvider>(provider);
     }
 }

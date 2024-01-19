@@ -2,13 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-          "name": "IdentityServerHost",
+          "name": "IdentityServer",
           "type": "coreclr",
           "request": "launch",
-          "preLaunchTask": "build-identityServerHost",
-          "program": "${workspaceFolder}/IdentityServerHost/bin/Debug/net6.0/IdentityServerHost.dll",
+          "preLaunchTask": "build-IdentityServer",
+          "program": "${workspaceFolder}/IdentityServer/bin/Debug/net6.0/IdentityServer.dll",
           "args": [],
-          "cwd": "${workspaceFolder}/IdentityServerHost",
+          "cwd": "${workspaceFolder}/IdentityServer",
           "env": {
               "ASPNETCORE_ENVIRONMENT": "Development"
           }
@@ -45,7 +45,7 @@
    "compounds": [
         {
             "name": "All",
-            "configurations": ["Api","Client","IdentityServerHost"]
+            "configurations": ["Api","Client","IdentityServer"]
         }
    ] 
 }

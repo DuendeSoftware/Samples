@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Duende.IdentityServer;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.ResponseHandling;
 using Duende.IdentityServer.Services;
@@ -12,7 +13,7 @@ public class StepUpInteractionResponseGenerator : AuthorizeInteractionResponseGe
 {
     public StepUpInteractionResponseGenerator(
         IdentityServerOptions options,
-        ISystemClock clock,
+        IClock clock,
         ILogger<AuthorizeInteractionResponseGenerator> logger,
         IConsentService consent,
         IProfileService profile) : base(options, clock, logger, consent, profile)

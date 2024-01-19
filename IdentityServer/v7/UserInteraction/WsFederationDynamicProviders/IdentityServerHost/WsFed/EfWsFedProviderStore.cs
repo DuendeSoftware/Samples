@@ -8,25 +8,24 @@ using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Microsoft.Extensions.Logging;
 
-namespace IdentityServerHost.WsFed
+namespace IdentityServerHost;
+
+public class EfWsFedProviderStore : IdentityProviderStore
 {
-    public class EfWsFedProviderStore : IdentityProviderStore
+    public EfWsFedProviderStore(IConfigurationDbContext context, ILogger<IdentityProviderStore> logger, ICancellationTokenProvider cancellationTokenProvider) 
+        : base(context, logger, cancellationTokenProvider)
     {
-        public EfWsFedProviderStore(IConfigurationDbContext context, ILogger<IdentityProviderStore> logger, ICancellationTokenProvider cancellationTokenProvider) 
-            : base(context, logger, cancellationTokenProvider)
+    }
+
+    protected override IdentityProvider MapIdp(Duende.IdentityServer.EntityFramework.Entities.IdentityProvider idp)
+    {
+        var result = base.MapIdp(idp);
+        
+        if (result == null && idp.Type == "wsfed")
         {
+            result = new WsFedProvider(idp.ToModel());
         }
 
-        protected override IdentityProvider MapIdp(Duende.IdentityServer.EntityFramework.Entities.IdentityProvider idp)
-        {
-            var result = base.MapIdp(idp);
-            
-            if (result == null && idp.Type == "wsfed")
-            {
-                result = new WsFedProvider(idp.ToModel());
-            }
-
-            return result;
-        }
+        return result;
     }
 }

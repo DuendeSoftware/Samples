@@ -1,13 +1,12 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerHost", "IdentityServer\IdentityServerHost.csproj", "{0196F924-7B04-4DDC-AB1E-C0DD1D329D5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerHost", "IdentityServerHost\IdentityServerHost.csproj", "{0196F924-7B04-4DDC-AB1E-C0DD1D329D5B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleCibaClient", "ConsoleCibaClient\ConsoleCibaClient.csproj", "{A31E166F-54C4-42E9-95E1-448B5BB8F3B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{A31E166F-54C4-42E9-95E1-448B5BB8F3B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleApi", "SimpleApi\SimpleApi.csproj", "{194ABC4A-1D22-4C99-B529-E99372976E1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{194ABC4A-1D22-4C99-B529-E99372976E1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

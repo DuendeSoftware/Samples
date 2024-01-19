@@ -29,7 +29,8 @@ CREATE TABLE "Keys" (
 );
 
 CREATE TABLE "PersistedGrants" (
-    "Key" TEXT NOT NULL CONSTRAINT "PK_PersistedGrants" PRIMARY KEY,
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_PersistedGrants" PRIMARY KEY AUTOINCREMENT,
+    "Key" TEXT NULL,
     "Type" TEXT NOT NULL,
     "SubjectId" TEXT NULL,
     "SessionId" TEXT NULL,
@@ -38,6 +39,26 @@ CREATE TABLE "PersistedGrants" (
     "CreationTime" TEXT NOT NULL,
     "Expiration" TEXT NULL,
     "ConsumedTime" TEXT NULL,
+    "Data" TEXT NOT NULL
+);
+
+CREATE TABLE "PushedAuthorizationRequests" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_PushedAuthorizationRequests" PRIMARY KEY AUTOINCREMENT,
+    "ReferenceValueHash" TEXT NOT NULL,
+    "ExpiresAtUtc" TEXT NOT NULL,
+    "Parameters" TEXT NOT NULL
+);
+
+CREATE TABLE "ServerSideSessions" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_ServerSideSessions" PRIMARY KEY AUTOINCREMENT,
+    "Key" TEXT NOT NULL,
+    "Scheme" TEXT NOT NULL,
+    "SubjectId" TEXT NOT NULL,
+    "SessionId" TEXT NULL,
+    "DisplayName" TEXT NULL,
+    "Created" TEXT NOT NULL,
+    "Renewed" TEXT NOT NULL,
+    "Expires" TEXT NULL,
     "Data" TEXT NOT NULL
 );
 
@@ -51,12 +72,28 @@ CREATE INDEX "IX_PersistedGrants_ConsumedTime" ON "PersistedGrants" ("ConsumedTi
 
 CREATE INDEX "IX_PersistedGrants_Expiration" ON "PersistedGrants" ("Expiration");
 
+CREATE UNIQUE INDEX "IX_PersistedGrants_Key" ON "PersistedGrants" ("Key");
+
 CREATE INDEX "IX_PersistedGrants_SubjectId_ClientId_Type" ON "PersistedGrants" ("SubjectId", "ClientId", "Type");
 
 CREATE INDEX "IX_PersistedGrants_SubjectId_SessionId_Type" ON "PersistedGrants" ("SubjectId", "SessionId", "Type");
 
+CREATE INDEX "IX_PushedAuthorizationRequests_ExpiresAtUtc" ON "PushedAuthorizationRequests" ("ExpiresAtUtc");
+
+CREATE UNIQUE INDEX "IX_PushedAuthorizationRequests_ReferenceValueHash" ON "PushedAuthorizationRequests" ("ReferenceValueHash");
+
+CREATE INDEX "IX_ServerSideSessions_DisplayName" ON "ServerSideSessions" ("DisplayName");
+
+CREATE INDEX "IX_ServerSideSessions_Expires" ON "ServerSideSessions" ("Expires");
+
+CREATE UNIQUE INDEX "IX_ServerSideSessions_Key" ON "ServerSideSessions" ("Key");
+
+CREATE INDEX "IX_ServerSideSessions_SessionId" ON "ServerSideSessions" ("SessionId");
+
+CREATE INDEX "IX_ServerSideSessions_SubjectId" ON "ServerSideSessions" ("SubjectId");
+
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20220408152933_Grants', '6.0.0');
+VALUES ('20240119205647_Grants', '8.0.1');
 
 COMMIT;
 

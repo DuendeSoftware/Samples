@@ -2,12 +2,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-          "label": "build-identityServerHost",
+          "label": "build-IdentityServer",
           "type": "process",
           "command": "dotnet",
           "args": [
               "build",
-              "${workspaceFolder}/IdentityServerHost/IdentityServerHost.csproj",
+              "${workspaceFolder}/IdentityServer/IdentityServer.csproj",
               "/property:GenerateFullPaths=true",
               "/consoleloggerparameters:NoSummary"
           ],
