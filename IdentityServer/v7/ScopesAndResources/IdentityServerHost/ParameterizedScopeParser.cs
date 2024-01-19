@@ -2,7 +2,7 @@ using System;
 using Duende.IdentityServer.Validation;
 using Microsoft.Extensions.Logging;
 
-namespace IdentityServer;
+namespace IdentityServerHost;
 
 // shows how to parse a structured scope
 public class ParameterizedScopeParser : DefaultScopeParser

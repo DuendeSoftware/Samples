@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Duende.IdentityServer.Validation;
 
-namespace IdentityServer;
+namespace IdentityServerHost;
 
 // shows how to access the parsed scope in the token request pipeline
 public class TokenRequestValidator : ICustomTokenRequestValidator
