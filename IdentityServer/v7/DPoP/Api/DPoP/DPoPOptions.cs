@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ApiHost;
+namespace Api;
 
 public class DPoPOptions
 {

@@ -3,24 +3,20 @@
 
 
 using Duende.IdentityServer.Models;
-using System.Collections.Generic;
 
-namespace IdentityServerHost
+namespace IdentityServer;
+
+public static class Resources
 {
-    public static class Resources
-    {
-        public static IEnumerable<IdentityResource> Identity =>
-            new IdentityResource[]
-            {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
-            };
+    public static IEnumerable<IdentityResource> Identity =>
+    [
+        new IdentityResources.OpenId(),
+        new IdentityResources.Profile(),
+    ];
 
-        public static IEnumerable<ApiScope> ApiScopes =>
-            new ApiScope[]
-            {
-                new ApiScope("scope1"),
-            };
+    public static IEnumerable<ApiScope> ApiScopes =>
+    [
+        new ApiScope("scope1"),
+    ];
 
-   }
 }

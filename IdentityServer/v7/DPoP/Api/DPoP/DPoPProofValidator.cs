@@ -12,7 +12,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ApiHost;
+namespace Api;
 
 public class DPoPProofValidator
 {
@@ -130,7 +130,7 @@ public class DPoPProofValidator
             return Task.CompletedTask;
         }
 
-        if (!token.TryGetHeaderValue<IDictionary<string, object>>(JwtClaimTypes.JsonWebKey, out var jwkValues))
+        if (!token.TryGetHeaderValue<JsonElement>(JwtClaimTypes.JsonWebKey, out var jwkValues))
         {
             result.IsError = true;
             result.ErrorDescription = "Invalid 'jwk' value.";
@@ -169,9 +169,9 @@ public class DPoPProofValidator
     /// <summary>
     /// Validates the signature.
     /// </summary>
-    protected virtual Task ValidateSignatureAsync(DPoPProofValidatonContext context, DPoPProofValidatonResult result)
+    protected virtual async Task ValidateSignatureAsync(DPoPProofValidatonContext context, DPoPProofValidatonResult result)
     {
-        TokenValidationResult tokenValidationResult;
+        TokenValidationResult? tokenValidationResult = null;
 
         try
         {
@@ -185,27 +185,26 @@ public class DPoPProofValidator
             };
 
             var handler = new JsonWebTokenHandler();
-            tokenValidationResult = handler.ValidateToken(context.ProofToken, tvp);
+            tokenValidationResult = await handler.ValidateTokenAsync(context.ProofToken, tvp);
         }
         catch (Exception ex)
         {
             Logger.LogDebug("Error parsing DPoP token: {error}", ex.Message);
             result.IsError = true;
             result.ErrorDescription = "Invalid signature on DPoP token.";
-            return Task.CompletedTask;
         }
 
-        if (tokenValidationResult.Exception != null)
+        if (tokenValidationResult?.Exception != null)
         {
             Logger.LogDebug("Error parsing DPoP token: {error}", tokenValidationResult.Exception.Message);
             result.IsError = true;
             result.ErrorDescription = "Invalid signature on DPoP token.";
-            return Task.CompletedTask;
         }
 
-        result.Payload = tokenValidationResult.Claims;
-
-        return Task.CompletedTask;
+        if (tokenValidationResult != null)
+        {
+            result.Payload = tokenValidationResult.Claims;
+        }
     }
 
     /// <summary>
@@ -213,6 +212,13 @@ public class DPoPProofValidator
     /// </summary>
     protected virtual async Task ValidatePayloadAsync(DPoPProofValidatonContext context, DPoPProofValidatonResult result)
     {
+        if(result.Payload is null )
+        {
+            result.IsError = true;
+            result.ErrorDescription = "Missing payload";
+            return;
+        }
+
         if (result.Payload.TryGetValue(JwtClaimTypes.DPoPAccessTokenHash, out var ath))
         {
             result.AccessTokenHash = ath as string;
@@ -312,7 +318,7 @@ public class DPoPProofValidator
     {
         var dpopOptions = OptionsMonitor.Get(context.Scheme);
 
-        if (await ReplayCache.ExistsAsync(ReplayCachePurpose, result.TokenId))
+        if (await ReplayCache.ExistsAsync(ReplayCachePurpose, result.TokenId!)) // jti is required by an earlier validation
         {
             result.IsError = true;
             result.ErrorDescription = "Detected DPoP proof token replay.";
@@ -336,7 +342,7 @@ public class DPoPProofValidator
         // longer than the likelyhood of proof token expiration, which is done before replay
         skew *= 2;
         var cacheDuration = dpopOptions.ProofTokenValidityDuration + skew;
-        await ReplayCache.AddAsync(ReplayCachePurpose, result.TokenId, DateTimeOffset.UtcNow.Add(cacheDuration));
+        await ReplayCache.AddAsync(ReplayCachePurpose, result.TokenId!, DateTimeOffset.UtcNow.Add(cacheDuration));
     }
 
     /// <summary>
@@ -374,7 +380,7 @@ public class DPoPProofValidator
     {
         var dpopOptions = OptionsMonitor.Get(context.Scheme);
 
-        if (IsExpired(context, result, dpopOptions.ClientClockSkew, result.IssuedAt.Value))
+        if (IsExpired(context, result, dpopOptions.ClientClockSkew, result.IssuedAt!.Value)) // iat is required by an earlier validation
         {
             result.IsError = true;
             result.ErrorDescription = "Invalid 'iat' value.";
@@ -440,7 +446,7 @@ public class DPoPProofValidator
     {
         try
         {
-            var value = DataProtector.Unprotect(result.Nonce);
+            var value = DataProtector.Unprotect(result.Nonce!); // nonce is required by an earlier validation
             if (Int64.TryParse(value, out long iat))
             {
                 return ValueTask.FromResult(iat);

@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 
-namespace IdentityServerHost.Pages.Ciba;
+namespace IdentityServer.Pages.Ciba;
 
 public class ConsentOptions
 {

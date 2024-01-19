@@ -1,12 +1,13 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using static IdentityModel.OidcConstants;
 
-namespace ApiHost;
+namespace Api;
 
 public class DPoPJwtBearerEvents : JwtBearerEvents
 {
@@ -44,6 +45,10 @@ public class DPoPJwtBearerEvents : JwtBearerEvents
         if (context.HttpContext.Request.TryGetDPoPAccessToken(out var at))
         {
             var proofToken = context.HttpContext.Request.GetDPoPProofToken();
+            if (proofToken == null)
+            {
+                throw new InvalidOperationException("Missing DPoP (proof token) HTTP header");
+            }
             var result = await _validator.ValidateAsync(new DPoPProofValidatonContext
             {
                 Scheme = context.Scheme.Name,
@@ -56,7 +61,7 @@ public class DPoPJwtBearerEvents : JwtBearerEvents
             if (result.IsError)
             {
                 // fails the result
-                context.Fail(result.ErrorDescription ?? result.Error);
+                context.Fail(result.ErrorDescription ?? result.Error ?? throw new Exception("No ErrorDescription or Error set."));
 
                 // we need to stash these values away so they are available later when the Challenge method is called later
                 context.HttpContext.Items["DPoP-Error"] = result.Error;
@@ -75,7 +80,7 @@ public class DPoPJwtBearerEvents : JwtBearerEvents
             // if the scheme used was not DPoP, then it was Bearer
             // and if a access token was presented with a cnf, then the 
             // client should have sent it as DPoP, so we fail the request
-            if (context.Principal.HasClaim(x => x.Type == JwtClaimTypes.Confirmation))
+            if (context.Principal?.HasClaim(x => x.Type == JwtClaimTypes.Confirmation) ?? false)
             {
                 context.HttpContext.Items["Bearer-ErrorDescription"] = "Must use DPoP when using an access token with a 'cnf' claim";
                 context.Fail("Must use DPoP when using an access token with a 'cnf' claim");
@@ -130,7 +135,7 @@ public class DPoPJwtBearerEvents : JwtBearerEvents
             }
         }
 
-        context.Response.Headers.Add(HeaderNames.WWWAuthenticate, sb.ToString());
+        context.Response.Headers.Append(HeaderNames.WWWAuthenticate, sb.ToString());
 
         
         if (context.HttpContext.Items.ContainsKey("DPoP-Nonce"))

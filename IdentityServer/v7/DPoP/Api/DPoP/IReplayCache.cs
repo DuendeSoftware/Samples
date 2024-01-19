@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace ApiHost;
+namespace Api;
 
 public interface IReplayCache
 {

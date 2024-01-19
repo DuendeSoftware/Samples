@@ -1,4 +1,4 @@
-namespace ApiHost;
+namespace Api;
 
 public enum DPoPMode
 {

@@ -5,7 +5,7 @@
 using Duende.IdentityServer.Models;
 using System.Collections.Generic;
 
-namespace IdentityServerHost
+namespace IdentityServer
 {
     public static class Clients
     {
