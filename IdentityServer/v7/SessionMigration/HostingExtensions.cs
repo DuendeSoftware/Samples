@@ -32,7 +32,7 @@ internal static class HostingExtensions
 
         // ********************
         // *** INSTRUCTIONS ***
-        // This purpose of this sample is to show how to migrate existing client side session to server
+        // The purpose of this sample is to show how to migrate existing client side session to server
         // side session without the user having to login again. To test it, first run the sample as is
         // and log in (user: alice, password: alice) to get a normal cookie based session in your
         // browser. Then uncomment the following blocks and run the sample again. The first request
@@ -43,20 +43,19 @@ internal static class HostingExtensions
         // Note that if server side sessions have been enabled and then are removed before another
         // test run, you have to manually clear the cookie to be able to log in again.
 
-        // ** This is the normal template code for activating server side sessions.
+        // //** This is the normal template code for activating server side sessions.
+        // isBuilder.AddServerSideSessions();
 
-        //isBuilder.AddServerSideSessions();
-
-        //builder.Services.AddAuthorization(options =>
+        // builder.Services.AddAuthorization(options =>
         //       options.AddPolicy("admin",
         //           policy => policy.RequireClaim("sub", "1"))
         //   );
-        //builder.Services.Configure<RazorPagesOptions>(options =>
+        // builder.Services.Configure<RazorPagesOptions>(options =>
         //    options.Conventions.AuthorizeFolder("/ServerSideSessions", "admin"));
 
-        // ** This is the code that adds migration of sessions. Enabling server side sessions through the
-        // ** block above without enabling this will invalidate all existing sessions. 
-        //builder.Services.AddTransient<IPostConfigureOptions<CookieAuthenticationOptions>, SessionMigrationPostConfigureOptions>();
+        // //** This is the code that adds migration of sessions. Enabling server side sessions through the
+        // //** block above without enabling this will invalidate all existing sessions. 
+        // builder.Services.AddTransient<IPostConfigureOptions<CookieAuthenticationOptions>, SessionMigrationPostConfigureOptions>();
 
         return builder.Build();
     }
