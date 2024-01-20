@@ -3,7 +3,7 @@
     "compounds": [
         {
             "name": "Run All",
-            "configurations": ["Api","Client","IdentityServerHost"],
+            "configurations": ["Client","IdentityServerHost"],
             "presentation": {
                 "group": "10-compounds",
                 "order": 1
@@ -36,19 +36,6 @@
               "action": "openExternally",
               "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
           },
-          "env": {
-              "ASPNETCORE_ENVIRONMENT": "Development"
-          },
-          "console": "externalTerminal"
-        },
-        {
-          "name": "Api",
-          "type": "coreclr",
-          "request": "launch",
-          "preLaunchTask": "build-api",
-          "program": "${workspaceFolder}/Api/bin/Debug/net8.0/Api.dll",
-          "args": [],
-          "cwd": "${workspaceFolder}/Api",
           "env": {
               "ASPNETCORE_ENVIRONMENT": "Development"
           },

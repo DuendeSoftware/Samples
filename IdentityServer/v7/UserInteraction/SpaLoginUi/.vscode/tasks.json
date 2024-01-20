@@ -24,18 +24,6 @@
               "/consoleloggerparameters:NoSummary"
           ],
           "problemMatcher": "$msCompile"
-        },
-        {
-          "label": "build-api",
-          "type": "process",
-          "command": "dotnet",
-          "args": [
-              "build",
-              "${workspaceFolder}/Api/Api.csproj",
-              "/property:GenerateFullPaths=true",
-              "/consoleloggerparameters:NoSummary"
-          ],
-          "problemMatcher": "$msCompile"
         }
     ]
 }
