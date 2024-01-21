@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -7,9 +8,9 @@ using ConsoleDcrClient;
 using IdentityModel.Client;
 
 
-Console.Title = "Dynamic Client Registration - Client Credentials Flow";
+Console.Title = "DCR Client";
 
-"Obtaining initial access token (which does not allow setting client ids)".ConsoleYellow();
+"Obtaining initial access token (which does not allow setting client secrets)".ConsoleYellow();
 var badTokenResponse = await RequestTokenAsync(scope: "IdentityServer.Configuration");
 badTokenResponse.Show();
 Console.ReadLine();
@@ -24,7 +25,7 @@ var badDynamicClientToken = await RequestTokenAsync(badDcrResponse.ClientId, bad
 badDynamicClientToken.Show();
 Console.ReadLine();
 
-"Obtaining a new access token (which does allow setting client ids)".ConsoleYellow();
+"Obtaining a new access token (which does allow setting client secret)".ConsoleYellow();
 var goodTokenResponse = await RequestTokenAsync(scope: "IdentityServer.Configuration IdentityServer.Configuration:SetClientSecret");
 goodTokenResponse.Show();
 Console.ReadLine();
@@ -47,6 +48,19 @@ static async Task<DynamicClientRegistrationResponse> RegisterClient(string acces
 {
     var client = new HttpClient();
     client.SetBearerToken(accessToken);
+
+    // var request = new DynamicClientRegistrationRequest
+    // {
+    //     Address = "https://localhost:5001/connect/dcr",
+    //     Document = JsonSerializer.Deserialize<DynamicClientRegistrationDocument>(
+    //     """
+    //     {
+    //         "grant_types": [ "client_credentials" ],
+    //         "scope": "SimpleApi",
+    //         "client_secret": "hunter2"
+    //     }
+    //     """)
+    // };
 
     var request = new DynamicClientRegistrationRequest
     {

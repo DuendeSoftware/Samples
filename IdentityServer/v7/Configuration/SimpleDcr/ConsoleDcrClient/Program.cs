@@ -5,7 +5,7 @@ using ConsoleDcrClient;
 using IdentityModel.Client;
 
 
-Console.Title = "Dynamic Client Registration - Client Credentials Flow";
+Console.Title = "DCR Client";
 
 "Obtaining initial access token".ConsoleYellow();
 var tokenResponse = await RequestTokenAsync();

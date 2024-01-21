@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IdentityServer.Migrations.ConfigurationDb
 {
+    /// <inheritdoc />
     public partial class Configuration : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -110,7 +112,9 @@ namespace IdentityServer.Migrations.ConfigurationDb
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Updated = table.Column<DateTime>(type: "TEXT", nullable: true),
                     LastAccessed = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    NonEditable = table.Column<bool>(type: "INTEGER", nullable: false)
+                    NonEditable = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PushedAuthorizationLifetime = table.Column<int>(type: "INTEGER", nullable: true),
+                    RequirePushedAuthorization = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -644,6 +648,7 @@ namespace IdentityServer.Migrations.ConfigurationDb
                 unique: true);
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
