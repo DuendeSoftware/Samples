@@ -49,19 +49,6 @@ static async Task<DynamicClientRegistrationResponse> RegisterClient(string acces
     var client = new HttpClient();
     client.SetBearerToken(accessToken);
 
-    // var request = new DynamicClientRegistrationRequest
-    // {
-    //     Address = "https://localhost:5001/connect/dcr",
-    //     Document = JsonSerializer.Deserialize<DynamicClientRegistrationDocument>(
-    //     """
-    //     {
-    //         "grant_types": [ "client_credentials" ],
-    //         "scope": "SimpleApi",
-    //         "client_secret": "hunter2"
-    //     }
-    //     """)
-    // };
-
     var request = new DynamicClientRegistrationRequest
     {
         Address = "https://localhost:5002/connect/dcr",
@@ -73,7 +60,7 @@ static async Task<DynamicClientRegistrationResponse> RegisterClient(string acces
         }
     };
 
-    request.Document.Extensions.Add("client_secret", "hunter2");
+    request.Document.Extensions.Add("client_secret", AsJsonElement("hunter2"));
 
     var response = await client.RegisterClientAsync(request);
 
@@ -123,3 +110,5 @@ static async Task CallServiceAsync(string token)
     "\n\nService claims:".ConsoleGreen();
     Console.WriteLine(response.PrettyPrintJson());
 }
+
+static JsonElement AsJsonElement(string s) => JsonDocument.Parse($"\"{s}\"").RootElement;
