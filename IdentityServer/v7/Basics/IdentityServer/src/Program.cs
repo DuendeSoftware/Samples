@@ -15,6 +15,8 @@ namespace IdentityServerHost
     {
         public static int Main(string[] args)
         {
+            Console.Title = "IdentityServer";
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
