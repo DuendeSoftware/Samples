@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
 
-namespace ApiHost;
+namespace Api;
 
 /// <summary>
 /// Extensions methods for DPoP
@@ -21,7 +22,7 @@ static class DPoPExtensions
         return authz?.StartsWith(DPoPPrefix, System.StringComparison.Ordinal) == true;
     }
 
-    public static bool TryGetDPoPAccessToken(this HttpRequest request, out string token)
+    public static bool TryGetDPoPAccessToken(this HttpRequest request, [NotNullWhen(true)]out string? token)
     {
         token = null;
 
@@ -34,17 +35,17 @@ static class DPoPExtensions
         return false;
     }
 
-    public static string GetAuthorizationScheme(this HttpRequest request)
+    public static string? GetAuthorizationScheme(this HttpRequest request)
     {
         return request.Headers.Authorization.FirstOrDefault()?.Split(' ', System.StringSplitOptions.RemoveEmptyEntries)[0];
     }
 
-    public static string GetDPoPProofToken(this HttpRequest request)
+    public static string? GetDPoPProofToken(this HttpRequest request)
     {
         return request.Headers[OidcConstants.HttpHeaders.DPoP].FirstOrDefault();
     }
 
-    public static string GetDPoPNonce(this AuthenticationProperties props)
+    public static string? GetDPoPNonce(this AuthenticationProperties props)
     {
         if (props.Items.ContainsKey("DPoP-Nonce"))
         {

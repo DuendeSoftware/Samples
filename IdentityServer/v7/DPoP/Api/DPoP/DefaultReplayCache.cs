@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace ApiHost;
+namespace Api;
 
 /// <summary>
 /// Default implementation of the replay cache using IDistributedCache
