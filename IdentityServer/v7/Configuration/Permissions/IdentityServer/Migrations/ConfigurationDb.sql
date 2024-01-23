@@ -86,7 +86,9 @@ CREATE TABLE "Clients" (
     "Created" TEXT NOT NULL,
     "Updated" TEXT NULL,
     "LastAccessed" TEXT NULL,
-    "NonEditable" INTEGER NOT NULL
+    "NonEditable" INTEGER NOT NULL,
+    "PushedAuthorizationLifetime" INTEGER NULL,
+    "RequirePushedAuthorization" INTEGER NOT NULL
 );
 
 CREATE TABLE "IdentityProviders" (
@@ -293,7 +295,7 @@ CREATE UNIQUE INDEX "IX_IdentityResourceProperties_IdentityResourceId_Key" ON "I
 CREATE UNIQUE INDEX "IX_IdentityResources_Name" ON "IdentityResources" ("Name");
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20230509053624_Configuration', '6.0.0');
+VALUES ('20240120040116_Configuration', '8.0.1');
 
 COMMIT;
 

@@ -7,7 +7,7 @@ using IdentityModel.Client;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
-Console.Title = "Dynamic Client Registration - Client Credentials Flow";
+Console.Title = "DCR Client";
 
 "Obtaining initial access token".ConsoleYellow();
 var tokenResponse = await RequestTokenAsync();
