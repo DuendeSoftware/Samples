@@ -12,7 +12,7 @@ namespace ResourcesScopesConsoleClient
 
         static async Task Main(string[] args)
         {
-            Console.Title = "Console Token Exchange Client";
+            Console.Title = "Client";
             Cache = new DiscoveryCache("https://localhost:5001");
 
             // initial token
