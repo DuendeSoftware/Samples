@@ -5,11 +5,11 @@ with Duende IdentityServer.
 
 ## Overview of Projects
 The Demo consists of 3 projects:
-- IdentityServerHost is a token server implemented with Duende IdentityServer.
-- Api is a protected resource that uses the IdentityServerHost as its authority
+- IdentityServer is a token server implemented with Duende IdentityServer.
+- Api is a protected resource that uses the IdentityServer as its authority
   and can make Step-Up responses when requests don't meet its authentication
   requirements.
-- Client is a client application that uses IdentityServerHost to login and makes
+- Client is a client application that uses IdentityServer to login and makes
   requests to the Api.
 
 ## Running the Demo
@@ -47,7 +47,7 @@ including either the acr_values or max_age parameter (or both), to tell
 IdentityServer what form of authentication is required. This challenge is issued
 by an Http handler defined in Client\StepUpHandler.cs.
 
-### IdentityServerHost
+### IdentityServer
 IdentityServer determines which page in the UI to show the user when an
 authorization request comes in using the AuthorizeInteractionResponseGenerator.
 The default AuthorizeInteractionResponseGenerator already respects the max_age
@@ -59,5 +59,5 @@ been requested in the StepUpInteractionResponseGenerator. See our documentation
 on [custom pages](https://docs.duendesoftware.com/identityserver/v6/ui/custom/)
 for more details.
 
-Additionally, the UI in IdentityServerHost has been customized to show messages
+Additionally, the UI in IdentityServer has been customized to show messages
 telling the user what is happening during Step-Up.
