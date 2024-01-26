@@ -1,5 +1,9 @@
-﻿using System.Text.Json;
+﻿// Copyright (c) Duende Software. All rights reserved.
+// See LICENSE in the project root for license information.
+
+
 using IdentityModel.Client;
+using System.Text.Json;
 
 // discover endpoints from metadata
 var client = new HttpClient();
@@ -14,10 +18,9 @@ if (disco.IsError)
 var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
 {
     Address = disco.TokenEndpoint,
-
     ClientId = "client",
     ClientSecret = "secret",
-    Scope = "api1",
+    Scope = "api1"
 });
 
 if (tokenResponse.IsError)
@@ -29,10 +32,9 @@ if (tokenResponse.IsError)
 
 Console.WriteLine(tokenResponse.AccessToken);
 
-
 // call api
 var apiClient = new HttpClient();
-apiClient.SetBearerToken(tokenResponse.AccessToken);
+apiClient.SetBearerToken(tokenResponse.AccessToken!); // AccessToken is always non-null when IsError is false
 
 var response = await apiClient.GetAsync("https://localhost:6001/identity");
 if (!response.IsSuccessStatusCode)
@@ -41,10 +43,6 @@ if (!response.IsSuccessStatusCode)
 }
 else
 {
-    var content = await response.Content.ReadAsStringAsync();
-
-    var parsed = JsonDocument.Parse(content);
-    var formatted = JsonSerializer.Serialize(parsed, new JsonSerializerOptions { WriteIndented = true });
-
-    Console.WriteLine(formatted);
+    var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+    Console.WriteLine(JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true }));
 }
