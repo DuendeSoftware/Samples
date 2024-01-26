@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
 {
+    /// <inheritdoc />
     public partial class InitialIdentityServerConfigurationDbMigration : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -76,6 +78,9 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     AllowPlainTextPkce = table.Column<bool>(type: "INTEGER", nullable: false),
                     RequireRequestObject = table.Column<bool>(type: "INTEGER", nullable: false),
                     AllowAccessTokensViaBrowser = table.Column<bool>(type: "INTEGER", nullable: false),
+                    RequireDPoP = table.Column<bool>(type: "INTEGER", nullable: false),
+                    DPoPValidationMode = table.Column<int>(type: "INTEGER", nullable: false),
+                    DPoPClockSkew = table.Column<TimeSpan>(type: "TEXT", nullable: false),
                     FrontChannelLogoutUri = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
                     FrontChannelLogoutSessionRequired = table.Column<bool>(type: "INTEGER", nullable: false),
                     BackChannelLogoutUri = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
@@ -97,6 +102,7 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     AlwaysSendClientClaims = table.Column<bool>(type: "INTEGER", nullable: false),
                     ClientClaimsPrefix = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
                     PairWiseSubjectSalt = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
+                    InitiateLoginUri = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
                     UserSsoLifetime = table.Column<int>(type: "INTEGER", nullable: true),
                     UserCodeType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
                     DeviceCodeLifetime = table.Column<int>(type: "INTEGER", nullable: false),
@@ -106,7 +112,9 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Updated = table.Column<DateTime>(type: "TEXT", nullable: true),
                     LastAccessed = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    NonEditable = table.Column<bool>(type: "INTEGER", nullable: false)
+                    NonEditable = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PushedAuthorizationLifetime = table.Column<int>(type: "INTEGER", nullable: true),
+                    RequirePushedAuthorization = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -640,6 +648,7 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 unique: true);
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

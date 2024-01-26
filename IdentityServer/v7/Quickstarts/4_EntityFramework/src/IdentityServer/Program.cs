@@ -1,4 +1,8 @@
-﻿using IdentityServer;
+﻿// Copyright (c) Duende Software. All rights reserved.
+// See LICENSE in the project root for license information.
+
+
+using IdentityServer;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -22,12 +26,11 @@ try
     
     app.Run();
 }
-catch (Exception ex) when (
-    // https://github.com/dotnet/runtime/issues/60600
-    ex.GetType().Name is not "StopTheHostException"
-    // HostAbortedException was added in .NET 7, but since we target .NET 6 we
-    // need to do it this way until we target .NET 8
-    && ex.GetType().Name is not "HostAbortedException")
+catch (HostAbortedException)
+{
+    Log.Information("Shut down triggered by entity framework tools");
+}
+catch (Exception ex)
 {
     Log.Fatal(ex, "Unhandled exception");
 }

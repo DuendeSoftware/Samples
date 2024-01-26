@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IdentityServer.Data.Migrations.IdentityServer.PersistedGrantDb
 {
+    /// <inheritdoc />
     public partial class InitialIdentityServerPersistedGrantDbMigration : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -69,10 +71,25 @@ namespace IdentityServer.Data.Migrations.IdentityServer.PersistedGrantDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "PushedAuthorizationRequests",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ReferenceValueHash = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
+                    ExpiresAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Parameters = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PushedAuthorizationRequests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ServerSideSessions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Key = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Scheme = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
@@ -132,6 +149,17 @@ namespace IdentityServer.Data.Migrations.IdentityServer.PersistedGrantDb
                 columns: new[] { "SubjectId", "SessionId", "Type" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_PushedAuthorizationRequests_ExpiresAtUtc",
+                table: "PushedAuthorizationRequests",
+                column: "ExpiresAtUtc");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PushedAuthorizationRequests_ReferenceValueHash",
+                table: "PushedAuthorizationRequests",
+                column: "ReferenceValueHash",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ServerSideSessions_DisplayName",
                 table: "ServerSideSessions",
                 column: "DisplayName");
@@ -158,6 +186,7 @@ namespace IdentityServer.Data.Migrations.IdentityServer.PersistedGrantDb
                 column: "SubjectId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -168,6 +197,9 @@ namespace IdentityServer.Data.Migrations.IdentityServer.PersistedGrantDb
 
             migrationBuilder.DropTable(
                 name: "PersistedGrants");
+
+            migrationBuilder.DropTable(
+                name: "PushedAuthorizationRequests");
 
             migrationBuilder.DropTable(
                 name: "ServerSideSessions");
