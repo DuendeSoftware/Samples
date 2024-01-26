@@ -7,7 +7,6 @@ using System.Text.Json;
 
 // discover endpoints from metadata
 var client = new HttpClient();
-
 var disco = await client.GetDiscoveryDocumentAsync("https://localhost:5001");
 if (disco.IsError)
 {
@@ -21,7 +20,6 @@ var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCr
     Address = disco.TokenEndpoint,
     ClientId = "client",
     ClientSecret = "secret",
-
     Scope = "api1"
 });
 
@@ -32,12 +30,11 @@ if (tokenResponse.IsError)
     return;
 }
 
-Console.WriteLine(tokenResponse.Json);
-Console.WriteLine("\n\n");
+Console.WriteLine(tokenResponse.AccessToken);
 
 // call api
 var apiClient = new HttpClient();
-apiClient.SetBearerToken(tokenResponse.AccessToken);
+apiClient.SetBearerToken(tokenResponse.AccessToken!); // AccessToken is always non-null when IsError is false
 
 var response = await apiClient.GetAsync("https://localhost:6001/identity");
 if (!response.IsSuccessStatusCode)
