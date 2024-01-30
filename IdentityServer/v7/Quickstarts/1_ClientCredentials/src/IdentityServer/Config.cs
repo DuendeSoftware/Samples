@@ -9,13 +9,13 @@ namespace IdentityServer;
 public static class Config
 {
     public static IEnumerable<ApiScope> ApiScopes =>
-        new List<ApiScope>
+        new ApiScope[]
         { 
-            new ApiScope("api1", "My API") 
+            new ApiScope(name: "api1", displayName: "My API")
         };
 
     public static IEnumerable<Client> Clients =>
-        new List<Client>
+        new Client[] 
         {
             new Client
             {

@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebClient.Pages;
-
-public class SignoutModel : PageModel
+namespace MyApp.Namespace
 {
-    public IActionResult OnGet()
+    public class SignoutModel : PageModel
     {
-        return SignOut("Cookies", "oidc");
+        public IActionResult OnGet()
+        {
+            return SignOut("Cookies", "oidc");
+        }
     }
 }
