@@ -3,7 +3,7 @@
 
 using System.Diagnostics.Metrics;
 
-namespace IdentityServer.Pages;
+namespace IdentityServerAspNetIdentity.Pages;
 
 #pragma warning disable CA1034 // Nested types should not be visible
 #pragma warning disable CA1724 // Type names should not match namespaces
