@@ -1,8 +1,7 @@
 using System;
+using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -16,7 +15,7 @@ namespace Client
         private readonly HttpClient _httpClient = httpClient;
         private readonly IDiscoveryCache _discoveryCache = discoveryCache;
         private readonly ILogger<ParOidcEvents> _logger = logger;
-
+        
         public override async Task RedirectToIdentityProvider(RedirectContext context)
         {
             var clientId = context.ProtocolMessage.ClientId;
@@ -85,28 +84,30 @@ namespace Client
             throw new NotImplementedException($"An unsupported authentication method has been configured: {context.Options.AuthenticationMethod}");
         }
 
-        private async Task<ParResponse> PushAuthorizationParameters(RedirectContext context, string clientId)
+        private async Task<PushedAuthorizationResponse> PushAuthorizationParameters(RedirectContext context, string clientId)
         {
-            // Send our PAR request
-            var requestBody = new FormUrlEncodedContent(context.ProtocolMessage.Parameters);
-            _httpClient.SetBasicAuthentication(clientId, "secret");
-
             var disco = await _discoveryCache.GetAsync();
             if (disco.IsError)
             {
                 throw new Exception(disco.Error);
             }
-            var parEndpoint = disco.TryGetValue("pushed_authorization_request_endpoint").GetString();
-            var response = await _httpClient.PostAsync(parEndpoint, requestBody);
-            if (!response.IsSuccessStatusCode)
+            var par = new PushedAuthorizationRequest
             {
-                throw new Exception("PAR failure");
-            }
-            return await response.Content.ReadFromJsonAsync<ParResponse>();
+                Address = disco.PushedAuthorizationRequestEndpoint,
+                ClientId = "mvc.par", // This has to be set here, even though it is already in the Parameters collection. We use this property to set the auth header
+                ClientSecret = "secret",
+                Parameters = new Parameters(context.ProtocolMessage.Parameters.Where(p => p.Key != "client_id")),
+            };
+            var response = await _httpClient.PushAuthorizationAsync(par);
 
+            if (response.IsError )
+            {
+                throw new Exception("PAR failure", response.Exception);
+            }
+            return response; 
         }
 
-        private static void SetAuthorizeParameters(RedirectContext context, string clientId, ParResponse parResponse)
+        private static void SetAuthorizeParameters(RedirectContext context, string clientId, PushedAuthorizationResponse parResponse)
         {
             // Remove all the parameters from the protocol message, and replace with what we got from the PAR response
             context.ProtocolMessage.Parameters.Clear();
@@ -128,15 +129,6 @@ namespace Client
         public override Task TokenResponseReceived(TokenResponseReceivedContext context)
         {
             return base.TokenResponseReceived(context);
-        }
-
-        private class ParResponse
-        {
-            [JsonPropertyName("expires_in")]
-            public int ExpiresIn { get; set; }
-
-            [JsonPropertyName("request_uri")]
-            public string RequestUri { get; set; }
         }
     }
 }
