@@ -1,5 +1,7 @@
+// Copyright (c) Duende Software. All rights reserved.
+// See LICENSE in the project root for license information.
+
 using Duende.IdentityServer;
-using IdentityServerHost;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
@@ -17,15 +19,22 @@ internal static class HostingExtensions
             .AddInMemoryClients(Config.Clients)
             .AddTestUsers(TestUsers.Users);
 
-        builder.Services.AddAuthentication()
-            .AddGoogle("Google", options =>
+        var authenticationBuilder = builder.Services.AddAuthentication();
+
+        var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+        var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+        if(googleClientId != null && googleClientSecret != null)
+        {
+            authenticationBuilder.AddGoogle("Google", options =>
             {
                 options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
-                options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-                options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-            })
-            .AddOpenIdConnect("oidc", "Demo IdentityServer", options =>
+                options.ClientId = googleClientId;
+                options.ClientSecret = googleClientSecret;
+            });
+        }
+            
+        authenticationBuilder.AddOpenIdConnect("oidc", "Demo IdentityServer", options =>
             {
                 options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                 options.SignOutScheme = IdentityServerConstants.SignoutScheme;
@@ -49,6 +58,7 @@ internal static class HostingExtensions
     public static WebApplication ConfigurePipeline(this WebApplication app)
     { 
         app.UseSerilogRequestLogging();
+    
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

@@ -1,6 +1,6 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+// Copyright (c) Duende Software. All rights reserved.
+// See LICENSE in the project root for license information.
+
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Models;
@@ -9,11 +9,10 @@ using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServerHost.Pages.Login;
+namespace IdentityServer.Pages.Login;
 
 [SecurityHeaders]
 [AllowAnonymous]
@@ -21,35 +20,32 @@ public class Index : PageModel
 {
     private readonly TestUserStore _users;
     private readonly IIdentityServerInteractionService _interaction;
-    private readonly IClientStore _clientStore;
     private readonly IEventService _events;
     private readonly IAuthenticationSchemeProvider _schemeProvider;
     private readonly IIdentityProviderStore _identityProviderStore;
 
-    public ViewModel View { get; set; }
-        
+    public ViewModel View { get; set; } = default!;
+
     [BindProperty]
-    public InputModel Input { get; set; }
-        
+    public InputModel Input { get; set; } = default!;
+
     public Index(
         IIdentityServerInteractionService interaction,
-        IClientStore clientStore,
         IAuthenticationSchemeProvider schemeProvider,
         IIdentityProviderStore identityProviderStore,
         IEventService events,
-        TestUserStore users = null)
+        TestUserStore? users = null)
     {
         // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-        _users = users ?? throw new Exception("Please call 'AddTestUsers(TestUsers.Users)' on the IIdentityServerBuilder in Startup or remove the TestUserStore from the AccountController.");
+        _users = users ?? throw new InvalidOperationException("Please call 'AddTestUsers(TestUsers.Users)' on the IIdentityServerBuilder in Startup or remove the TestUserStore from the AccountController.");
             
         _interaction = interaction;
-        _clientStore = clientStore;
         _schemeProvider = schemeProvider;
         _identityProviderStore = identityProviderStore;
         _events = events;
     }
-        
-    public async Task<IActionResult> OnGet(string returnUrl)
+
+    public async Task<IActionResult> OnGet(string? returnUrl)
     {
         await BuildModelAsync(returnUrl);
             
@@ -72,6 +68,9 @@ public class Index : PageModel
         {
             if (context != null)
             {
+                // This "can't happen", because if the ReturnUrl was null, then the context would be null
+                ArgumentNullException.ThrowIfNull(Input.ReturnUrl, nameof(Input.ReturnUrl));
+
                 // if the user cancels, send a result back into IdentityServer as if they 
                 // denied the consent (even if this client does not require consent).
                 // this will send back an access denied OIDC error response to the client.
@@ -85,7 +84,7 @@ public class Index : PageModel
                     return this.LoadingPage(Input.ReturnUrl);
                 }
 
-                return Redirect(Input.ReturnUrl);
+                return Redirect(Input.ReturnUrl ?? "~/");
             }
             else
             {
@@ -101,17 +100,15 @@ public class Index : PageModel
             {
                 var user = _users.FindByUsername(Input.Username);
                 await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.Client.ClientId));
+                Telemetry.Metrics.UserLogin(context?.Client.ClientId, IdentityServerConstants.LocalIdentityProvider);
 
                 // only set explicit expiration here if user chooses "remember me". 
                 // otherwise we rely upon expiration configured in cookie middleware.
-                AuthenticationProperties props = null;
+                var props = new AuthenticationProperties();
                 if (LoginOptions.AllowRememberLogin && Input.RememberLogin)
                 {
-                    props = new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
-                    };
+                    props.IsPersistent = true;
+                    props.ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration);
                 };
 
                 // issue authentication cookie with subject ID and username
@@ -124,6 +121,9 @@ public class Index : PageModel
 
                 if (context != null)
                 {
+                    // This "can't happen", because if the ReturnUrl was null, then the context would be null
+                    ArgumentNullException.ThrowIfNull(Input.ReturnUrl, nameof(Input.ReturnUrl));
+
                     if (context.IsNativeClient())
                     {
                         // The client is native, so this change in how to
@@ -132,7 +132,7 @@ public class Index : PageModel
                     }
 
                     // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                    return Redirect(Input.ReturnUrl);
+                    return Redirect(Input.ReturnUrl ?? "~/");
                 }
 
                 // request for a local page
@@ -147,11 +147,13 @@ public class Index : PageModel
                 else
                 {
                     // user might have clicked on a malicious link - should be logged
-                    throw new Exception("invalid return URL");
+                    throw new ArgumentException("invalid return URL");
                 }
             }
 
-            await _events.RaiseAsync(new UserLoginFailureEvent(Input.Username, "invalid credentials", clientId:context?.Client.ClientId));
+            const string error = "invalid credentials";
+            await _events.RaiseAsync(new UserLoginFailureEvent(Input.Username, error, clientId:context?.Client.ClientId));
+            Telemetry.Metrics.UserLoginFailure(context?.Client.ClientId, IdentityServerConstants.LocalIdentityProvider, error);
             ModelState.AddModelError(string.Empty, LoginOptions.InvalidCredentialsErrorMessage);
         }
 
@@ -159,8 +161,8 @@ public class Index : PageModel
         await BuildModelAsync(Input.ReturnUrl);
         return Page();
     }
-        
-    private async Task BuildModelAsync(string returnUrl)
+
+    private async Task BuildModelAsync(string? returnUrl)
     {
         Input = new InputModel
         {
@@ -178,11 +180,11 @@ public class Index : PageModel
                 EnableLocalLogin = local,
             };
 
-            Input.Username = context?.LoginHint;
+            Input.Username = context.LoginHint;
 
             if (!local)
             {
-                View.ExternalProviders = new[] { new ViewModel.ExternalProvider { AuthenticationScheme = context.IdP } };
+                View.ExternalProviders = new[] { new ViewModel.ExternalProvider ( authenticationScheme: context.IdP ) };
             }
 
             return;
@@ -193,33 +195,29 @@ public class Index : PageModel
         var providers = schemes
             .Where(x => x.DisplayName != null)
             .Select(x => new ViewModel.ExternalProvider
-            {
-                DisplayName = x.DisplayName ?? x.Name,
-                AuthenticationScheme = x.Name
-            }).ToList();
+            (
+                authenticationScheme: x.Name,
+                displayName: x.DisplayName ?? x.Name
+            )).ToList();
 
-        var dyanmicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync())
+        var dynamicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync())
             .Where(x => x.Enabled)
             .Select(x => new ViewModel.ExternalProvider
-            {
-                AuthenticationScheme = x.Scheme,
-                DisplayName = x.DisplayName
-            });
-        providers.AddRange(dyanmicSchemes);
+            (
+                authenticationScheme: x.Scheme,
+                displayName: x.DisplayName ?? x.Scheme
+            ));
+        providers.AddRange(dynamicSchemes);
 
 
         var allowLocal = true;
-        if (context?.Client.ClientId != null)
+        var client = context?.Client;
+        if (client != null)
         {
-            var client = await _clientStore.FindEnabledClientByIdAsync(context.Client.ClientId);
-            if (client != null)
+            allowLocal = client.EnableLocalLogin;
+            if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Count != 0)
             {
-                allowLocal = client.EnableLocalLogin;
-
-                if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
-                {
-                    providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
-                }
+                providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
             }
         }
 

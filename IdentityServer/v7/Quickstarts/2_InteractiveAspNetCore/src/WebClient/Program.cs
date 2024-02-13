@@ -1,13 +1,9 @@
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
-JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = "Cookies";
@@ -28,7 +24,9 @@ builder.Services.AddAuthentication(options =>
         options.Scope.Add("verification");
         options.ClaimActions.MapJsonKey("email_verified", "email_verified");
         options.GetClaimsFromUserInfoEndpoint = true;
-        
+
+        options.MapInboundClaims = false; // Don't rename claim types
+
         options.SaveTokens = true;
     });
 

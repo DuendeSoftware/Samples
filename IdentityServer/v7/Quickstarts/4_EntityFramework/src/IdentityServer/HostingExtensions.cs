@@ -1,7 +1,10 @@
+// Copyright (c) Duende Software. All rights reserved.
+// See LICENSE in the project root for license information.
+
+
 using Duende.IdentityServer;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
-using IdentityServerHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -12,7 +15,7 @@ internal static class HostingExtensions
 {
     private static void InitializeDatabase(IApplicationBuilder app)
     {
-        using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+        using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope())
         {
             serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
@@ -49,10 +52,10 @@ internal static class HostingExtensions
 
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddRazorPages();
+
         var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
         const string connectionString = @"Data Source=Duende.IdentityServer.Quickstart.EntityFramework.db";
-
-        builder.Services.AddRazorPages();
 
         builder.Services.AddIdentityServer()
             .AddConfigurationStore(options =>
@@ -67,15 +70,22 @@ internal static class HostingExtensions
             })
             .AddTestUsers(TestUsers.Users);
 
-        builder.Services.AddAuthentication()
-            .AddGoogle("Google", options =>
+        var authenticationBuilder = builder.Services.AddAuthentication();
+
+        var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+        var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+        if(googleClientId != null && googleClientSecret != null)
+        {
+            authenticationBuilder.AddGoogle("Google", options =>
             {
                 options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
-                options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-                options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-            })
-            .AddOpenIdConnect("oidc", "Demo IdentityServer", options =>
+                options.ClientId = googleClientId;
+                options.ClientSecret = googleClientSecret;
+            });
+        }
+            
+        authenticationBuilder.AddOpenIdConnect("oidc", "Demo IdentityServer", options =>
             {
                 options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                 options.SignOutScheme = IdentityServerConstants.SignoutScheme;
@@ -99,6 +109,7 @@ internal static class HostingExtensions
     public static WebApplication ConfigurePipeline(this WebApplication app)
     { 
         app.UseSerilogRequestLogging();
+    
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

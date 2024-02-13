@@ -15,7 +15,7 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.13");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.1");
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResource", b =>
                 {
@@ -352,6 +352,12 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
+                    b.Property<TimeSpan>("DPoPClockSkew")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DPoPValidationMode")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("TEXT");
@@ -378,6 +384,10 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.Property<bool>("IncludeJwtId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("InitiateLoginUri")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("LastAccessed")
                         .HasColumnType("TEXT");
 
@@ -400,6 +410,9 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("PushedAuthorizationLifetime")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("RefreshTokenExpiration")
                         .HasColumnType("INTEGER");
 
@@ -412,7 +425,13 @@ namespace IdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.Property<bool>("RequireConsent")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("RequireDPoP")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("RequirePkce")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("RequirePushedAuthorization")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("RequireRequestObject")

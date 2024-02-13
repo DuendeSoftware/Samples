@@ -15,7 +15,7 @@ namespace IdentityServerAspNetIdentity
         protected override async Task GetProfileDataAsync(ProfileDataRequestContext context, ApplicationUser user)
         {
             var principal = await GetUserClaimsAsync(user);
-            var id = (ClaimsIdentity)principal.Identity;
+            var id = (ClaimsIdentity)principal.Identity!;
             if (!string.IsNullOrEmpty(user.FavoriteColor))
             {
                 id.AddClaim(new Claim("favorite_color", user.FavoriteColor));
