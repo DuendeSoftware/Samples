@@ -8,6 +8,7 @@
 		<PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="2.0.3"/>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.0"/>
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+		<PackageReference Include="IdentityModel" Version="7.0.0-preview.1" />
 	</ItemGroup>
 
 	<!-- Constants and helpers -->
