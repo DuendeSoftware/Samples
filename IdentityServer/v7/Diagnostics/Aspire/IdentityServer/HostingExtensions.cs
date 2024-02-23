@@ -1,7 +1,6 @@
 using Duende.IdentityServer;
 using IdentityServer;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Serilog;
 
 namespace IdentityServer;
 
@@ -9,6 +8,8 @@ internal static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        builder.AddServiceDefaults();
+
         builder.Services.AddRazorPages();
 
         var isBuilder = builder.Services.AddIdentityServer(options =>
@@ -59,8 +60,6 @@ internal static class HostingExtensions
     
     public static WebApplication ConfigurePipeline(this WebApplication app)
     { 
-        app.UseSerilogRequestLogging();
-    
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

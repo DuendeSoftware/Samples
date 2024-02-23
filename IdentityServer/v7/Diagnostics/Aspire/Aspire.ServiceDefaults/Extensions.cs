@@ -43,7 +43,11 @@ public static class Extensions
             .WithMetrics(metrics =>
             {
                 metrics.AddRuntimeInstrumentation()
-                       .AddBuiltInMeters();
+                       .AddBuiltInMeters()
+                       .AddMeter(
+                            "Duende.IdentityServer", // Stable counters from IdentityServer library
+                            "Duende.IdentityServer.Experimental", // More counters from IdentityServer library
+                            "IdentityServer"); // Counters from the UI in our IdentityServer project.
             })
             .WithTracing(tracing =>
             {
@@ -55,7 +59,13 @@ public static class Extensions
 
                 tracing.AddAspNetCoreInstrumentation()
                        .AddGrpcClientInstrumentation()
-                       .AddHttpClientInstrumentation();
+                       .AddHttpClientInstrumentation()
+                       .AddSource(
+                            "Duende.IdentityServer",
+                            "Duende.IdentityServer.Stores",
+                            "Duende.IdentityServer.Cache",
+                            "Duende.IdentityServer.Services",
+                            "Duende.IdentityServer.Validation");
             });
 
         builder.AddOpenTelemetryExporters();
