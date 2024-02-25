@@ -1,6 +1,4 @@
 using Aspire.Web;
-using Aspire.Web.Components;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
@@ -23,6 +21,7 @@ builder.Services.AddAuthentication(opt =>
 
         opt.ResponseType = "code";
         opt.Scope.Add("weather");
+        opt.Scope.Add("offline_access");
 
         opt.SaveTokens = true;
 
@@ -30,13 +29,14 @@ builder.Services.AddAuthentication(opt =>
         opt.MapInboundClaims = false;
     });
 
+builder.Services.AddOpenIdConnectAccessTokenManagement();
+
 // Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+builder.Services.AddRazorPages();
 
-builder.Services.AddOutputCache();
-
-builder.Services.AddHttpClient<WeatherApiClient>(client => client.BaseAddress = new("https://apiservice"));
+builder.Services.AddHttpClient<WeatherApiClient>(client
+    => client.BaseAddress = new("https://apiservice"))
+    .AddUserAccessTokenHandler();
 
 var app = builder.Build();
 
@@ -47,29 +47,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-app.UseAntiforgery();
-
-app.UseOutputCache();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
+app.MapRazorPages()
     .RequireAuthorization();
-
-app.MapPost("/Logout", async ctx =>
-{
-    // Sign out local session
-    await ctx.SignOutAsync();
-
-    // Initiate remote signout
-    var props = new AuthenticationProperties
-    {
-        RedirectUri = "/"
-    };
-    await ctx.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, props);
-});
 
 app.MapDefaultEndpoints();
 

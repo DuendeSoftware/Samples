@@ -60,12 +60,7 @@ public static class Extensions
                 tracing.AddAspNetCoreInstrumentation()
                        .AddGrpcClientInstrumentation()
                        .AddHttpClientInstrumentation()
-                       .AddSource(
-                            "Duende.IdentityServer",
-                            "Duende.IdentityServer.Stores",
-                            "Duende.IdentityServer.Cache",
-                            "Duende.IdentityServer.Services",
-                            "Duende.IdentityServer.Validation");
+                       .AddSource("Duende.IdentityServer");
             });
 
         builder.AddOpenTelemetryExporters();

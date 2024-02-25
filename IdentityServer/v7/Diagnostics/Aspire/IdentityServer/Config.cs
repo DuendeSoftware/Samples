@@ -30,7 +30,12 @@ public static class Config
                 PostLogoutRedirectUris = { "https://localhost:5014/signout-callback-oidc" },
 
                 AllowOfflineAccess = true,
-                AllowedScopes = { "openid", "profile", "weather" }
+                AllowedScopes = { "openid", "profile", "weather" },
+
+                // Ridiculously short to force renewals. Duende.AccessTokenManagement.OpenIdConnect
+                // by defaults renews token 60 seconds before expiry. So this means effectively
+                // every 10 seconds.
+                AccessTokenLifetime = 70
             },
         ];
 }
