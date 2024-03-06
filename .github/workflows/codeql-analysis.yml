@@ -59,6 +59,9 @@ jobs:
       
     - run: dotnet --info
 
+    - name: Install .NET Aspire workload
+      run: dotnet workload install aspire
+      
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
