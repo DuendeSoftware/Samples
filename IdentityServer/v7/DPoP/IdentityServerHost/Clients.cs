@@ -25,7 +25,9 @@ namespace IdentityServerHost
                     PostLogoutRedirectUris = { "https://localhost:5010/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "scope1" }
+                    AllowedScopes = { "openid", "profile", "scope1" },
+
+                    RequireDPoP = true,
                 },           
             };
     }
