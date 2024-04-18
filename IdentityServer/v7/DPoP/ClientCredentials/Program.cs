@@ -38,7 +38,6 @@ public class Program
                         client.TokenEndpoint = "https://localhost:5001/connect/token";
 
                         client.ClientId = "dpop";
-                        //client.ClientId = "dpop.nonce";
                         client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
 
                         client.Scope = "scope1";
