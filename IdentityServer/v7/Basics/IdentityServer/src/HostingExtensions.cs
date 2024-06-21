@@ -43,6 +43,8 @@ internal static class HostingExtensions
 
                 options.CallbackPath = "/signin-google";
                 options.Scope.Add("email");
+                //Disable x-client-SKU and x-client-ver headers (security issue)
+                options.DisableTelemetry = true;
             });
 
         return builder.Build();

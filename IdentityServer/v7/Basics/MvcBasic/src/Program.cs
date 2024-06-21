@@ -51,6 +51,8 @@ builder.Services.AddAuthentication(options =>
         options.SaveTokens = true;
         // disable MS auto claim type renaming
         options.MapInboundClaims = false;
+        //Disable x-client-SKU and x-client-ver headers (security issue)
+        options.DisableTelemetry = true;
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
