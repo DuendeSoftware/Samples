@@ -1,12 +1,9 @@
 ﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-
-using Microsoft.AspNetCore.Builder;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
-using System;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

@@ -3,12 +3,7 @@
 
 using Duende.IdentityServer;
 using IdentityServerHost;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using System;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 
 internal static class HostingExtensions
 {
