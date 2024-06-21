@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace SimpleApi.Controllers
 {
     [Route("identity")]
+    [ApiController]
     public class IdentityController : ControllerBase
     {
         private readonly ILogger<IdentityController> _logger;
