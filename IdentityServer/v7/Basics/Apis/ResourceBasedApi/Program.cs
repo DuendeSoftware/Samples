@@ -1,35 +1,59 @@
 ﻿using System;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+using Client;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using ResourceBasedApi;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace ResourceBasedApi
-{
-    public class Program
+Console.Title = "Resource based API";
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .MinimumLevel.Override("System", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
+    .CreateLogger();
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSerilog();
+builder.Services.AddControllers();
+
+builder.Services.AddCors();
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddAuthentication("token")
+    // JWT tokens
+    .AddJwtBearer("token", options =>
     {
-        public static void Main(string[] args)
-        {
-            Console.Title = "Simple API with Resources";
+        options.Authority = Urls.IdentityServer;
+        options.Audience = "resource2";
 
-            BuildWebHost(args).Run();
-        }
+        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
 
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .MinimumLevel.Override("System", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
-                .CreateLogger();
+        // if token does not contain a dot, it is a reference token
+        options.ForwardDefaultSelector = Selector.ForwardReferenceToken("introspection");
+    })
 
-            return WebHost.CreateDefaultBuilder(args)
-                    .UseStartup<Startup>()
-                    .Build();
-        }
-    }
-}
+    // reference tokens
+    .AddOAuth2Introspection("introspection", options =>
+    {
+        options.Authority = Urls.IdentityServer;
+
+        options.ClientId = "resource1";
+        options.ClientSecret = "secret";
+    });
+
+var app = builder.Build();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers().RequireAuthorization();
+
+app.Run();
+

@@ -4,33 +4,32 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.Json;
 
-namespace Client.Controllers
+namespace Client.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    public HomeController(IHttpClientFactory httpClientFactory)
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        _httpClientFactory = httpClientFactory;
+    }
 
-        public HomeController(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
+    [AllowAnonymous]
+    public IActionResult Index() => View();
 
-        [AllowAnonymous]
-        public IActionResult Index() => View();
+    public IActionResult Secure() => View();
 
-        public IActionResult Secure() => View();
+    public IActionResult Logout() => SignOut("oidc", "cookie");
 
-        public IActionResult Logout() => SignOut("oidc", "cookie");
+    public async Task<IActionResult> CallApi()
+    {
+        var client = _httpClientFactory.CreateClient("client");
 
-        public async Task<IActionResult> CallApi()
-        {
-            var client = _httpClientFactory.CreateClient("client");
+        var response = await client.GetStringAsync("identity");
+        var json = JsonDocument.Parse(response);
 
-            var response = await client.GetStringAsync("identity");
-            var json = JsonDocument.Parse(response);
-
-            ViewBag.Json = JsonSerializer.Serialize(json, new JsonSerializerOptions { WriteIndented = true });
-            return View();
-        }
+        ViewBag.Json = JsonSerializer.Serialize(json, new JsonSerializerOptions { WriteIndented = true });
+        return View();
     }
 }
