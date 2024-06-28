@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DPoP.Api;
+﻿namespace DPoP.Api;
 
 public class DPoPOptions
 {
