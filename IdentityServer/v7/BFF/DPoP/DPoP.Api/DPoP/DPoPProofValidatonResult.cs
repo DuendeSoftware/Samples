@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace DPoP.Api;
 
 public class DPoPProofValidatonResult

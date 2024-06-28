@@ -36,6 +36,7 @@ builder.Services.AddAuthentication(options =>
         options.MapInboundClaims = false;
         options.GetClaimsFromUserInfoEndpoint = true;
         options.SaveTokens = true;
+        options.DisableTelemetry = true;
     });
 
 var app = builder.Build();
