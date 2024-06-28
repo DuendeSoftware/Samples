@@ -1,54 +1,46 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Client;
 using IdentityModel.Client;
 
-namespace Client
+var response = await RequestTokenAsync();
+response.Show();
+
+Console.ReadLine();
+await CallServiceAsync(response.AccessToken);
+
+static async Task<TokenResponse> RequestTokenAsync()
 {
-    class Program
+    var client = new HttpClient();
+
+    var disco = await client.GetDiscoveryDocumentAsync(Urls.IdentityServer);
+    if (disco.IsError) throw new Exception(disco.Error);
+
+    var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
     {
-        public static async Task Main()
-        {
-            var response = await RequestTokenAsync();
-            response.Show();
+        Address = disco.TokenEndpoint,
 
-            Console.ReadLine();
-            await CallServiceAsync(response.AccessToken);
-        }
+        ClientId = "introspection.sample",
+        ClientSecret = "secret",
+            
+        Scope = "scope2"
+    });
 
-        static async Task<TokenResponse> RequestTokenAsync()
-        {
-            var client = new HttpClient();
+    if (response.IsError) throw new Exception(response.Error);
+    return response;
+}
 
-            var disco = await client.GetDiscoveryDocumentAsync(Urls.IdentityServer);
-            if (disco.IsError) throw new Exception(disco.Error);
+static async Task CallServiceAsync(string token)
+{
+    var client = new HttpClient
+    {
+        BaseAddress = new Uri(Urls.SampleApi)
+    };
 
-            var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-            {
-                Address = disco.TokenEndpoint,
+    client.SetBearerToken(token);
+    var response = await client.GetStringAsync("identity");
 
-                ClientId = "introspection.sample",
-                ClientSecret = "secret",
-                
-                Scope = "scope2"
-            });
-
-            if (response.IsError) throw new Exception(response.Error);
-            return response;
-        }
-
-        static async Task CallServiceAsync(string token)
-        {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri(Urls.SampleApi)
-            };
-
-            client.SetBearerToken(token);
-            var response = await client.GetStringAsync("identity");
-
-            "\n\nService claims:".ConsoleGreen();
-            Console.WriteLine(response.PrettyPrintJson());
-        }
-    }
+    "\n\nService claims:".ConsoleGreen();
+    Console.WriteLine(response.PrettyPrintJson());
 }
