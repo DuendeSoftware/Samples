@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 
 public static class ConsoleExtensions
@@ -11,16 +10,6 @@ public static class ConsoleExtensions
     public static void ConsoleGreen(this string text)
     {
         text.ColoredWriteLine(ConsoleColor.Green);
-    }
-
-    /// <summary>
-    /// Writes red text to the console.
-    /// </summary>
-    /// <param name="text">The text.</param>
-    [DebuggerStepThrough]
-    public static void ConsoleRed(this string text)
-    {
-        text.ColoredWriteLine(ConsoleColor.Red);
     }
 
     /// <summary>
