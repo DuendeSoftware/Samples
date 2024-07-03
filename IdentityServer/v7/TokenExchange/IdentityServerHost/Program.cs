@@ -2,47 +2,36 @@
 // See LICENSE in the project root for license information.
 
 
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using IdentityServerHost;
 using Serilog;
-using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
-using System;
 
-namespace IdentityServerHost;
+Console.Title = "IdentityServer";
 
-public class Program
-{
-    public static int Main(string[] args)
-    {
-        Log.Logger = new LoggerConfiguration()
+Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .Enrich.FromLogContext()
             .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
             .CreateLogger();
 
-        try
-        {
-            Log.Information("Starting host...");
-            CreateHostBuilder(args).Build().Run();
-            return 0;
-        }
-        catch (Exception ex)
-        {
-            Log.Fatal(ex, "Host terminated unexpectedly.");
-            return 1;
-        }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
-    }
+var builder = WebApplication.CreateBuilder(args);
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .UseSerilog()
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
-}
+builder.Services.AddSerilog();
+
+var idsvrBuilder = builder.Services.AddIdentityServer()
+    .AddInMemoryApiScopes(Config.Scopes)
+    .AddInMemoryClients(Config.Clients);
+
+// registers extension grant validator for the token exchange grant type
+idsvrBuilder.AddExtensionGrantValidator<TokenExchangeGrantValidator>();
+
+// register a profile service to emit the act claim
+idsvrBuilder.AddProfileService<ProfileService>();
+
+var app =  builder.Build();
+
+app.UseDeveloperExceptionPage();
+
+app.UseIdentityServer();
+
+app.Run();
