@@ -1,49 +1,51 @@
 ﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using IdentityServerHost;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
-using System;
 
-namespace IdentityServerHost;
+Console.Title = "IdentityServer";
 
-public class Program
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
+    .CreateLogger();
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSerilog();
+
+builder.Services.AddRazorPages();
+
+var idsvrBuilder = builder.Services.AddIdentityServer(options =>
 {
-    public static int Main(string[] args)
-    {
-        Console.Title = "IdentityServer";
+    options.Events.RaiseErrorEvents = true;
+    options.Events.RaiseInformationEvents = true;
+    options.Events.RaiseFailureEvents = true;
+    options.Events.RaiseSuccessEvents = true;
 
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-            .Enrich.FromLogContext()
-            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
-            .CreateLogger();
+    // see https://docs.duendesoftware.com/identityserver/v5/basics/resources
+    options.EmitStaticAudienceClaim = true;
+})
+    .AddTestUsers(TestUsers.Users);
 
-        try
-        {
-            Log.Information("Starting host...");
-            CreateHostBuilder(args).Build().Run();
-            return 0;
-        }
-        catch (Exception ex)
-        {
-            Log.Fatal(ex, "Host terminated unexpectedly.");
-            return 1;
-        }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
-    }
+idsvrBuilder.AddInMemoryIdentityResources(Resources.Identity);
+idsvrBuilder.AddInMemoryApiScopes(Resources.ApiScopes);
+idsvrBuilder.AddInMemoryClients(Clients.List);
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .UseSerilog()
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
+
+app.UseStaticFiles();
+
+app.UseRouting();
+app.UseIdentityServer();
+app.UseAuthorization();
+app.MapRazorPages();
+
+app.Run();

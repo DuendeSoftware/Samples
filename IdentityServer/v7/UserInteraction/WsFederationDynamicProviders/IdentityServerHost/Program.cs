@@ -1,80 +1,116 @@
 ﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Duende.IdentityServer;
+using IdentityServerHost;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
-using System;
-using System.Linq;
+using Serilog.Events;
 
-namespace IdentityServerHost;
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+    .MinimumLevel.Override("System", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    // uncomment to write to Azure diagnostics stream
+    //.WriteTo.File(
+    //    @"D:\home\LogFiles\Application\identityserver.txt",
+    //    fileSizeLimitBytes: 1_000_000,
+    //    rollOnFileSizeLimit: true,
+    //    shared: true,
+    //    flushToDiskInterval: TimeSpan.FromSeconds(1))
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
+    .CreateLogger();
 
-public class Program
+var seed = args.Contains("/seed");
+if (seed)
 {
-    public static int Main(string[] args)
-    {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-            .MinimumLevel.Override("System", LogEventLevel.Warning)
-            .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-            .Enrich.FromLogContext()
-            // uncomment to write to Azure diagnostics stream
-            //.WriteTo.File(
-            //    @"D:\home\LogFiles\Application\identityserver.txt",
-            //    fileSizeLimitBytes: 1_000_000,
-            //    rollOnFileSizeLimit: true,
-            //    shared: true,
-            //    flushToDiskInterval: TimeSpan.FromSeconds(1))
-            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
-            .CreateLogger();
-
-        try
-        {
-            var seed = args.Contains("/seed");
-            if (seed)
-            {
-                args = args.Except(new[] { "/seed" }).ToArray();
-            }
-
-            var host = CreateHostBuilder(args).Build();
-
-            if (seed)
-            {
-                Log.Information("Seeding database...");
-                var config = host.Services.GetRequiredService<IConfiguration>();
-                var connectionString = config.GetConnectionString("DefaultConnection");
-                SeedData.EnsureSeedData(connectionString);
-                Log.Information("Done seeding database.");
-                return 0;
-            }
-
-            Log.Information("Starting host...");
-            host.Run();
-            return 0;
-        }
-        catch (Exception ex)
-        {
-            Log.Fatal(ex, "Host terminated unexpectedly.");
-            return 1;
-        }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
-    }
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .UseSerilog()
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
+    args = args.Except(new[] { "/seed" }).ToArray();
 }
+
+var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (seed)
+{
+    Log.Information("Seeding database...");
+    SeedData.EnsureSeedData(connectionString);
+    Log.Information("Done seeding database.");
+    return;
+}
+
+builder.Services.AddRazorPages();
+
+var idsvrBuilder = builder.Services.AddIdentityServer(options =>
+{
+    options.Events.RaiseErrorEvents = true;
+    options.Events.RaiseInformationEvents = true;
+    options.Events.RaiseFailureEvents = true;
+    options.Events.RaiseSuccessEvents = true;
+
+    // see https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
+    options.EmitStaticAudienceClaim = true;
+})
+    .AddTestUsers(TestUsers.Users)
+    // this adds the config data from DB (clients, resources, CORS)
+    .AddConfigurationStore(options =>
+    {
+        options.ConfigureDbContext = b =>
+            b.UseSqlite(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+    })
+    // this adds the operational data from DB (codes, tokens, consents)
+    .AddOperationalStore(options =>
+    {
+        options.ConfigureDbContext = b =>
+            b.UseSqlite(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+
+        // this enables automatic token cleanup. this is optional.
+        options.EnableTokenCleanup = true;
+    });
+
+idsvrBuilder.AddWsFedDynamicProvider()
+    .AddIdentityProviderStore<EfWsFedProviderStore>();
+
+//idsvrBuilder.AddWsFedDynamicProvider()
+//  .AddInMemoryWsFedProviders(new WsFedProvider[] {
+//        new WsFedProvider
+//        {
+//            Scheme = "adfs",
+//            MetadataAddress = "https://adfs4.local/federationmetadata/2007-06/federationmetadata.xml",
+//            RelyingPartyId = "urn:test",
+//            DisplayName = "Local ADFS"
+//        }
+//    });
+
+
+builder.Services.AddAuthentication()
+    .AddGoogle(options =>
+    {
+        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+        // register your IdentityServer with Google at https://console.developers.google.com
+        // enable the Google+ API
+        // set the redirect URI to https://localhost:5001/signin-google
+        options.ClientId = "copy client ID from Google here";
+        options.ClientSecret = "copy client secret from Google here";
+    });
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.UseStaticFiles();
+
+app.UseRouting();
+app.UseIdentityServer();
+app.UseAuthorization();
+app.MapRazorPages();
+
+app.Run();
