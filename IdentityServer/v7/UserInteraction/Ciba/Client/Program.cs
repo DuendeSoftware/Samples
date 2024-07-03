@@ -1,12 +1,6 @@
 using Clients;
 using IdentityModel;
 using IdentityModel.Client;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Client;
 

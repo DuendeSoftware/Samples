@@ -1,34 +1,37 @@
-﻿using System;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+﻿using Client;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace Api;
+Console.Title = "API";
 
-public class Program
-{
-    public static void Main(string[] args)
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
+    .CreateLogger();
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSerilog();
+builder.Services.AddControllers();
+
+// this API will accept any access token from the authority
+builder.Services.AddAuthentication("token")
+    .AddJwtBearer("token", options =>
     {
-        Console.Title = "API";
+        options.Authority = Urls.IdentityServer;
+        options.TokenValidationParameters.ValidateAudience = false;
 
-        BuildWebHost(args).Run();
-    }
+        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+        options.MapInboundClaims = false;
+    });
 
-    public static IHost BuildWebHost(string[] args)
-    {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-            .Enrich.FromLogContext()
-            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
-            .CreateLogger();
+var app = builder.Build();
 
-        return Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder => 
-            {
-                webBuilder.UseStartup<Startup>();
-            })
-            .UseSerilog()
-            .Build();
-    }
-}
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers().RequireAuthorization();
+
+app.Run();
