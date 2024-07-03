@@ -32,7 +32,7 @@ if (tokenResponse.IsError)
     return;
 }
 
-Console.WriteLine(tokenResponse.Json);
+Console.WriteLine(tokenResponse.AccessToken);
 Console.WriteLine("\n\n");
 
 // call api
