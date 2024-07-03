@@ -1,91 +1,87 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using IdentityModel;
+﻿using IdentityModel;
 using IdentityModel.Client;
 
-namespace ResourcesScopesConsoleClient
+namespace ResourcesScopesConsoleClient;
+
+class Program
 {
-    class Program
+    private static DiscoveryCache Cache;
+
+    static async Task Main(string[] args)
     {
-        private static DiscoveryCache Cache;
+        Console.Title = "Client";
+        Cache = new DiscoveryCache("https://localhost:5001");
 
-        static async Task Main(string[] args)
+        // initial token
+        var response = await RequestTokenAsync();
+        var initialToken = response.AccessToken;
+
+        "\n\nInitial token:".ConsoleYellow();
+        response.Show();
+        Console.ReadLine();
+
+        response = await DelegateToken(initialToken, "impersonation");
+
+        "\n\nImpersonation style:".ConsoleYellow();
+        response.Show();
+        Console.ReadLine();
+
+        response = await DelegateToken(initialToken, "delegation");
+
+        "\n\nDelegation style:".ConsoleYellow();
+        response.Show();
+        Console.ReadLine();
+
+        response = await DelegateToken(initialToken, "custom");
+
+        "\n\nCustom style:".ConsoleYellow();
+        response.Show();
+    }
+
+    static async Task<TokenResponse> RequestTokenAsync()
+    {
+        var client = new HttpClient();
+
+        var disco = await Cache.GetAsync();
+        if (disco.IsError) throw new Exception(disco.Error);
+
+        var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
         {
-            Console.Title = "Client";
-            Cache = new DiscoveryCache("https://localhost:5001");
+            Address = disco.TokenEndpoint,
+            ClientId = "front.end",
+            ClientSecret = "secret",
+            
+            Scope = "scope1",
+        });
 
-            // initial token
-            var response = await RequestTokenAsync();
-            var initialToken = response.AccessToken;
+        if (response.IsError) throw new Exception(response.Error);
+        return response;
+    }
 
-            "\n\nInitial token:".ConsoleYellow();
-            response.Show();
-            Console.ReadLine();
+    static async Task<TokenResponse> DelegateToken(string token, string style)
+    {
+        var client = new HttpClient();
 
-            response = await DelegateToken(initialToken, "impersonation");
+        var disco = await Cache.GetAsync();
+        if (disco.IsError) throw new Exception(disco.Error);
 
-            "\n\nImpersonation style:".ConsoleYellow();
-            response.Show();
-            Console.ReadLine();
-
-            response = await DelegateToken(initialToken, "delegation");
-
-            "\n\nDelegation style:".ConsoleYellow();
-            response.Show();
-            Console.ReadLine();
-
-            response = await DelegateToken(initialToken, "custom");
-
-            "\n\nCustom style:".ConsoleYellow();
-            response.Show();
-        }
-
-        static async Task<TokenResponse> RequestTokenAsync()
+        var response = await client.RequestTokenExchangeTokenAsync(new TokenExchangeTokenRequest
         {
-            var client = new HttpClient();
+            Address = disco.TokenEndpoint,
+            ClientId = "api1",
+            ClientSecret = "secret",
 
-            var disco = await Cache.GetAsync();
-            if (disco.IsError) throw new Exception(disco.Error);
+            SubjectToken = token,
+            SubjectTokenType = OidcConstants.TokenTypeIdentifiers.AccessToken,
+            Scope = "scope2",
 
-            var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            Parameters =
             {
-                Address = disco.TokenEndpoint,
-                ClientId = "front.end",
-                ClientSecret = "secret",
-                
-                Scope = "scope1",
-            });
+                { "exchange_style", style }
+            }
+        });
 
-            if (response.IsError) throw new Exception(response.Error);
-            return response;
-        }
-
-        static async Task<TokenResponse> DelegateToken(string token, string style)
-        {
-            var client = new HttpClient();
-
-            var disco = await Cache.GetAsync();
-            if (disco.IsError) throw new Exception(disco.Error);
-
-            var response = await client.RequestTokenExchangeTokenAsync(new TokenExchangeTokenRequest
-            {
-                Address = disco.TokenEndpoint,
-                ClientId = "api1",
-                ClientSecret = "secret",
-
-                SubjectToken = token,
-                SubjectTokenType = OidcConstants.TokenTypeIdentifiers.AccessToken,
-                Scope = "scope2",
-
-                Parameters =
-                {
-                    { "exchange_style", style }
-                }
-            });
-
-            if (response.IsError) throw new Exception(response.Error);
-            return response;
-        }
+        if (response.IsError) throw new Exception(response.Error);
+        return response;
     }
 }
