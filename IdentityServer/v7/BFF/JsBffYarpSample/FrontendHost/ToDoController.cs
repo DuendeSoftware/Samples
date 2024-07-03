@@ -46,7 +46,7 @@ public class ToDoController : ControllerBase
         model.User = $"{User.FindFirst("sub").Value} ({User.FindFirst("name").Value})";
         
         __data.Add(model);
-        _logger.LogInformation("Added todo";
+        _logger.LogInformation("Added todo");
 
         return Created(Url.Action(nameof(Get), new { id = model.Id }), model);
     }
