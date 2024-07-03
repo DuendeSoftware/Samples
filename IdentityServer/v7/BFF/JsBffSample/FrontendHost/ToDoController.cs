@@ -46,7 +46,7 @@ public class ToDoController : ControllerBase
         model.User = $"{User.FindFirst("sub").Value} ({User.FindFirst("name").Value})";
         
         __data.Add(model);
-        _logger.LogInformation("Add {name}", model.Name);
+        _logger.LogInformation("Added todo");
 
         return Created(Url.Action(nameof(Get), new { id = model.Id }), model);
     }
@@ -60,7 +60,7 @@ public class ToDoController : ControllerBase
         item.Date = model.Date;
         item.Name = model.Name;
 
-        _logger.LogInformation("Update {name}", model.Name);
+        _logger.LogInformation("Updated todo");
         
         return NoContent();
     }
