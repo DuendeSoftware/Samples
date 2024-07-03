@@ -1,20 +1,36 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace BackendApiHost
-{
-    public class Program
+builder.Services.AddControllers();
+
+builder.Services.AddAuthentication("token")
+    .AddJwtBearer("token", options =>
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        options.Authority = "https://demo.duendesoftware.com";
+        options.Audience = "api";
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
-}
+        options.MapInboundClaims = false;
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ApiCaller", policy =>
+    {
+        policy.RequireClaim("scope", "api");
+    });
+
+    options.AddPolicy("RequireInteractiveUser", policy =>
+    {
+        policy.RequireClaim("sub");
+    });
+});
+
+var app =  builder.Build();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers().RequireAuthorization("ApiCaller");
+
+app.Run();

@@ -1,9 +1,6 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 
 namespace DPoP.Api;
