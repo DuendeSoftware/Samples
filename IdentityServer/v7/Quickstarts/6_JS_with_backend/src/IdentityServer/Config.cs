@@ -89,7 +89,6 @@ public static class Config
                 // where to redirect to after logout
                 PostLogoutRedirectUris = { "https://localhost:5003/signout-callback-oidc" },
                 AllowOfflineAccess = true,
-                AccessTokenLifetime = 30,
 
                 AllowedScopes = new List<string>
                 {
