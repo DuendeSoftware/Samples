@@ -32,6 +32,9 @@ builder.Services.AddAuthentication(options =>
         options.SaveTokens = true;
     });
 
+builder.Services.AddHttpClient();
+builder.Services.AddOpenIdConnectAccessTokenManagement();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
