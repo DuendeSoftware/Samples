@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace MyApp.Namespace
 {
 
-    public class CallApiModel() : PageModel
+    public class CallApiModel : PageModel
     {
         public string Json = string.Empty;
 
