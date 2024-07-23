@@ -15,6 +15,7 @@ namespace MyApp.Namespace
             var accessToken = await HttpContext.GetTokenAsync("access_token");
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
             var content = await client.GetStringAsync("https://localhost:6001/identity");
 
             var parsed = JsonDocument.Parse(content);
