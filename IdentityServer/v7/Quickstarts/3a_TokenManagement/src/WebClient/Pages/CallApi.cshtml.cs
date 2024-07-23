@@ -12,9 +12,9 @@ namespace MyApp.Namespace
 
         public async Task OnGet()
         {
-            //var accessToken = await HttpContext.GetUserAccessTokenAsync();
+            //var tokenInfo = await HttpContext.GetUserAccessTokenAsync();
             //var client = new HttpClient();
-            //client.SetBearerToken(accessToken.AccessToken!);
+            //client.SetBearerToken(tokenInfo.AccessToken!);
 
             var client = httpClientFactory.CreateClient("apiClient");
 
