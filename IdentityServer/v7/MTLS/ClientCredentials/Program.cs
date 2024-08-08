@@ -1,8 +1,5 @@
-﻿using System;
-using System.Net.Http;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
-using System.Threading.Tasks;
 using IdentityModel.Client;
 using Shared;
 

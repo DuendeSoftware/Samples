@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 

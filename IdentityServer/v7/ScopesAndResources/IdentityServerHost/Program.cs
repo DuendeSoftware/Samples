@@ -1,50 +1,44 @@
 ﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using IdentityServerHost;
 using Serilog;
-using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
-using System;
 
-namespace IdentityServerHost;
+Console.Title = "IdentityServer";
 
-public class Program
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
+    .CreateLogger();
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSerilog();
+
+var idsvrBuilder = builder.Services.AddIdentityServer(options =>
 {
-    public static int Main(string[] args)
-    {
-        Console.Title = "IdentityServer";
+    // emits static audience if required
+    options.EmitStaticAudienceClaim = false;
 
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-            .Enrich.FromLogContext()
-            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
-            .CreateLogger();
+    // control format of scope claim
+    options.EmitScopesAsSpaceDelimitedStringInJwt = true;
+})
+    .AddInMemoryApiScopes(Config.Scopes)
+    .AddInMemoryApiResources(Config.Resources)
+    .AddInMemoryClients(Config.Clients);
 
-        try
-        {
-            Log.Information("Starting host...");
-            CreateHostBuilder(args).Build().Run();
-            return 0;
-        }
-        catch (Exception ex)
-        {
-            Log.Fatal(ex, "Host terminated unexpectedly.");
-            return 1;
-        }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
-    }
+// registers the scope parser for the transaction scope
+idsvrBuilder.AddScopeParser<ParameterizedScopeParser>();
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .UseSerilog()
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
-}
+// register the token request validator to access the parsed scope in the pipeline
+idsvrBuilder.AddCustomTokenRequestValidator<TokenRequestValidator>();
+
+var app = builder.Build();
+
+app.UseDeveloperExceptionPage();
+
+app.UseIdentityServer();
+
+app.Run();

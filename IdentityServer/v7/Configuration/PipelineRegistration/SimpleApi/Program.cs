@@ -1,37 +1,41 @@
-using System;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace SimpleApi
-{
-    public class Program
+Console.Title = "Sample API";
+
+Log.Logger = new LoggerConfiguration()
+.MinimumLevel.Information()
+.Enrich.FromLogContext()
+.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
+.CreateLogger();
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSerilog();
+builder.Services.AddControllers();
+
+// this API will accept any access token from the authority
+builder.Services.AddAuthentication("token")
+    .AddJwtBearer("token", options =>
     {
-        public static void Main(string[] args)
-        {
-            Console.Title = "Sample API";
+        options.Authority = "https://localhost:5001";
+        options.MapInboundClaims = false;
 
-            BuildWebHost(args).Run();
-        }
+        options.TokenValidationParameters.ValidateAudience = false;
+        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+    });
 
-        public static IHost BuildWebHost(string[] args)
-        {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .Enrich.FromLogContext()
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
-                .CreateLogger();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("SimpleApi", p => p.RequireClaim("scope", "SimpleApi"));
+});
 
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseSerilog()
-                .Build();
-        }
-    }
-}
+var app = builder.Build();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers().RequireAuthorization();
+app.Run();
+

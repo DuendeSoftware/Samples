@@ -1,6 +1,4 @@
-using System;
 using Duende.IdentityServer.Validation;
-using Microsoft.Extensions.Logging;
 
 namespace IdentityServerHost;
 

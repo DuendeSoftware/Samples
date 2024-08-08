@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
-using System;
-using System.Threading.Tasks;
 
 namespace Api;
 

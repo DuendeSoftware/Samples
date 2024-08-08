@@ -1,34 +1,52 @@
-﻿using System;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+﻿
+using Api;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace Api;
+Console.Title = "API";
 
-public class Program
-{
-    public static void Main(string[] args)
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
+    .CreateLogger();
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+
+builder.Services.AddCors();
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddAuthentication("token")
+
+    // JWT tokens
+    .AddJwtBearer("token", options =>
     {
-        Console.Title = "API";
+        options.Authority = "https://localhost:5001";
+        options.Audience = "api1";
 
-        BuildWebHost(args).Run();
-    }
+        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
 
-    public static IHost BuildWebHost(string[] args)
+        // if token does not contain a dot, it is a reference token
+        options.ForwardDefaultSelector = Selector.ForwardReferenceToken("introspection");
+    })
+
+    // reference tokens
+    .AddOAuth2Introspection("introspection", options =>
     {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-            .Enrich.FromLogContext()
-            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
-            .CreateLogger();
+        options.Authority = "https://localhost:5001";
 
-        return Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder => 
-            {
-                webBuilder.UseStartup<Startup>();
-            })
-            .UseSerilog()
-            .Build();
-    }
-}
+        options.ClientId = "api1";
+        options.ClientSecret = "secret";
+    });
+
+var app = builder.Build();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers().RequireAuthorization();
+
+app.Run();

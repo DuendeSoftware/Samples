@@ -1,10 +1,8 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using static IdentityModel.OidcConstants;
 
 namespace Api;
