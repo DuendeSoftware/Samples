@@ -42,7 +42,7 @@ namespace IdentityServerAspNetIdentity
                         alice = new ApplicationUser
                         {
                             UserName = "alice",
-                            Email = "AliceSmith@email.com",
+                            Email = "AliceSmith@email.example.com",
                             EmailConfirmed = true,
                         };
                         var result = userMgr.CreateAsync(alice, "Pass123$").Result;
@@ -55,7 +55,7 @@ namespace IdentityServerAspNetIdentity
                             new Claim(JwtClaimTypes.Name, "Alice Smith"),
                             new Claim(JwtClaimTypes.GivenName, "Alice"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
+                            new Claim(JwtClaimTypes.WebSite, "http://alice.example.com"),
                         }).Result;
                         if (!result.Succeeded)
                         {
@@ -74,7 +74,7 @@ namespace IdentityServerAspNetIdentity
                         bob = new ApplicationUser
                         {
                             UserName = "bob",
-                            Email = "BobSmith@email.com",
+                            Email = "BobSmith@email.example.com",
                             EmailConfirmed = true
                         };
                         var result = userMgr.CreateAsync(bob, "Pass123$").Result;
@@ -87,7 +87,7 @@ namespace IdentityServerAspNetIdentity
                             new Claim(JwtClaimTypes.Name, "Bob Smith"),
                             new Claim(JwtClaimTypes.GivenName, "Bob"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
+                            new Claim(JwtClaimTypes.WebSite, "http://bob.example.com"),
                             new Claim("location", "somewhere")
                         }).Result;
                         if (!result.Succeeded)
