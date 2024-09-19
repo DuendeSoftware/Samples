@@ -12,6 +12,7 @@ builder.Services.AddAuthentication()
         options.Authority = "https://localhost:5001";
         options.TokenValidationParameters.ValidateAudience = false;
     });
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("ApiScope", policy =>
