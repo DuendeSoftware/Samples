@@ -42,7 +42,7 @@ namespace IdentityServerAspNetIdentity
                         alice = new ApplicationUser
                         {
                             UserName = "alice",
-                            Email = "AliceSmith@email.example.com",
+                            Email = "AliceSmith@example.com",
                             EmailConfirmed = true,
                         };
                         var result = userMgr.CreateAsync(alice, "Pass123$").Result;
@@ -74,7 +74,7 @@ namespace IdentityServerAspNetIdentity
                         bob = new ApplicationUser
                         {
                             UserName = "bob",
-                            Email = "BobSmith@email.example.com",
+                            Email = "BobSmith@example.com",
                             EmailConfirmed = true
                         };
                         var result = userMgr.CreateAsync(bob, "Pass123$").Result;
