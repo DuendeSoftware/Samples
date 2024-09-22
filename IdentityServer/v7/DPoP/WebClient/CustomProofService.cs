@@ -1,6 +1,4 @@
 using Duende.AccessTokenManagement;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace WebClient;
 

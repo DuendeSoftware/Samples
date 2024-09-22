@@ -11,7 +11,8 @@ var disco = await client.GetDiscoveryDocumentAsync("https://localhost:5001");
 if (disco.IsError)
 {
     Console.WriteLine(disco.Error);
-    return;
+    Console.WriteLine(disco.Exception);
+    return 1;
 }
 
 // request token
@@ -27,7 +28,7 @@ if (tokenResponse.IsError)
 {
     Console.WriteLine(tokenResponse.Error);
     Console.WriteLine(tokenResponse.ErrorDescription);
-    return;
+    return 1;
 }
 
 Console.WriteLine(tokenResponse.AccessToken);
@@ -40,9 +41,9 @@ var response = await apiClient.GetAsync("https://localhost:6001/identity");
 if (!response.IsSuccessStatusCode)
 {
     Console.WriteLine(response.StatusCode);
+    return 1;
 }
-else
-{
-    var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
-    Console.WriteLine(JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true }));
-}
+
+var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+Console.WriteLine(JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true }));
+return 0;
