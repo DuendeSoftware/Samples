@@ -56,19 +56,6 @@ static class DPoPExtensions
     }
 
     /// <summary>
-    /// Create the value of a thumbprint-based cnf claim
-    /// </summary>
-    public static string CreateThumbprintCnf(this JsonWebKey jwk)
-    {
-        var jkt = jwk.CreateThumbprint();
-        var values = new Dictionary<string, string>
-        {
-            { JwtClaimTypes.ConfirmationMethods.JwkThumbprint, jkt }
-        };
-        return JsonSerializer.Serialize(values);
-    }
-
-    /// <summary>
     /// Create the value of a thumbprint
     /// </summary>
     public static string CreateThumbprint(this JsonWebKey jwk)

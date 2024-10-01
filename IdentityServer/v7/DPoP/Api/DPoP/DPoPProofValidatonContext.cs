@@ -1,3 +1,5 @@
+using System.Security.Claims;
+
 namespace Api;
 
 public class DPoPProofValidatonContext
@@ -26,4 +28,10 @@ public class DPoPProofValidatonContext
     /// The access token
     /// </summary>
     public required string AccessToken { get; set; }
+
+    /// <summary>
+    /// The claims associated with the access token.
+    /// </summary>
+    public IEnumerable<Claim> AccessTokenClaims { get; set; } = Enumerable.Empty<Claim>();
+
 }
