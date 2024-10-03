@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 
 namespace ApiHost;
@@ -29,4 +30,9 @@ public class DPoPProofValidatonContext
     /// The access token
     /// </summary>
     public string AccessToken { get; set; }
+    
+    /// <summary>
+    /// The claims associated with the access token. 
+    /// </summary>
+    public IEnumerable<Claim> AccessTokenClaims { get; set; } = Enumerable.Empty<Claim>();
 }
