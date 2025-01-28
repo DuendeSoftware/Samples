@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Client;
+using Duende.IdentityModel.Client;
+using Duende.IdentityModel;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Client;
-using IdentityModel;
-using IdentityModel.Client;
-using Microsoft.IdentityModel.Tokens;
 
 // would normally load from a secure data store
 string rsaKey = """
@@ -39,7 +39,7 @@ static async Task<TokenResponse> RequestTokenAsync(SigningCredentials signingCre
     var disco = await client.GetDiscoveryDocumentAsync(Urls.IdentityServer);
     if (disco.IsError) throw new Exception(disco.Error);
 
-    var clientToken = CreateClientToken(signingCredentials,"jwt.client.credentials.sample", disco.TokenEndpoint);
+    var clientToken = CreateClientToken(signingCredentials,"jwt.client.credentials.sample", disco.Issuer);
     var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
     {
         Address = disco.TokenEndpoint,
@@ -76,7 +76,10 @@ static string CreateClientToken(SigningCredentials credential, string clientId, 
     );
 
     var tokenHandler = new JwtSecurityTokenHandler();
-    return tokenHandler.WriteToken(token);
+    var clientToken = tokenHandler.WriteToken(token);
+    "\n\nClient Authentication Token:".ConsoleGreen();
+    Console.WriteLine(token);
+    return clientToken;
 }
 
 static async Task CallServiceAsync(string token)

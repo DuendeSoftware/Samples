@@ -2,9 +2,8 @@
 // See LICENSE in the project root for license information.
 
 
-using IdentityModel;
+using Duende.IdentityModel;
 using Microsoft.AspNetCore.Authentication;
-using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 

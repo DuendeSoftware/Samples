@@ -28,7 +28,7 @@ public class AssertionService
 
         var token = new JwtSecurityToken(
             clientId,
-            Urls.IdentityServer + "/connect/token",
+            Urls.IdentityServer,
             new List<Claim>()
             {
                 new Claim(JwtClaimTypes.JwtId, Guid.NewGuid().ToString()),
