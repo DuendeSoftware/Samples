@@ -1,7 +1,7 @@
-using System.Threading.Tasks;
-using IdentityModel;
-using IdentityModel.Client;
 using Duende.AccessTokenManagement;
+using Duende.IdentityModel;
+using Duende.IdentityModel.Client;
+using System.Threading.Tasks;
 
 namespace Client;
 

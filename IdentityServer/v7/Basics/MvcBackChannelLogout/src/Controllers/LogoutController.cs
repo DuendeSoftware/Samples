@@ -1,6 +1,7 @@
-﻿using IdentityModel;
-using IdentityModel.Client;
+﻿using Duende.IdentityModel;
+using Duende.IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -26,8 +27,8 @@ public class LogoutController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Index(string logout_token)
     {
-        Response.Headers.Add("Cache-Control", "no-cache, no-store");
-        Response.Headers.Add("Pragma", "no-cache");
+        Response.Headers.Append("Cache-Control", "no-cache, no-store");
+        Response.Headers.Append("Pragma", "no-cache");
 
         try
         {
