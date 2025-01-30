@@ -22,7 +22,7 @@ public class HomeController : Controller
 
     public IActionResult Secure() => View();
 
-    public IActionResult Logout() => SignOut("oidc");
+    public IActionResult Logout() => SignOut("oidc", "Cookies");
     
     public async Task<IActionResult> CallApi()
     {

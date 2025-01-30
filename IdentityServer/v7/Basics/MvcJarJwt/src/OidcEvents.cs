@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
-using IdentityModel;
+using Duende.IdentityModel;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using System.Threading.Tasks;
 
 namespace Client;
 

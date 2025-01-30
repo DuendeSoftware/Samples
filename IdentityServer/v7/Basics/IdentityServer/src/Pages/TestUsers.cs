@@ -2,12 +2,11 @@
 // See LICENSE in the project root for license information.
 
 
-using IdentityModel;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Text.Json;
+using Duende.IdentityModel;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Test;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace IdentityServerHost;
 

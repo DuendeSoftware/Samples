@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Client;
+using Duende.IdentityModel.Client;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Client;
-using IdentityModel.Client;
 
 var response = await RequestTokenAsync();
 response.Show();

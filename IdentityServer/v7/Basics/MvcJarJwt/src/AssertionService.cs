@@ -1,11 +1,11 @@
+using Duende.IdentityModel;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using IdentityModel;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Client;
 
@@ -28,7 +28,7 @@ public class AssertionService
 
         var token = new JwtSecurityToken(
             clientId,
-            Urls.IdentityServer + "/connect/token",
+            Urls.IdentityServer,
             new List<Claim>()
             {
                 new Claim(JwtClaimTypes.JwtId, Guid.NewGuid().ToString()),
